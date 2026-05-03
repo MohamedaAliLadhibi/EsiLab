@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c3ccda; border-radius: 2px; }
+
+/* Fix select dropdowns on all browsers */
+select, select option {
+  background-color: #ffffff !important;
+  color: #172033 !important;
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(217,226,239,0.9);
+  }
+  .esi-glow {
+    box-shadow: 0 0 24px rgba(26,86,219,0.25);
+  }
+  .scarlet-glow {
+    box-shadow: 0 0 24px rgba(224,36,36,0.2);
+  }
+  .card-hover {
+    transition: all 0.2s ease;
+  }
+  .card-hover:hover {
+    background: rgba(26,86,219,0.04);
+    border-color: rgba(26,86,219,0.3);
+  }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-esi {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.animate-fadeUp { animation: fadeUp 0.35s ease forwards; }
+.animate-pulse-esi { animation: pulse-esi 2s ease infinite; }
+
+.stagger-1 { animation-delay: 0.05s; opacity: 0; }
+.stagger-2 { animation-delay: 0.10s; opacity: 0; }
+.stagger-3 { animation-delay: 0.15s; opacity: 0; }
+.stagger-4 { animation-delay: 0.20s; opacity: 0; }
+.stagger-5 { animation-delay: 0.25s; opacity: 0; }
+.stagger-6 { animation-delay: 0.30s; opacity: 0; }
