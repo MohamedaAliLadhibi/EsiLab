@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -24,20 +25,18 @@ export default function Sidebar() {
     <aside className="w-60 flex-shrink-0 flex flex-col border-r border-border bg-panel shadow-sm">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-border">
-        <div className="flex items-center gap-3">
-          {/* ESI Logo mark — triangle + red bar */}
-          <div className="w-8 h-8 flex-shrink-0">
-            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <polygon points="4,36 20,6 36,36" fill="none" stroke="#1a56db" strokeWidth="5" strokeLinejoin="round"/>
-              <line x1="14" y1="28" x2="36" y2="28" stroke="#e02424" strokeWidth="5" strokeLinecap="round"/>
-            </svg>
-          </div>
-          <div>
-            <p className="text-sm font-bold tracking-tight leading-none">
-              <span className="text-esi">ESI</span><span className="text-scarlet">LAB</span>
-            </p>
-            <p className="text-[10px] text-dim mt-0.5 font-mono">{t.nav.adminConsole}</p>
-          </div>
+        <div className="flex flex-col items-start gap-1.5">
+          <Image
+            src="/logo-esilab-bleu.png"
+            alt="EsiLab logo"
+            width={180}
+            height={180}
+            priority
+            className="h-auto w-[112px]"
+          />
+          <p className="text-[10px] text-dim font-mono uppercase tracking-[0.22em]">
+            {t.nav.adminConsole}
+          </p>
         </div>
       </div>
 

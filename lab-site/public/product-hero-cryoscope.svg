@@ -1,0 +1,143 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="144" y1="90" x2="1498" y2="828" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4FAFF"/>
+      <stop offset="0.45" stop-color="#E5F3FF"/>
+      <stop offset="1" stop-color="#D7EBFF"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="932" y1="130" x2="1414" y2="706" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#173B7A"/>
+      <stop offset="1" stop-color="#081A3F"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#41C6E8"/>
+      <stop offset="1" stop-color="#2C7EF7"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#16366A"/>
+      <stop offset="1" stop-color="#0B1E44"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="24" stdDeviation="30" flood-color="#173B7A" flood-opacity="0.18"/>
+    </filter>
+    <filter id="soft" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#0F1B34" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" rx="40" fill="url(#bg)"/>
+  <circle cx="1318" cy="132" r="144" fill="#9EEBFF" fill-opacity="0.28"/>
+  <circle cx="152" cy="164" r="128" fill="#48C6DF" fill-opacity="0.16"/>
+  <circle cx="1454" cy="712" r="180" fill="#1F57B8" fill-opacity="0.09"/>
+
+  <g opacity="0.5">
+    <path d="M88 182H714" stroke="#B9D5EA" stroke-width="2"/>
+    <path d="M88 254H640" stroke="#B9D5EA" stroke-width="2"/>
+    <path d="M88 326H566" stroke="#B9D5EA" stroke-width="2"/>
+    <path d="M88 398H528" stroke="#B9D5EA" stroke-width="2"/>
+  </g>
+
+  <rect x="92" y="96" width="174" height="42" rx="21" fill="#FFFFFF"/>
+  <text x="179" y="123" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#1F57B8">
+    EsiLab Featured
+  </text>
+
+  <text x="92" y="220" font-family="Arial, sans-serif" font-size="74" font-weight="800" fill="#0F1B34">
+    Cryoscope 4250
+  </text>
+  <text x="92" y="292" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2E78C7">
+    Analytique precise pour laboratoires qualite
+  </text>
+  <text x="92" y="362" font-family="Arial, sans-serif" font-size="28" font-weight="400" fill="#35506F">
+    Inspire du catalogue backend EsiLab
+  </text>
+  <text x="92" y="406" font-family="Arial, sans-serif" font-size="28" font-weight="400" fill="#35506F">
+    Advanced Instruments 4250 Single-Sample Cryoscope
+  </text>
+
+  <rect x="92" y="478" width="314" height="92" rx="28" fill="#FFFFFF" filter="url(#soft)"/>
+  <circle cx="150" cy="524" r="18" fill="#48C6DF"/>
+  <path d="M143 524.5L148.5 530L159 518" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="184" y="518" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0F1B34">
+    Controle de l'osmolalite
+  </text>
+  <text x="184" y="548" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#47627F">
+    Interface claire et cadence labo
+  </text>
+
+  <rect x="430" y="478" width="260" height="92" rx="28" fill="#FFFFFF" filter="url(#soft)"/>
+  <circle cx="488" cy="524" r="18" fill="#1F57B8"/>
+  <path d="M478 528H498M488 518V538" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+  <text x="522" y="518" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0F1B34">
+    Support EsiLab
+  </text>
+  <text x="522" y="548" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#47627F">
+    Installation et mise en route
+  </text>
+
+  <g filter="url(#shadow)">
+    <rect x="918" y="132" width="520" height="616" rx="44" fill="url(#panel)"/>
+  </g>
+
+  <g opacity="0.16">
+    <path d="M954 208H1402" stroke="#9FDBFF" stroke-width="2"/>
+    <path d="M954 248H1402" stroke="#9FDBFF" stroke-width="2"/>
+    <path d="M954 288H1402" stroke="#9FDBFF" stroke-width="2"/>
+    <path d="M954 328H1402" stroke="#9FDBFF" stroke-width="2"/>
+    <path d="M954 368H1402" stroke="#9FDBFF" stroke-width="2"/>
+    <path d="M954 408H1402" stroke="#9FDBFF" stroke-width="2"/>
+    <path d="M954 448H1402" stroke="#9FDBFF" stroke-width="2"/>
+    <path d="M954 488H1402" stroke="#9FDBFF" stroke-width="2"/>
+  </g>
+
+  <rect x="1006" y="194" width="344" height="460" rx="44" fill="#EDF7FF"/>
+  <rect x="1078" y="250" width="196" height="282" rx="26" fill="#FFFFFF"/>
+  <rect x="1112" y="286" width="130" height="86" rx="16" fill="url(#screen)"/>
+  <path d="M1128 350C1141 334 1158 325 1178 325C1199 325 1215 334 1228 350" stroke="#66E0FF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M1128 332C1142 317 1159 310 1178 310C1198 310 1215 317 1228 332" stroke="#3CB5F9" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="1178" cy="388" r="20" fill="#41C6E8"/>
+  <rect x="1128" y="430" width="100" height="18" rx="9" fill="#D8E6F6"/>
+  <rect x="1128" y="462" width="88" height="18" rx="9" fill="#D8E6F6"/>
+  <rect x="1118" y="566" width="120" height="26" rx="13" fill="url(#accent)"/>
+  <text x="1178" y="584" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">
+    4250 SERIES
+  </text>
+
+  <rect x="1278" y="256" width="98" height="310" rx="26" fill="#DCEBFA"/>
+  <rect x="1292" y="286" width="70" height="22" rx="11" fill="#BFD7EF"/>
+  <rect x="1292" y="324" width="70" height="22" rx="11" fill="#BFD7EF"/>
+  <rect x="1292" y="362" width="70" height="22" rx="11" fill="#BFD7EF"/>
+  <rect x="1292" y="400" width="70" height="22" rx="11" fill="#BFD7EF"/>
+  <rect x="1292" y="438" width="70" height="22" rx="11" fill="#BFD7EF"/>
+  <rect x="1292" y="476" width="70" height="22" rx="11" fill="#BFD7EF"/>
+
+  <rect x="1004" y="676" width="352" height="40" rx="20" fill="#FFFFFF" fill-opacity="0.1"/>
+  <circle cx="1036" cy="696" r="8" fill="#48C6DF"/>
+  <text x="1060" y="703" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">
+    Mesure fiable
+  </text>
+  <circle cx="1186" cy="696" r="8" fill="#48C6DF"/>
+  <text x="1210" y="703" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">
+    Format compact
+  </text>
+
+  <circle cx="836" cy="438" r="76" fill="#FFFFFF"/>
+  <circle cx="836" cy="438" r="64" fill="url(#accent)"/>
+  <text x="836" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">
+    OSMO
+  </text>
+  <text x="836" y="462" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#FFFFFF">
+    CONTROL
+  </text>
+  <path d="M748 438H650" stroke="#48C6DF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M912 438H1008" stroke="#48C6DF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M682 410L650 438L682 466" stroke="#48C6DF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="92" y="650" width="406" height="112" rx="34" fill="#0F1B34"/>
+  <text x="136" y="700" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">
+    Placeholder premium pour carousel produit
+  </text>
+  <text x="136" y="736" font-family="Arial, sans-serif" font-size="19" font-weight="400" fill="#B7D7FF">
+    A reutiliser sur les cartes et les banners en attendant les vrais renders.
+  </text>
+</svg>
