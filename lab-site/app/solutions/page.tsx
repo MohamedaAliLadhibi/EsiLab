@@ -22,7 +22,7 @@ export default function SolutionsPage() {
         />
         <div className="mt-14 grid gap-8">
           {solutions.map((solution, index) => (
-            <section key={solution.slug} className="grid gap-6 rounded-[2.25rem] border border-line bg-white p-8 shadow-halo lg:grid-cols-[0.3fr_0.7fr]">
+            <section id={solution.slug} key={solution.slug} className="scroll-mt-32 grid gap-6 rounded-[2.25rem] border border-line bg-white p-8 shadow-halo lg:grid-cols-[0.3fr_0.7fr]">
               <div>
                 <p className="text-sm font-mono uppercase tracking-[0.22em] text-slate-400">0{index + 1}</p>
                 <div className={`mt-4 h-3 w-20 rounded-full ${solution.accent}`} />

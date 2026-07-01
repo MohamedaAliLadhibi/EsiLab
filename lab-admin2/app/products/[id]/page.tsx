@@ -7,9 +7,6 @@ import { ArrowLeft, Eye, EyeOff, Trash2, Package, ExternalLink, Save, Plus, Tras
 import Link from 'next/link';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 
-const BASE = process.env.NEXT_PUBLIC_ADMIN_API || 'http://localhost:3001';
-const KEY  = process.env.NEXT_PUBLIC_ADMIN_KEY  || '';
-
 export default function ProductDetailPage() {
   const { lang, t } = useLanguage();
   const { id } = useParams<{ id: string }>();
@@ -44,9 +41,9 @@ export default function ProductDetailPage() {
       if (row.key.trim() && row.value.trim()) data[row.key.trim()] = row.value.trim();
     }
     try {
-      const res = await fetch(`${BASE}/admin/products/${id}`, {
+      const res = await fetch(`/api/admin/admin/products/${id}`, {
         method: 'PATCH',
-        headers: { 'Authorization': `Bearer ${KEY}`, 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data }),
       });
       if (!res.ok) throw new Error((await res.json()).error);

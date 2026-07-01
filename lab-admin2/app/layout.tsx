@@ -4,6 +4,7 @@ import { Syne, DM_Mono } from 'next/font/google';
 import './globals.css';
 import Sidebar from '@/components/layout/Sidebar';
 import { LanguageProvider } from '@/components/i18n/LanguageProvider';
+import AuthGate from '@/components/layout/AuthGate';
 
 const syne = Syne({
   subsets: ['latin'],
@@ -27,12 +28,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${syne.variable} ${dmMono.variable}`}>
       <body className="bg-[#f5f7fb] text-ink font-display antialiased">
         <LanguageProvider>
-          <div className="flex h-screen overflow-hidden">
-            <Sidebar />
-            <main className="flex-1 overflow-y-auto">
-              {children}
-            </main>
-          </div>
+          <AuthGate>
+            <div className="flex h-screen overflow-hidden">
+              <Sidebar />
+              <main className="flex-1 overflow-y-auto">
+                {children}
+              </main>
+            </div>
+          </AuthGate>
         </LanguageProvider>
       </body>
     </html>

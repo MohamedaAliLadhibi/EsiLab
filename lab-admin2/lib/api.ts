@@ -1,20 +1,16 @@
 // lib/api.ts
-const BASE = process.env.NEXT_PUBLIC_ADMIN_API || 'http://localhost:3001';
-const KEY  = process.env.NEXT_PUBLIC_ADMIN_KEY  || '';
-
-const headers = () => ({
-  'Authorization': `Bearer ${KEY}`,
-  'Content-Type':  'application/json',
-});
-
 async function req<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await fetch(`/api/admin${path}`, {
     ...options,
-    headers: { ...headers(), ...(options.headers || {}) },
+    headers: {
+      ...(options.headers || {}),
+      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+    },
     cache: 'no-store',
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Request failed');
+  const text = await res.text();
+  const data = text ? JSON.parse(text) : null;
+  if (!res.ok) throw new Error(data?.error || 'Request failed');
   return data;
 }
 
@@ -37,9 +33,15 @@ export const getProducts = (params?: Record<string, string>) => {
   return req<any>(`/admin/products${qs}`);
 };
 export const getProduct      = (id: string)  => req<any>(`/admin/products/${id}`);
-export const toggleProduct   = (id: string)  => fetch(`${BASE}/admin/products/${id}/toggle-active`, { method: 'PATCH', headers: headers() }).then(r => r.json());
+export const toggleProduct   = (id: string)  => req<any>(`/admin/products/${id}/toggle-active`, { method: 'PATCH' });
 export const deleteProduct   = (id: string)  => req<any>(`/admin/products/${id}`, { method: 'DELETE' });
 export const getProductFields = ()           => req<any>('/admin/product-fields');
+
+// Users
+export const getCurrentAdmin = ()           => req<any>('/admin/auth/me');
+export const getUsers        = ()           => req<any>('/admin/users');
+export const createUser      = (body: any)  => req<any>('/admin/users', { method: 'POST', body: JSON.stringify(body) });
+export const deleteUser      = (id: string) => req<any>(`/admin/users/${id}`, { method: 'DELETE' });
 
 // ── Imports ────────────────────────────────────────────────────────────────
 export const getImportLogs = (supplierId: string) => req<any>(`/admin/suppliers/${supplierId}/imports`);
@@ -48,10 +50,11 @@ export const getImportLog  = (logId: string)      => req<any>(`/admin/imports/${
 export async function importFile(supplierId: string, file: File) {
   const form = new FormData();
   form.append('file', file);
-  const res = await fetch(`${BASE}/admin/suppliers/${supplierId}/import`, {
+  const res = await fetch(`/api/admin/admin/suppliers/${supplierId}/import`, {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${KEY}` },
     body: form,
   });
-  return res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Import failed');
+  return data;
 }

@@ -8,9 +8,6 @@ import { ArrowLeft, Save, Plus, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 
-const BASE = process.env.NEXT_PUBLIC_ADMIN_API || 'http://localhost:3001';
-const KEY  = process.env.NEXT_PUBLIC_ADMIN_KEY  || '';
-
 export default function NewProductPage() {
   const { t } = useLanguage();
   const router = useRouter();
@@ -56,9 +53,9 @@ export default function NewProductPage() {
 
     setSaving(true); setError('');
     try {
-      const res = await fetch(`${BASE}/admin/products/manual`, {
+      const res = await fetch('/api/admin/admin/products/manual', {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${KEY}`, 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ supplier_id: parseInt(supplierId), data }),
       });
       const json = await res.json();

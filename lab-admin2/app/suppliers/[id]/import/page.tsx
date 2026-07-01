@@ -281,7 +281,12 @@ export default function ImportPage() {
                       </p>
                     </div>
                   </div>
-                  <Badge color={statusColor(log.status) as any}>{log.status}</Badge>
+                  <div className="flex flex-col items-end gap-2">
+                    <Badge color={statusColor(log.status) as any}>{log.status}</Badge>
+                    <Link href={`/imports/${log.id}`} className="text-[10px] text-esi hover:underline">
+                      {t.ui.openLog}
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>

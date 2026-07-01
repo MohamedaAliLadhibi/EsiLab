@@ -227,6 +227,8 @@ export default function ProductsPage() {
 
   useEffect(() => {
     setSearch(searchParams.get('search') ?? '');
+    const group = searchParams.get('group');
+    setSelectedGroup(productGroups.some((item) => item.slug === group) ? group : null);
   }, [searchParams]);
 
   // Fetch products when filters change

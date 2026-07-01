@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { company } from '@/lib/site-data';
+import { ContactForm } from '@/components/landing/ContactForm';
 import { SectionTitle } from '@/components/landing/SectionTitle';
 
 export const metadata: Metadata = {
@@ -11,7 +12,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactPage() {
+export default function ContactPage({
+  searchParams,
+}: {
+  searchParams?: { subject?: string | string[] };
+}) {
+  const subject = Array.isArray(searchParams?.subject) ? searchParams?.subject[0] : searchParams?.subject;
+
   return (
     <main className="bg-panel py-24">
       <div className="site-shell grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
@@ -35,19 +42,7 @@ export default function ContactPage() {
             <p className="text-xs font-mono uppercase tracking-[0.22em] text-slate-500">Adresse</p>
             <p className="mt-2 text-lg font-semibold text-ink">{company.address}</p>
           </div>
-          <form className="mt-8 grid gap-4 md:grid-cols-2">
-            <input className="rounded-2xl border border-line px-4 py-3 outline-none" placeholder="Nom complet" />
-            <input className="rounded-2xl border border-line px-4 py-3 outline-none" placeholder="Societe" />
-            <input className="rounded-2xl border border-line px-4 py-3 outline-none" placeholder="Email" />
-            <input className="rounded-2xl border border-line px-4 py-3 outline-none" placeholder="Telephone" />
-            <textarea
-              className="min-h-40 rounded-2xl border border-line px-4 py-3 outline-none md:col-span-2"
-              placeholder="Decrivez votre besoin, vos produits d interet ou votre contexte laboratoire."
-            />
-            <button className="rounded-full bg-orange px-6 py-3 text-sm font-semibold text-white transition hover:bg-scarlet md:col-span-2 md:justify-self-start">
-              Envoyer la demande
-            </button>
-          </form>
+          <ContactForm subject={subject} />
         </div>
       </div>
     </main>

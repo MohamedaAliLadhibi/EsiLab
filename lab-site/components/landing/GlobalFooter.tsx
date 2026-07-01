@@ -48,15 +48,27 @@ export function GlobalFooter() {
           <div className="mt-8">
             <p className="text-xl font-semibold">S'abonner a la newsletter</p>
             <p className="mt-2 text-sm text-white/75">Actualites, promotions et nouveautes EsiLab.</p>
-            <div className="mt-4 flex items-center overflow-hidden rounded-full bg-white">
+            <form
+              action="https://mail.google.com/mail/"
+              method="get"
+              target="_blank"
+              className="mt-4 flex items-center overflow-hidden rounded-full bg-white"
+            >
+              <input type="hidden" name="view" value="cm" />
+              <input type="hidden" name="fs" value="1" />
+              <input type="hidden" name="to" value={company.email} />
+              <input type="hidden" name="su" value="Inscription newsletter EsiLab" />
               <input
+                type="email"
+                name="body"
+                required
                 className="flex-1 border-0 bg-transparent px-5 py-4 text-sm text-ink outline-none"
                 placeholder="Votre email professionnel"
               />
-              <button type="button" className="m-1 rounded-full bg-cyan px-5 py-3 text-sm font-semibold text-white">
+              <button type="submit" className="m-1 rounded-full bg-cyan px-5 py-3 text-sm font-semibold text-white">
                 Envoyer
               </button>
-            </div>
+            </form>
           </div>
         </div>
 
@@ -86,7 +98,7 @@ export function GlobalFooter() {
           <h3 className="text-2xl font-semibold">Nos services</h3>
           <div className="mt-6 space-y-4 text-white/78">
             {solutions.map((item) => (
-              <Link key={item.slug} href="/solutions" className="block transition hover:text-white">
+              <Link key={item.slug} href={`/solutions#${item.slug}`} className="block transition hover:text-white">
                 {item.name}
               </Link>
             ))}

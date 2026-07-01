@@ -6,21 +6,31 @@ import { SectionTitle } from '@/components/landing/SectionTitle';
 import { LandingHero } from '@/components/landing/home/LandingHero';
 import { QuickPanels } from '@/components/landing/home/QuickPanels';
 import { ServiceHighlights } from '@/components/landing/home/ServiceHighlights';
-import { brands, clientReferences, company, featuredProducts, solutions, values } from '@/lib/site-data';
+import { getHomePageCatalogue } from '@/lib/catalogue';
+import { brands, clientReferences, company, solutions, values } from '@/lib/site-data';
 
 export const metadata: Metadata = {
   title: 'Accueil',
   description:
-    'Découvrez EsiLab, partenaire des laboratoires pour les équipements scientifiques, la métrologie, l inspection, les réactifs et le support technique en Tunisie.',
+    'Decouvrez EsiLab, partenaire des laboratoires pour les equipements scientifiques, la metrologie, l inspection, les reactifs et le support technique en Tunisie.',
   alternates: {
     canonical: '/',
   },
 };
 
-export default function HomePage() {
+export const revalidate = 300;
+
+export default async function HomePage() {
+  const { totalProducts, featuredBrands, featuredProducts, heroProduct } = await getHomePageCatalogue();
+
   return (
     <main>
-      <LandingHero />
+      <LandingHero
+        totalProducts={totalProducts}
+        featuredBrands={featuredBrands}
+        featuredCount={featuredProducts.length}
+        product={heroProduct}
+      />
       <QuickPanels />
       <ServiceHighlights />
 
@@ -29,7 +39,7 @@ export default function HomePage() {
           <SectionTitle
             eyebrow="Nos solutions"
             title="Quatre piliers pour couvrir les besoins critiques du laboratoire moderne."
-            text="Les references que tu as envoyees vendent d'abord des univers de besoins. On reprend cette logique ici avec des blocs plus visibles, plus commerciaux et plus faciles a scanner."
+            text="Des univers plus lisibles pour orienter rapidement les equipes vers les equipements, solutions de mesure, inspections et consommables adaptes."
           />
           <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {solutions.map((solution) => (
@@ -51,7 +61,7 @@ export default function HomePage() {
           <SectionTitle
             eyebrow="Qui sommes-nous ?"
             title="Un partenaire scientifique centre sur la qualite, la precision et l excellence."
-            text="Ici on garde le fond de ta marque, mais la forme devient plus proche d'un distributeur laboratoire premium avec davantage de structure et de reassurance."
+            text="EsiLab accompagne les laboratoires avec une selection technique exigeante, un support local et une approche terrain orientee resultat."
           />
           <div className="grid gap-5">
             {values.map((value) => (
@@ -73,11 +83,11 @@ export default function HomePage() {
         <div className="site-shell">
           <SectionTitle
             eyebrow="Produits phares"
-            title="Une section produit plus proche d'un vrai catalogue marchand."
-            text="On reprend les grands codes des screenshots: image forte, denomination claire, parcours d'action visible et structure plus commerciale."
+            title="Une selection chargee depuis la base catalogue EsiLab."
+            text="Les references ci-dessous viennent du catalogue actif et sont presentees avec des visuels dedies pour une lecture plus nette."
           />
           <div className="mt-10 flex flex-wrap gap-3">
-            {brands.map((brand) => (
+            {featuredBrands.map((brand) => (
               <span key={brand} className="rounded-full border border-line bg-white px-4 py-2 text-sm text-slate-600 shadow-soft">
                 {brand}
               </span>
@@ -96,7 +106,7 @@ export default function HomePage() {
           <SectionTitle
             eyebrow="Marques & References"
             title="Des fabricants reconnus et des clients qui inspirent confiance."
-            text="Nous gardons la logique catalogue: la credibilite vient autant des marques representees que des references terrain."
+            text="La credibilite se construit autant par les marques representees que par les references terrain accompagnees par EsiLab."
             light
           />
           <div className="space-y-8">

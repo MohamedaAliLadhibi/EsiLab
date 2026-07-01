@@ -7,24 +7,28 @@ const panels = [
     text: 'Brochures, catalogues et documentations techniques.',
     icon: Download,
     className: 'bg-[#2db7f5]',
+    href: '/contact?subject=documentation',
   },
   {
     title: 'Promotions',
     text: 'Mises en avant commerciales sur des familles strategiques.',
     icon: Percent,
     className: 'bg-[#45c3b0]',
+    href: '/products?search=promotion',
   },
   {
     title: 'Destockage',
     text: 'Opportunites produits pour decisions rapides et budgets maitrises.',
     icon: ShoppingCart,
     className: 'bg-[#2851b4]',
+    href: '/products?search=destockage',
   },
   {
     title: 'Actualites',
     text: 'Lancements, conseils applicatifs et vie du laboratoire.',
     icon: Megaphone,
     className: 'bg-[#4a4a4a]',
+    href: '/contact?subject=actualites',
   },
 ];
 
@@ -37,7 +41,7 @@ export function QuickPanels() {
           return (
             <Link
               key={panel.title}
-              href="/products"
+              href={panel.href}
               className={`${panel.className} flex min-h-[190px] flex-col justify-between rounded-[2rem] p-6 text-white transition hover:-translate-y-1`}
             >
               <div>

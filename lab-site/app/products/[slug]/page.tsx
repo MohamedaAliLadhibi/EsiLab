@@ -15,6 +15,7 @@ import {
   FileText,
   Layers,
   Mail,
+  MessageCircle,
   Package,
   Phone,
   Send,
@@ -25,6 +26,8 @@ import {
 } from 'lucide-react';
 
 const API_BASE = 'http://localhost:3000/api';
+const QUOTE_EMAIL = 'Contact@esilab.tn';
+const QUOTE_WHATSAPP_NUMBER = '21650601783';
 
 type FieldMeta = {
   field_key: string;
@@ -167,6 +170,7 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isQuoteChoiceOpen, setIsQuoteChoiceOpen] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -227,6 +231,24 @@ export default function ProductDetailPage() {
     specFields,
   };
   const currentUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab.tn'}/products/${product.slug}`;
+  const quoteLines = [
+    'Bonjour EsiLab,',
+    '',
+    'Je souhaite demander un devis pour ce produit :',
+    `Produit : ${name}`,
+    sku ? `Reference / SKU : ${sku}` : '',
+    brand ? `Marque : ${brand}` : '',
+    category ? `Univers : ${category}` : '',
+    packageSize ? `Conditionnement : ${packageSize}` : '',
+    `Lien produit : ${currentUrl}`,
+    '',
+    'Merci de me confirmer le prix, la disponibilite et les delais.',
+  ].filter(Boolean);
+  const quoteMessage = quoteLines.join('\n');
+  const quoteSubject = `Demande de devis - ${sku || name}`;
+  const emailHref = `mailto:${QUOTE_EMAIL}?subject=${encodeURIComponent(quoteSubject)}&body=${encodeURIComponent(quoteMessage)}`;
+  const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(QUOTE_EMAIL)}&su=${encodeURIComponent(quoteSubject)}&body=${encodeURIComponent(quoteMessage)}`;
+  const whatsappHref = `https://wa.me/${QUOTE_WHATSAPP_NUMBER}?text=${encodeURIComponent(quoteMessage)}`;
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -394,13 +416,14 @@ export default function ProductDetailPage() {
               </div>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                <Link
-                  href={`/contact?product=${encodeURIComponent(name)}${sku ? `&sku=${encodeURIComponent(sku)}` : ''}`}
+                <button
+                  type="button"
+                  onClick={() => setIsQuoteChoiceOpen((isOpen) => !isOpen)}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-navy"
                 >
                   Demander un devis
                   <ArrowRight size={16} />
-                </Link>
+                </button>
                 <Link
                   href="/contact"
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-line px-5 py-3.5 text-sm font-semibold text-ink transition hover:border-blue hover:text-blue"
@@ -409,6 +432,14 @@ export default function ProductDetailPage() {
                   <Mail size={16} />
                 </Link>
               </div>
+              {isQuoteChoiceOpen && (
+                <QuoteChoiceCard
+                  emailHref={emailHref}
+                  gmailHref={gmailHref}
+                  whatsappHref={whatsappHref}
+                  productName={name}
+                />
+              )}
 
               <div className="mt-8 grid gap-3 border-t border-line pt-6 sm:grid-cols-3">
                 <div className="flex items-start gap-3">
@@ -492,13 +523,22 @@ export default function ProductDetailPage() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href={`/contact?product=${encodeURIComponent(name)}${sku ? `&sku=${encodeURIComponent(sku)}` : ''}`}
+              <button
+                type="button"
+                onClick={() => setIsQuoteChoiceOpen(true)}
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cyan px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue"
               >
                 Recevoir une offre
                 <ArrowRight size={16} />
-              </Link>
+              </button>
+              {isQuoteChoiceOpen && (
+                <QuoteChoiceCard
+                  emailHref={emailHref}
+                  gmailHref={gmailHref}
+                  whatsappHref={whatsappHref}
+                  productName={name}
+                />
+              )}
             </section>
 
             <section className="rounded-[2rem] border border-blue/20 bg-blue/5 p-6">
@@ -511,6 +551,53 @@ export default function ProductDetailPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+function QuoteChoiceCard({
+  emailHref,
+  gmailHref,
+  whatsappHref,
+  productName,
+}: {
+  emailHref: string;
+  gmailHref: string;
+  whatsappHref: string;
+  productName: string;
+}) {
+  return (
+    <div className="mt-4 rounded-2xl border border-blue/20 bg-blue/5 p-4">
+      <p className="text-sm font-semibold text-ink">Choisissez comment envoyer votre demande</p>
+      <p className="mt-1 text-xs leading-5 text-slate-500">
+        Le message sera prepare automatiquement avec les details de {productName}.
+      </p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <a
+          href={gmailHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:border-blue hover:text-blue"
+        >
+          <Mail size={16} />
+          Ouvrir Gmail
+        </a>
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#1faa52]"
+        >
+          <MessageCircle size={16} />
+          Contacter sur WhatsApp
+        </a>
+      </div>
+      <a
+        href={emailHref}
+        className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-white/70 px-4 py-2.5 text-xs font-semibold text-slate-600 transition hover:border-blue hover:text-blue"
+      >
+        Utiliser mon application email
+      </a>
+    </div>
   );
 }
 

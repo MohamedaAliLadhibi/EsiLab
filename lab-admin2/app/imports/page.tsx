@@ -5,6 +5,18 @@ import { getSuppliers, getImportLogs } from '@/lib/api';
 import { PageHeader, Table, Th, Td, Badge, Spinner, Empty } from '@/components/ui';
 import { ClipboardList, CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
+import Link from 'next/link';
+
+function parseErrors(raw: unknown) {
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw !== 'string' || !raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
 
 export default function ImportsPage() {
   const { lang, t } = useLanguage();
@@ -81,6 +93,7 @@ export default function ImportsPage() {
               <Th>{t.ui.errors}</Th>
               <Th>{t.ui.date}</Th>
               <Th>{t.ui.duration}</Th>
+              <Th>{t.ui.actions}</Th>
             </tr>
           </thead>
           <tbody>
@@ -88,7 +101,7 @@ export default function ImportsPage() {
               const duration = log.started_at && log.completed_at
                 ? ((new Date(log.completed_at).getTime() - new Date(log.started_at).getTime()) / 1000).toFixed(1) + 's'
                 : '—';
-              const errors = typeof log.errors === 'string' ? JSON.parse(log.errors) : (log.errors || []);
+              const errors = parseErrors(log.errors);
 
               return (
                 <tr key={log.id} className="hover:bg-esi/5 transition-colors animate-fadeUp"
@@ -131,6 +144,14 @@ export default function ImportsPage() {
                     </span>
                   </Td>
                   <Td><span className="text-xs font-mono text-dim">{duration}</span></Td>
+                  <Td>
+                    <Link
+                      href={`/imports/${log.id}`}
+                      className="text-xs text-esi hover:underline"
+                    >
+                      {t.ui.openLog}
+                    </Link>
+                  </Td>
                 </tr>
               );
             })}

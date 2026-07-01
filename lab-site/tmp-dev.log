@@ -1,0 +1,17 @@
+
+> lab-site@1.0.0 dev
+> next dev -p 4001
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:4001
+
+ ✓ Starting...
+ ✓ Ready in 3s
+ ○ Compiling / ...
+ ✓ Compiled / in 9s (654 modules)
+ GET / 200 in 9632ms
+ GET / 200 in 223ms
+ GET / 200 in 447ms
+ GET / 200 in 154ms
+ GET / 200 in 223ms
+ GET / 200 in 124ms

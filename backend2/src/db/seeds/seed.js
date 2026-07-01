@@ -1,5 +1,6 @@
 // src/db/seeds/seed.js
 const db = require('../../db/knex');
+const { hashPassword } = require('../../utils/auth');
 
 const PRODUCT_FIELDS = [
   { field_key: 'sku',                field_label: 'Part Number / SKU',        field_type: 'text',      is_required: true,  sort_order: 1  },
@@ -26,6 +27,26 @@ async function seed() {
     .onConflict('field_key')
     .merge(['field_label', 'field_type', 'is_required', 'sort_order']);
   console.log(`✅  Seeded ${PRODUCT_FIELDS.length} product fields.`);
+
+  const email = process.env.ADMIN_BOOTSTRAP_EMAIL;
+  const password = process.env.ADMIN_BOOTSTRAP_PASSWORD;
+  const name = process.env.ADMIN_BOOTSTRAP_NAME || 'Admin';
+
+  if (email && password) {
+    const existing = await db('users').whereRaw('lower(email) = lower(?)', [email]).first();
+    if (!existing) {
+      const { passwordHash } = hashPassword(password);
+      await db('users').insert({
+        name,
+        email,
+        password_hash: passwordHash,
+        role: 'admin',
+        is_active: true,
+      });
+      console.log(`✅  Seeded admin user ${email}.`);
+    }
+  }
+
   await db.destroy();
 }
 
