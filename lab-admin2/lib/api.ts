@@ -37,12 +37,6 @@ export const toggleProduct   = (id: string)  => req<any>(`/admin/products/${id}/
 export const deleteProduct   = (id: string)  => req<any>(`/admin/products/${id}`, { method: 'DELETE' });
 export const getProductFields = ()           => req<any>('/admin/product-fields');
 
-// Users
-export const getCurrentAdmin = ()           => req<any>('/admin/auth/me');
-export const getUsers        = ()           => req<any>('/admin/users');
-export const createUser      = (body: any)  => req<any>('/admin/users', { method: 'POST', body: JSON.stringify(body) });
-export const deleteUser      = (id: string) => req<any>(`/admin/users/${id}`, { method: 'DELETE' });
-
 // ── Imports ────────────────────────────────────────────────────────────────
 export const getImportLogs = (supplierId: string) => req<any>(`/admin/suppliers/${supplierId}/imports`);
 export const getImportLog  = (logId: string)      => req<any>(`/admin/imports/${logId}`);

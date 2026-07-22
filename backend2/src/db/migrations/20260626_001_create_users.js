@@ -1,16 +1,8 @@
-exports.up = function (knex) {
-  return knex.schema.createTable('users', (table) => {
-    table.increments('id').primary();
-    table.string('name', 150).notNullable();
-    table.string('email', 255).notNullable().unique();
-    table.text('password_hash').notNullable();
-    table.string('role', 50).notNullable().defaultTo('admin');
-    table.boolean('is_active').notNullable().defaultTo(true);
-    table.timestamp('last_login_at');
-    table.timestamps(true, true);
-  });
+// Kept as a no-op so databases that recorded this historical migration remain valid.
+exports.up = function () {
+  return Promise.resolve();
 };
 
-exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('users');
+exports.down = function () {
+  return Promise.resolve();
 };

@@ -4,10 +4,6 @@ const supplierCtrl = require('../../controllers/admin/supplierController');
 const importCtrl = require('../../controllers/admin/importController');
 const productCtrl = require('../../controllers/admin/productController');
 const dashboardCtrl = require('../../controllers/admin/dashboardController');
-const authCtrl = require('../../controllers/admin/authController');
-const userCtrl = require('../../controllers/admin/userController');
-const adminAuth = require('../../middleware/adminAuth');
-const adminBootstrapGuard = require('../../middleware/adminBootstrapGuard');
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -20,15 +16,6 @@ const upload = multer({
     cb(null, allowed.includes(file.mimetype));
   },
 });
-
-router.post('/auth/bootstrap', adminBootstrapGuard, authCtrl.bootstrap);
-router.post('/auth/login', authCtrl.login);
-router.use(adminAuth);
-router.get('/auth/me', authCtrl.me);
-router.post('/auth/logout', authCtrl.logout);
-router.get('/users', userCtrl.list);
-router.post('/users', userCtrl.create);
-router.delete('/users/:id', userCtrl.destroy);
 
 router.get('/dashboard/summary', dashboardCtrl.summary);
 router.get('/suppliers', supplierCtrl.list);

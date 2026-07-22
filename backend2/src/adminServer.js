@@ -1,5 +1,13 @@
 // src/adminServer.js - ADMIN API
-require('dotenv').config();
+// Resolve from this project so the server also works when launched outside backend2.
+const dotenv = require('dotenv');
+const envPath = require('path').resolve(__dirname, '../.env');
+const localEnv = dotenv.config({ path: envPath });
+
+// Local development should use this project's settings instead of stale Windows variables.
+if (localEnv.parsed?.NODE_ENV === 'development') {
+  dotenv.config({ path: envPath, override: true });
+}
 
 const express = require('express');
 const helmet = require('helmet');
@@ -23,8 +31,7 @@ app.use(cors({
     cb(new Error('CORS: origin not allowed'));
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+  allowedHeaders: ['Content-Type'],
 }));
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
