@@ -2,9 +2,9 @@
 import type { Metadata } from 'next';
 import { Syne, DM_Mono } from 'next/font/google';
 import './globals.css';
-import Sidebar from '@/components/layout/Sidebar';
-import TopBar from '@/components/layout/TopBar';
 import { LanguageProvider } from '@/components/i18n/LanguageProvider';
+import { AuthProvider } from '@/components/auth/AuthProvider';
+import AuthShell from '@/components/auth/AuthShell';
 
 const syne = Syne({
   subsets: ['latin'],
@@ -28,13 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${syne.variable} ${dmMono.variable}`}>
       <body className="bg-[#f5f7fb] text-ink font-display antialiased">
         <LanguageProvider>
-          <div className="flex h-screen overflow-hidden">
-            <Sidebar />
-            <main className="flex-1 overflow-y-auto">
-              <TopBar />
-              {children}
-            </main>
-          </div>
+          <AuthProvider>
+            <AuthShell>{children}</AuthShell>
+          </AuthProvider>
         </LanguageProvider>
       </body>
     </html>

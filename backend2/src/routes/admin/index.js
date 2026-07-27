@@ -4,6 +4,8 @@ const supplierCtrl = require('../../controllers/admin/supplierController');
 const importCtrl = require('../../controllers/admin/importController');
 const productCtrl = require('../../controllers/admin/productController');
 const dashboardCtrl = require('../../controllers/admin/dashboardController');
+const authenticationRoutes = require('../../authentication/routes');
+const { requireAuth } = require('../../authentication/authMiddleware');
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -16,6 +18,9 @@ const upload = multer({
     cb(null, allowed.includes(file.mimetype));
   },
 });
+
+router.use(authenticationRoutes);
+router.use(requireAuth);
 
 router.get('/dashboard/summary', dashboardCtrl.summary);
 router.get('/suppliers', supplierCtrl.list);

@@ -2,12 +2,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import {
   LayoutDashboard, Package, Building2, Upload,
   ClipboardList, ChevronRight, PlusCircle
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
+import { useAuth } from '@/components/auth/AuthProvider';
+import { getPendingSignups } from '@/lib/api';
 
 const nav = [
   { labelKey: 'dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -20,6 +23,46 @@ const nav = [
 export default function Sidebar() {
   const path = usePathname();
   const { lang, setLang, t } = useLanguage();
+  const { user } = useAuth();
+  const [pendingCount, setPendingCount] = useState<number>(0);
+
+  const visibleNav = user?.role === 'admin'
+    ? [...nav, { labelKey: 'users', href: '/users', icon: ClipboardList } as const]
+    : nav;
+
+  // Fetch pending signups count for admin
+  useEffect(() => {
+    if (user?.role !== 'admin') return;
+
+    const fetchPending = async () => {
+      try {
+        const response = await getPendingSignups();
+        const count = response?.data?.length || 0;
+        console.log('🔴 Pending count:', count);
+        setPendingCount(count);
+      } catch (error) {
+        console.warn('Failed to fetch pending signups:', error);
+      }
+    };
+
+    // Initial fetch
+    fetchPending();
+
+    // Refetch when user returns to the tab
+    const handleFocus = () => fetchPending();
+    window.addEventListener('focus', handleFocus);
+
+    // Custom event: trigger after approve/reject in UsersPage
+    const handleCustomUpdate = () => fetchPending();
+    window.addEventListener('pending-count-updated', handleCustomUpdate);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('pending-count-updated', handleCustomUpdate);
+    };
+  }, [user]);
+
+  const badgeText = pendingCount > 9 ? '9+' : pendingCount > 0 ? String(pendingCount) : '';
 
   return (
     <aside className="w-60 flex-shrink-0 flex flex-col border-r border-border bg-panel shadow-sm">
@@ -40,8 +83,9 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {nav.map(({ labelKey, href, icon: Icon }) => {
+        {visibleNav.map(({ labelKey, href, icon: Icon }) => {
           const active = path === href || path.startsWith(href + '/');
+          const isUsers = labelKey === 'users';
           return (
             <Link
               key={href}
@@ -54,7 +98,33 @@ export default function Sidebar() {
               )}
             >
               <Icon size={15} strokeWidth={active ? 2.5 : 1.8} />
-              <span className="flex-1 font-medium">{t.nav[labelKey]}</span>
+              <span className="flex-1 font-medium flex items-center justify-between">
+                {t.nav[labelKey]}
+                {isUsers && badgeText && (
+                  <span
+                    style={{
+                      marginLeft: 'auto',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minWidth: '20px',
+                      height: '20px',
+                      padding: '0 6px',
+                      borderRadius: '9999px',
+                      backgroundColor: '#ef4444',
+                      color: '#ffffff',
+                      fontSize: '10px',
+                      fontWeight: 'bold',
+                      lineHeight: 1,
+                      flexShrink: 0,
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                      border: '1px solid rgba(255,255,255,0.3)',
+                    }}
+                  >
+                    {badgeText}
+                  </span>
+                )}
+              </span>
               {active && <ChevronRight size={12} className="opacity-60" />}
             </Link>
           );
@@ -105,4 +175,4 @@ export default function Sidebar() {
       </div>
     </aside>
   );
-}
+} 

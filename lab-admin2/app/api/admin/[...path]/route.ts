@@ -18,25 +18,36 @@ async function proxy(request: NextRequest, context: { params: { path: string[] }
   }
 
   const { path } = context.params;
-  const targetUrl = new URL(`${backendUrl}/${path.join('/')}`);
+  const targetUrl = new URL(`${backendUrl}/admin/${path.join('/')}`);
   targetUrl.search = request.nextUrl.search;
 
   const headers = new Headers(request.headers);
   headers.delete('host');
   headers.delete('content-length');
+  headers.delete('transfer-encoding');
 
   const method = request.method.toUpperCase();
-  const hasBody = !['GET', 'HEAD'].includes(method);
-  const body = hasBody ? Buffer.from(await request.arrayBuffer()) : undefined;
+
+  // Only POST, PUT, PATCH can have a body
+  const hasBody = ['POST', 'PUT', 'PATCH'].includes(method);
+  let body: any = undefined;  // Use 'any' to satisfy TypeScript
+  if (hasBody) {
+    const contentLength = request.headers.get('content-length');
+    if (contentLength && parseInt(contentLength, 10) > 0) {
+      body = Buffer.from(await request.arrayBuffer());
+    }
+  }
 
   let backendResponse: Response;
   try {
+    console.log('🔀 Proxying to:', targetUrl.toString());
     backendResponse = await fetch(targetUrl, {
       method,
       headers,
-      body,
+      body, // undefined for GET/HEAD/DELETE, Buffer for POST/PUT/PATCH
     });
-  } catch {
+  } catch (error) {
+    console.error('❌ Proxy fetch error:', error);
     return NextResponse.json(
       { error: 'Admin backend is unreachable.' },
       { status: 502 }
