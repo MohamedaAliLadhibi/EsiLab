@@ -3,10 +3,10 @@ const tokens = require('./tokens');
 
 async function requireAuth(req, res, next) {
   try {
-    const header = req.headers.authorization || '';
-    const [scheme, token] = header.split(' ');
+    // 🔥 Read token from the secure HttpOnly cookie
+    const token = req.cookies.auth_token;
 
-    if (scheme !== 'Bearer' || !token) {
+    if (!token) {
       return res.status(401).json({ error: 'Authentication required' });
     }
 

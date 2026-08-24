@@ -1,19 +1,17 @@
 // lib/api.ts
-function getSavedToken() {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('auth_token');
-}
 
-async function req<T>(path: string, options: RequestInit = {}, token?: string | null): Promise<T> {
-  const authToken = token || getSavedToken();
+// 🔥 No more getSavedToken – we use HttpOnly cookies
+
+async function req<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`/api/admin${path}`, {
     ...options,
     headers: {
       ...(options.headers || {}),
       ...(options.body ? { 'Content-Type': 'application/json' } : {}),
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+      // No Authorization header – cookie is sent automatically
     },
     cache: 'no-store',
+    credentials: 'include', // 🔥 send cookies (auth_token)
   });
   const text = await res.text();
   const data = text ? JSON.parse(text) : null;
@@ -23,10 +21,10 @@ async function req<T>(path: string, options: RequestInit = {}, token?: string | 
 
 // ── Auth ──────────────────────────────────────────────────────────────────
 export const login = (body: { email: string; password: string }) =>
-  req<any>('/auth/login', { method: 'POST', body: JSON.stringify(body) }, null);
+  req<any>('/auth/login', { method: 'POST', body: JSON.stringify(body) });
 export const signup = (body: { name: string; email: string; password: string }) =>
-  req<any>('/auth/signup', { method: 'POST', body: JSON.stringify(body) }, null);
-export const me = (token?: string) => req<any>('/auth/me', {}, token);
+  req<any>('/auth/signup', { method: 'POST', body: JSON.stringify(body) });
+export const me = () => req<any>('/auth/me'); // no token arg needed
 export const getPendingSignups = () => req<any>('/auth/pending-signups');
 export const approveSignup = (id: string | number) =>
   req<any>(`/auth/pending-signups/${id}/approve`, { method: 'PATCH' });
@@ -78,13 +76,11 @@ export const getImportLog  = (logId: string)      => req<any>(`/imports/${logId}
 export async function importFile(supplierId: string, file: File) {
   const form = new FormData();
   form.append('file', file);
-  const authToken = getSavedToken();
-  const res = await fetch(`/api/admin/suppliers/${supplierId}/import`, {  // <-- fixed path
+  const res = await fetch(`/api/admin/suppliers/${supplierId}/import`, {
     method: 'POST',
     body: form,
-    headers: {
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-    },
+    credentials: 'include', // 🔥 send cookie
+    // No Authorization header needed
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Import failed');

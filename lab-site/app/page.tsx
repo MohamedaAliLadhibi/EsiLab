@@ -6,6 +6,10 @@ import { SectionTitle } from '@/components/landing/SectionTitle';
 import { LandingHero } from '@/components/landing/home/LandingHero';
 import { QuickPanels } from '@/components/landing/home/QuickPanels';
 import { ServiceHighlights } from '@/components/landing/home/ServiceHighlights';
+import { TrustBar } from '@/components/landing/home/TrustBar';
+import { BrowseByNeed } from '@/components/landing/home/BrowseByNeed';
+import { HowItWorks } from '@/components/landing/home/HowItWorks';
+import { AdviceCallout } from '@/components/landing/home/AdviceCallout';
 import { getHomePageCatalogue } from '@/lib/catalogue';
 import { brands, clientReferences, company, solutions, values } from '@/lib/site-data';
 
@@ -31,7 +35,9 @@ export default async function HomePage() {
         featuredCount={featuredProducts.length}
         product={heroProduct}
       />
+      <TrustBar />
       <QuickPanels />
+      <BrowseByNeed />
       <ServiceHighlights />
 
       <section className="bg-white py-24">
@@ -55,6 +61,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <HowItWorks />
 
       <section className="bg-panel py-24">
         <div className="site-shell grid gap-14 lg:grid-cols-[0.9fr_1.1fr]">
@@ -133,6 +141,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <AdviceCallout />
 
       <section className="bg-white py-24">
         <div className="site-shell rounded-[2.5rem] bg-gradient-to-r from-blue to-cyan p-10 text-white shadow-halo lg:flex lg:items-end lg:justify-between">

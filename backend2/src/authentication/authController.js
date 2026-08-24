@@ -54,11 +54,19 @@ exports.login = async (req, res, next) => {
     }
 
     const safeUser = User.sanitize(user);
+    const token = tokens.sign({ id: safeUser.id, role: safeUser.role });
+
+    // ✅ Set secure, HttpOnly cookie
+    res.cookie('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    });
+
+    // ✅ Return user data WITHOUT the token
     res.json({
-      data: {
-        user: safeUser,
-        token: tokens.sign({ id: safeUser.id, role: safeUser.role }),
-      },
+      data: { user: safeUser },
     });
   } catch (err) {
     next(err);
