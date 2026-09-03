@@ -35,6 +35,10 @@ export const metadata: Metadata = {
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
+  icons: {
+    icon: '/logo-esilab-bleu.png',
+    apple: '/logo-esilab-bleu.png',
+  },
   keywords: [
     'EsiLab',
     'equipement laboratoire Tunisie',

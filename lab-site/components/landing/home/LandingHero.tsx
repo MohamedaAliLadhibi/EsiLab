@@ -77,7 +77,7 @@ export function LandingHero({ totalProducts, featuredBrands, featuredCount, prod
             <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-[0.95] text-white md:text-7xl xl:text-[6.2rem]">
               EsiLab, solutions intelligentes pour laboratoires modernes.
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78 md:text-xl">
+            <p className="mt-6 max-w-2xl rounded-2xl border border-cyan/50 bg-[#d9f4fb] px-5 py-4 text-lg leading-8 text-ink shadow-lg shadow-ink/20 md:text-xl">
               Une presentation plus visuelle, premium et claire du catalogue EsiLab avec mise en avant des
               equipements, de l&apos;expertise technique et de la demande de devis rapide.
             </p>
