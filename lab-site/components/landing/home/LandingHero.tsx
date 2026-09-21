@@ -16,7 +16,7 @@ type LandingHeroProps = {
 const slides = [
   {
     src: '/hero-lab-1.png',
-    alt: 'Scientifique EsiLab en laboratoire',
+    alt: 'Scientifique ESILAB en laboratoire',
     eyebrow: 'Laboratoire moderne',
   },
   {
@@ -26,12 +26,12 @@ const slides = [
   },
   {
     src: '/hero-lab-3.png',
-    alt: 'Equipe scientifique EsiLab',
+    alt: 'Equipe scientifique ESILAB',
     eyebrow: 'Performance et precision',
   },
   {
     src: '/hero-lab-4.png',
-    alt: 'Chercheur EsiLab en laboratoire moderne',
+    alt: 'Chercheur ESILAB en laboratoire moderne',
     eyebrow: 'Qualite et controle',
   },
 ];
@@ -73,12 +73,12 @@ export function LandingHero({ totalProducts, featuredBrands, featuredCount, prod
       <div className="site-shell relative flex min-h-[calc(100vh-72px)] items-end py-16 lg:py-20">
         <div className="grid w-full gap-10 xl:grid-cols-[1.15fr_0.85fr] xl:items-end">
           <div className="max-w-4xl">
-            <p className="eyebrow text-cyan">{slides[activeSlide]?.eyebrow ?? 'Catalogue EsiLab'}</p>
+            <p className="eyebrow text-cyan">{slides[activeSlide]?.eyebrow ?? 'Catalogue ESILAB'}</p>
             <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-[0.95] text-white md:text-7xl xl:text-[6.2rem]">
-              EsiLab, solutions intelligentes pour laboratoires modernes.
+              ESILAB, solutions intelligentes pour laboratoires modernes.
             </h1>
             <p className="mt-6 max-w-2xl rounded-2xl border border-cyan/50 bg-[#d9f4fb] px-5 py-4 text-lg leading-8 text-ink shadow-lg shadow-ink/20 md:text-xl">
-              Une presentation plus visuelle, premium et claire du catalogue EsiLab avec mise en avant des
+              Une presentation plus visuelle, premium et claire du catalogue ESILAB avec mise en avant des
               equipements, de l&apos;expertise technique et de la demande de devis rapide.
             </p>
 
@@ -112,7 +112,7 @@ export function LandingHero({ totalProducts, featuredBrands, featuredCount, prod
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 bg-white/5 px-6 py-5">
               <div>
                 <p className="eyebrow text-cyan">Produit mis en avant</p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">{product?.name ?? 'Selection EsiLab'}</h2>
+                <h2 className="mt-2 text-2xl font-semibold text-white">{product?.name ?? 'Selection ESILAB'}</h2>
                 <p className="mt-2 text-sm text-white/68">
                   {product ? `${product.brand} - ${product.category}` : 'Reference issue du catalogue'}
                 </p>

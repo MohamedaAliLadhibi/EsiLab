@@ -1,0 +1,86 @@
+{
+  "changedAt": "2026-09-12T12:27:23.035Z",
+  "changes": [
+    {
+      "id": "32859",
+      "slug": "anoxomat-iii-1-jar-3-gas-240v-system",
+      "sku": "ANX1J3G-2",
+      "name": "Anoxomat III 1 Jar 3 Gas 240V System",
+      "oldImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Standard-Jars-400x220-2.png",
+      "newImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Anoxomat_800x554_Isolated.png",
+      "reason": "Anoxomat instrument/system family"
+    },
+    {
+      "id": "32860",
+      "slug": "anoxomat-iii-2-jar-1-gas-240v-system",
+      "sku": "ANX2J1G-2",
+      "name": "Anoxomat III 2 Jar 1 Gas 240V System",
+      "oldImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Standard-Jars-400x220-2.png",
+      "newImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Anoxomat_800x554_Isolated.png",
+      "reason": "Anoxomat instrument/system family"
+    },
+    {
+      "id": "32861",
+      "slug": "anoxomat-iii-2-jar-2-gas-240v-system",
+      "sku": "ANX2J2G-2",
+      "name": "Anoxomat III 2 Jar 2 Gas 240V System",
+      "oldImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Standard-Jars-400x220-2.png",
+      "newImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Anoxomat_800x554_Isolated.png",
+      "reason": "Anoxomat instrument/system family"
+    },
+    {
+      "id": "32862",
+      "slug": "anoxomat-iii-2-jar-3-gas-240v-system",
+      "sku": "ANX2J3G-2",
+      "name": "Anoxomat III 2 Jar 3 Gas 240V System",
+      "oldImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Standard-Jars-400x220-2.png",
+      "newImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Anoxomat_800x554_Isolated.png",
+      "reason": "Anoxomat instrument/system family"
+    },
+    {
+      "id": "32863",
+      "slug": "anoxomat-iii-3-jar-1-gas-240v-system",
+      "sku": "ANX3J1G-2",
+      "name": "Anoxomat III 3 Jar 1 Gas 240V System",
+      "oldImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Standard-Jars-400x220-2.png",
+      "newImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Anoxomat_800x554_Isolated.png",
+      "reason": "Anoxomat instrument/system family"
+    },
+    {
+      "id": "32864",
+      "slug": "anoxomat-iii-3-jar-2-gas-240v-system",
+      "sku": "ANX3J2G-2",
+      "name": "Anoxomat III 3 Jar 2 Gas 240V System",
+      "oldImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Standard-Jars-400x220-2.png",
+      "newImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Anoxomat_800x554_Isolated.png",
+      "reason": "Anoxomat instrument/system family"
+    },
+    {
+      "id": "32865",
+      "slug": "anoxomat-iii-4-jar-1-gas-240v-system",
+      "sku": "ANX4J1G-2",
+      "name": "Anoxomat III 4 Jar 1 Gas 240V System",
+      "oldImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Standard-Jars-400x220-2.png",
+      "newImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Anoxomat_800x554_Isolated.png",
+      "reason": "Anoxomat instrument/system family"
+    },
+    {
+      "id": "32857",
+      "slug": "anoxomat-iii-1-jar-1-gas-240v-system",
+      "sku": "ANX1J1G-2",
+      "name": "Anoxomat III 1 Jar 1 Gas 240V System",
+      "oldImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Standard-Jars-400x220-2.png",
+      "newImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Anoxomat_800x554_Isolated.png",
+      "reason": "Anoxomat instrument/system family"
+    },
+    {
+      "id": "32858",
+      "slug": "anoxomat-iii-1-jar-2-gas-240v-system",
+      "sku": "ANX1J2G-2",
+      "name": "Anoxomat III 1 Jar 2 Gas 240V System",
+      "oldImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Standard-Jars-400x220-2.png",
+      "newImage": "https://www.novabiomedical.com/inc/uploads/2019/12/Anoxomat_800x554_Isolated.png",
+      "reason": "Anoxomat instrument/system family"
+    }
+  ]
+}

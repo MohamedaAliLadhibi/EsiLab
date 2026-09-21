@@ -78,11 +78,11 @@ const productFamilyImages = [
   },
   {
     test: (data: Record<string, string>) => /\bFLM300\b|ALP|cuvette|pipet/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
-    url: 'https://www.novabiomedical.com/up/assets/2023/08/FLM300_220x260.png',
+    url: 'https://www.novabiomedical.com/inc/uploads/2019/12/FLM3000_800x554_New_Logo.png',
   },
   {
     test: (data: Record<string, string>) => /\b4250\b|cryoscope|lactrol|calibration standard/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
-    url: 'https://www.novabiomedical.com/up/assets/2019/12/4250-Cryoscope_New_Logo_220x260_Isolated.png',
+    url: 'https://www.novabiomedical.com/inc/uploads/2019/12/4250-Cryoscope_New_Logo_800x544_Isolated.png',
   },
 ];
 

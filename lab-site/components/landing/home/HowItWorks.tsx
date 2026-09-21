@@ -4,7 +4,7 @@ import { SectionTitle } from '@/components/landing/SectionTitle';
 
 const steps = [
   { number: '01', title: 'Partagez votre besoin', text: 'Application, contraintes, reference connue ou objectif de votre equipe.', icon: MessageSquareText },
-  { number: '02', title: 'Recevez une recommandation', text: 'EsiLab vous oriente vers une solution et les documents techniques utiles.', icon: PackageSearch },
+  { number: '02', title: 'Recevez une recommandation', text: 'ESILAB vous oriente vers une solution et les documents techniques utiles.', icon: PackageSearch },
   { number: '03', title: 'Avancez sereinement', text: 'Devis, livraison, installation et suivi selon votre contexte.', icon: ClipboardList },
 ];
 

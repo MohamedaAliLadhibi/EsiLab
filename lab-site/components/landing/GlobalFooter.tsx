@@ -22,14 +22,14 @@ export function GlobalFooter() {
                 />
               </div>
               <div>
-                <p className="text-lg font-semibold">EsiLab</p>
+                <p className="text-lg font-semibold">ESILAB</p>
                 <p className="text-sm text-slate-300">Expert du laboratoire</p>
               </div>
             </div>
 
             {/* Descriptive paragraph */}
             <div>
-              <h2 className="text-4xl font-semibold">EsiLab</h2>
+              <h2 className="text-4xl font-semibold">ESILAB</h2>
               <p className="mt-3 max-w-xl text-base leading-8 text-slate-300">
                 Depuis plus de 85 ans dans l’esprit des grandes maisons du laboratoire,
                 EsiLab accompagne les équipes avec des équipements, des réactifs,
@@ -99,7 +99,7 @@ export function GlobalFooter() {
               {/* Responsive map container with 16:9 aspect ratio */}
               <div className="aspect-[4/3] lg:aspect-[3/4] xl:aspect-[4/5]">
                 <iframe
-                  title="EsiLab location"
+                  title="ESILAB location"
                   src={`https://maps.google.com/maps?q=${encodeURIComponent(
                     company.address
                   )}&t=&z=14&ie=UTF8&iwloc=&output=embed`}

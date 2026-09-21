@@ -1,12 +1,11 @@
 // src/controllers/admin/importController.js
 const path = require('path');
 const db = require('../../db/knex');
-const importQueue = require('../../../queue/importQueue');  // ✅ fixed
+const { runImport } = require('../../services/ImportService');
 const logger = require('../../utils/logger');
-// ... rest of the file
 
 // POST /admin/suppliers/:id/import
-// Accepts a multipart Excel upload, queues the import job.
+// Accepts a multipart Excel upload and imports it immediately.
 exports.upload = async (req, res, next) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded. Send an Excel file as multipart field "file".' });
@@ -17,36 +16,35 @@ exports.upload = async (req, res, next) => {
 
   // Validate extension
   const ext = path.extname(originalFilename).toLowerCase();
-  if (!['.xlsx', '.xls'].ext(ext)) {
+  if (!['.xlsx', '.xls'].includes(ext)) {
     return res.status(422).json({ error: 'Only .xlsx and .xls files are accepted.' });
   }
 
-  // Create an import log record with status 'pending' (or 'queued')
+  // Create an import log record before parsing so failures remain traceable.
   const [importLog] = await db('import_logs')
     .insert({
       supplier_id: supplierId,
       original_filename: originalFilename,
-      status: 'pending', // will be updated to 'processing' by worker
+      status: 'pending',
     })
     .returning('*');
 
-  // Add job to Bull queue
-  const job = await importQueue.add({
-    importLogId: importLog.id,
-    supplierId,
-    fileBuffer: req.file.buffer, // Buffer is serializable
-    originalFilename,
-  });
+  logger.info(`[Import] Starting import log #${importLog.id} for supplier ${supplierId}`);
 
-  logger.info(`[Import] Job #${job.id} queued for import log #${importLog.id}`);
+  try {
+    const result = await runImport(importLog.id, supplierId, req.file.buffer, originalFilename);
 
-  // Respond immediately with job ID and log ID
-  res.status(202).json({
-    message: 'Import job queued. Check status via /admin/imports/:logId.',
-    jobId: job.id,
-    importLogId: importLog.id,
-    status: 'queued',
-  });
+    res.status(202).json({
+      message: 'Import completed.',
+      importLogId: importLog.id,
+      inserted: result.inserted,
+      updated: result.updated,
+      skipped: result.skipped,
+      rowErrors: result.rowErrors,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 // GET /admin/suppliers/:id/imports – list logs (unchanged)

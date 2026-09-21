@@ -5,9 +5,9 @@ import { FormEvent, useState } from 'react';
 const CONTACT_EMAIL = 'contact@esilab.tn';
 
 const subjectLabels: Record<string, string> = {
-  commande: 'Demande de commande EsiLab',
-  documentation: 'Demande de documentation EsiLab',
-  actualites: 'Demande d informations actualites EsiLab',
+  commande: 'Demande de commande ESILAB',
+  documentation: 'Demande de documentation ESILAB',
+  actualites: 'Demande d informations actualites ESILAB',
 };
 
 export function ContactForm({ subject = 'contact' }: { subject?: string }) {
@@ -20,7 +20,7 @@ export function ContactForm({ subject = 'contact' }: { subject?: string }) {
   const submitContact = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const body = [
-      'Bonjour EsiLab,',
+      'Bonjour ESILAB,',
       '',
       'Je souhaite vous contacter pour une demande.',
       '',
@@ -33,7 +33,7 @@ export function ContactForm({ subject = 'contact' }: { subject?: string }) {
       message,
     ].filter(Boolean).join('\n');
 
-    const emailSubject = subjectLabels[subject] ?? 'Demande de contact EsiLab';
+    const emailSubject = subjectLabels[subject] ?? 'Demande de contact ESILAB';
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(body)}`;
     window.open(gmailUrl, '_blank', 'noopener,noreferrer');
   };

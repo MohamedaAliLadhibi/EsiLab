@@ -15,8 +15,6 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 
-// Import queue – starts the worker automatically when required
-const importQueue = require('../queue/importQueue');
 const adminRoutes = require('./routes/admin');
 const errorHandler = require('./middleware/errorHandler');
 const logger = require('./utils/logger');
@@ -37,11 +35,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
-
-// Start the Bull worker (import queue) – optional, but good for logging
-importQueue.on('ready', () => {
-  logger.info('Bull import worker ready');
-});
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cookieParser());
