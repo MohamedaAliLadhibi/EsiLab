@@ -9,6 +9,8 @@ if (localEnv.parsed?.NODE_ENV === 'development') {
   dotenv.config({ path: envPath, override: true });
 }
 
+console.log('AUTH_TOKEN_SECRET loaded:', !!process.env.AUTH_TOKEN_SECRET);
+
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -21,6 +23,10 @@ const logger = require('./utils/logger');
 
 const app = express();
 const PORT = process.env.ADMIN_PORT || 3001;
+
+// Trust the first proxy (required when running behind a reverse proxy,
+// and silences the express-rate-limit X-Forwarded-For warning).
+app.set('trust proxy', 1);
 
 const ALLOWED_ORIGINS = (process.env.ADMIN_CORS_ORIGINS || 'http://localhost:4000')
   .split(',')
@@ -38,6 +44,7 @@ app.use(cors({
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cookieParser());
+
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 200,
@@ -47,9 +54,16 @@ app.use(rateLimit({
 
 app.use(express.json());
 
-app.get('/health', (_req, res) => res.json({ status: 'ok', app: 'admin' }));
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok', app: 'admin' });
+});
+
 app.use('/admin', adminRoutes);
-app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
+
+app.use((_req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {

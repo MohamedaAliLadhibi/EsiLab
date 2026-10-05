@@ -275,3 +275,12 @@ export const company = {
 export function getProduct(slug: string) {
   return featuredProducts.find((product) => product.slug === slug);
 }
+
+export const savContact = {
+  name: 'Achraf Kouki',
+  role: 'Responsable SAV',
+  email: 'achraf.kouki@esilab.tn',
+  phone: '50783775',
+  phoneDisplay: '50 783 775',
+  whatsapp: '21650783775',
+};

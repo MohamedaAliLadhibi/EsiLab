@@ -25,38 +25,97 @@ function isSkippableRow(rowValues, skuColumnIndex) {
 
 function parseExcelBuffer(fileBuffer, supplier, mappingMap) {
   const workbook = XLSX.read(fileBuffer, { type: 'buffer' });
-
-  // Merge ALL sheets — supports multi-sheet supplier files
-  const allRows = [];
   const headerRowIndex = (supplier.header_row_number || 1) - 1;
+
+  // ---------------------------------------------------------------------------
+  // Which column letter is mapped to the SKU field? Required to sanity-check
+  // each sheet before reading it.
+  // ---------------------------------------------------------------------------
+  const skuEntry = Object.entries(mappingMap).find(([fieldKey]) => fieldKey === 'sku');
+  if (!skuEntry) {
+    throw new Error(`Supplier "${supplier.name}" has no "sku" field mapped.`);
+  }
+  const skuColumnLetter = String(skuEntry[1].source_column).toUpperCase();
+  const skuColumnIndex = colLetterToIndex(skuColumnLetter);
+
+  // Collect every column index the supplier has mapped to a field.
+  const expectedColumnIndices = Object.values(mappingMap)
+    .map((m) => colLetterToIndex(String(m.source_column)));
+
+  // ---------------------------------------------------------------------------
+  // Load rows from sheets that look like the supplier's expected layout.
+  // Sheets with a different structure (e.g. matrix layouts, calibration tables)
+  // are skipped so they don't produce junk products.
+  //
+  // Heuristic: a sheet is "compatible" if its header row has non-empty values
+  // in EVERY column the supplier has mapped, AND the SKU header looks like a
+  // normal short column label (no spaces, under 30 chars).
+  // ---------------------------------------------------------------------------
+  const allRows = [];
 
   for (const sheetName of workbook.SheetNames) {
     const sheet = workbook.Sheets[sheetName];
     if (!sheet) continue;
+
     const sheetRows = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: '' });
-    // Skip header rows at the top of each sheet
-    allRows.push(...sheetRows.slice(headerRowIndex + 1));
+    if (sheetRows.length <= headerRowIndex) continue;
+
+    const headerRow = sheetRows[headerRowIndex] || [];
+
+    // Every mapped column must have a non-empty header cell.
+    const everyMappedHeaderPresent = expectedColumnIndices.every((idx) => {
+      const cell = headerRow[idx];
+      return cell !== undefined && cell !== null && String(cell).trim() !== '';
+    });
+
+    // The SKU header should look like a real column header (not prose).
+    const skuHeaderRaw = headerRow[skuColumnIndex];
+    const skuHeaderStr = skuHeaderRaw != null ? String(skuHeaderRaw).trim() : '';
+    const skuHeaderLooksLikeHeader =
+      skuHeaderStr !== '' &&
+      skuHeaderStr.length < 30 &&
+      !skuHeaderStr.includes(' ');
+
+    if (!everyMappedHeaderPresent || !skuHeaderLooksLikeHeader) {
+      logger.info(
+        `[ImportService] Skipping sheet "${sheetName}" — header row does not match supplier mappings ` +
+        `(sku header was "${skuHeaderStr}")`
+      );
+      continue;
+    }
+
+    logger.info(`[ImportService] Reading sheet "${sheetName}"`);
+
+    // Tag each row with its sheet name so error messages can reference it.
+    for (const row of sheetRows.slice(headerRowIndex + 1)) {
+      allRows.push({ rowValues: row, sheetName });
+    }
+  }
+
+  if (allRows.length === 0) {
+    throw new Error(
+      `No compatible sheets found in "${supplier.name}" import. ` +
+      `Check header_row_number and field mappings.`
+    );
   }
 
   // Build column-index → field_key map
   const colIndexToFieldKey = {};
-  let skuColumnIndex = -1;
-
   for (const [fieldKey, mapping] of Object.entries(mappingMap)) {
     const idx = colLetterToIndex(mapping.source_column);
     colIndexToFieldKey[idx] = fieldKey;
-    if (fieldKey === 'sku') skuColumnIndex = idx;
-  }
-
-  if (skuColumnIndex === -1) {
-    throw new Error(`Supplier "${supplier.name}" has no "sku" field mapped.`);
   }
 
   const products = [];
   const rowErrors = [];
   const PRICE_KEY_PATTERNS = /price|cost|tarif|prix|preis|rate|msrp|rrp/i;
 
-  allRows.forEach((rowValues, i) => {
+  // Tracks the last non-empty description encountered. Used to propagate
+  // the parent product family's description down to all its variants
+  // (which have an empty description cell in the source Excel).
+  let lastDescription = '';
+
+  allRows.forEach(({ rowValues, sheetName }, i) => {
     if (isSkippableRow(rowValues, skuColumnIndex)) return;
 
     try {
@@ -71,19 +130,34 @@ function parseExcelBuffer(fileBuffer, supplier, mappingMap) {
       // Belt-and-suspenders price strip
       for (const key of Object.keys(productData)) {
         if (PRICE_KEY_PATTERNS.test(key)) {
-          logger.warn(`[ImportService] Stripped suspicious key "${key}" from row ${i + 2}`);
+          logger.warn(
+            `[ImportService] Stripped suspicious key "${key}" from row ${i + 2} in sheet "${sheetName}"`
+          );
           delete productData[key];
         }
       }
 
       if (!productData.sku) {
-        rowErrors.push({ row: i + 2, error: 'Empty SKU, row skipped.' });
+        rowErrors.push({
+          row: i + 2,
+          sheet: sheetName,
+          error: 'Empty SKU, row skipped.',
+        });
         return;
+      }
+
+      // Description inheritance:
+      // - If this row has a description, remember it for subsequent variants.
+      // - If this row has no description, inherit from the last one seen.
+      if (productData.description) {
+        lastDescription = productData.description;
+      } else if (lastDescription) {
+        productData.description = lastDescription;
       }
 
       products.push(productData);
     } catch (err) {
-      rowErrors.push({ row: i + 2, error: err.message });
+      rowErrors.push({ row: i + 2, sheet: sheetName, error: err.message });
     }
   });
 

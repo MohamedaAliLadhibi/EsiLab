@@ -30,11 +30,12 @@ export default async function HomePage() {
   return (
     <main>
       <LandingHero
-        totalProducts={totalProducts}
-        featuredBrands={featuredBrands}
-        featuredCount={featuredProducts.length}
-        product={heroProduct}
-      />
+  totalProducts={totalProducts}
+  featuredBrands={featuredBrands}
+  featuredCount={featuredProducts.length}
+  product={heroProduct}
+  products={featuredProducts}
+/>
       <TrustBar />
       <QuickPanels />
       <BrowseByNeed />

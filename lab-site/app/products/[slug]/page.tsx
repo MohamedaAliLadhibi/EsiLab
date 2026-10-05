@@ -24,6 +24,7 @@ import {
   Tag,
   User,
 } from 'lucide-react';
+import { DownloadTechnicalSheetButton } from '@/components/landing/DownloadTechnicalSheetButton';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api';
 
@@ -163,7 +164,7 @@ type ProductAssistantContext = {
     field_label: string;
     field_type: string;
     sort_order: number;
-  }>;
+  }>; 
 };
 
 export default function ProductDetailPage() {
@@ -219,6 +220,24 @@ export default function ProductDetailPage() {
     packageSize && { label: 'Conditionnement', value: packageSize, icon: Box },
     sku && { label: 'Reference', value: sku, icon: Tag },
   ].filter(Boolean) as Array<{ label: string; value: string; icon: typeof BadgeCheck }>;
+
+  // Payload for the PDF "Fiche technique"
+  const dataSheetProduct = {
+    name,
+    sku: sku || undefined,
+    brand: brand || undefined,
+    category: category || undefined,
+    packageSize: packageSize || undefined,
+    shortDescription: shortDescription || undefined,
+    description: description || undefined,
+    imageUrl: imageUrl || undefined,
+    specs: specFields
+      .map((field) => ({
+        label: field.field_label,
+        value: getDisplayValue(d, field.field_key),
+      }))
+      .filter((spec) => spec.value),
+  };
 
   const assistantContext: ProductAssistantContext = {
     name,
@@ -414,6 +433,8 @@ export default function ProductDetailPage() {
                     </div>
                   );
                 })}
+
+                <DownloadTechnicalSheetButton product={dataSheetProduct} variant="tile" />
               </div>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-2">

@@ -16,6 +16,9 @@ const PRODUCT_FIELDS = [
   { field_key: 'safety_info', field_label: 'Safety Information', field_type: 'rich_text', is_required: false, sort_order: 13 },
   { field_key: 'storage_conditions', field_label: 'Storage Conditions', field_type: 'text', is_required: false, sort_order: 14 },
   { field_key: 'package_size', field_label: 'Package Size / Unit', field_type: 'text', is_required: false, sort_order: 15 },
+  { field_key: 'price', field_label: 'Price', field_type: 'text', is_required: false, sort_order: 16 },
+  { field_key: 'pli', field_label: 'PLI', field_type: 'text', is_required: false, sort_order: 17 },
+  { field_key: 'pli_description', field_label: 'PLI Description', field_type: 'text', is_required: false, sort_order: 18 },
 ];
 
 async function seed() {

@@ -1,4 +1,4 @@
-// src/queue/importQueue.js
+﻿// src/queue/importQueue.js
 const Bull = require('bull');
 const { runImport } = require('../src/services/ImportService');
 const logger = require('../src/utils/logger');
@@ -20,7 +20,7 @@ const importQueue = new Bull('import', {
   },
 });
 
-// Worker processor – processes each job
+// Worker processor â€“ processes each job
 importQueue.process(async (job) => {
   const { importLogId, supplierId, fileBuffer, originalFilename } = job.data;
 
@@ -28,7 +28,11 @@ importQueue.process(async (job) => {
 
   try {
     // Run the import (synchronous, but we're in a separate process)
-    const result = await runImport(importLogId, supplierId, fileBuffer, originalFilename);
+    const buffer = Buffer.isBuffer(fileBuffer)
+    ? fileBuffer
+    : Buffer.from(fileBuffer?.data ?? fileBuffer);
+
+  const result = await runImport(importLogId, supplierId, buffer, originalFilename);
     logger.info(`[Queue] Job #${job.id} completed for import log #${importLogId}`);
     return result;
   } catch (err) {

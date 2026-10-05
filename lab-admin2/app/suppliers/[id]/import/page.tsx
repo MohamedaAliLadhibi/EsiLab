@@ -195,8 +195,8 @@ export default function ImportPage() {
               <div className="grid grid-cols-3 gap-2 text-center">
                 {[
                   { label: t.ui.inserted, val: result.inserted, color: 'text-green' },
-                  { label: t.ui.updated, val: result.updated, color: 'text-blue' },
-                  { label: t.ui.skipped, val: result.skipped, color: 'text-amber' },
+                  { label: t.ui.updated,  val: result.updated,  color: 'text-blue'  },
+                  { label: t.ui.skipped,  val: result.skipped,  color: 'text-amber' },
                 ].map(({ label, val, color }) => (
                   <div key={label} className="bg-white/5 rounded-lg p-2">
                     <p className={`text-lg font-bold ${color}`}>{val}</p>
@@ -204,11 +204,16 @@ export default function ImportPage() {
                   </div>
                 ))}
               </div>
-              {result.rowErrors.length > 0 && (
+
+              {(result.rowErrors?.length ?? 0) > 0 && (
                 <div className="mt-3 space-y-1">
-                  <p className="text-xs text-amber font-mono">{result.rowErrors.length} {t.ui.rowErrors}</p>
-                  {result.rowErrors.slice(0, 5).map((e, i) => (
-                    <p key={i} className="text-xs text-dim font-mono">Row {e.row}: {e.error}</p>
+                  <p className="text-xs text-amber font-mono">
+                    {(result.rowErrors?.length ?? 0)} {t.ui.rowErrors}
+                  </p>
+                  {(result.rowErrors ?? []).slice(0, 5).map((e, i) => (
+                    <p key={i} className="text-xs text-dim font-mono">
+                      Row {e.row}: {e.error}
+                    </p>
                   ))}
                 </div>
               )}

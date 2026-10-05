@@ -5,9 +5,10 @@ import { FormEvent, useState } from 'react';
 const CONTACT_EMAIL = 'contact@esilab.tn';
 
 const subjectLabels: Record<string, string> = {
-  commande: 'Demande de commande ESILAB',
-  documentation: 'Demande de documentation ESILAB',
-  actualites: 'Demande d informations actualites ESILAB',
+  commande: 'Demande de commande EsiLab',
+  documentation: 'Demande de documentation EsiLab',
+  actualites: 'Demande d informations actualites EsiLab',
+  sav: 'Demande SAV EsiLab',
 };
 
 export function ContactForm({ subject = 'contact' }: { subject?: string }) {
@@ -20,7 +21,7 @@ export function ContactForm({ subject = 'contact' }: { subject?: string }) {
   const submitContact = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const body = [
-      'Bonjour ESILAB,',
+      'Bonjour EsiLab,',
       '',
       'Je souhaite vous contacter pour une demande.',
       '',
@@ -33,7 +34,7 @@ export function ContactForm({ subject = 'contact' }: { subject?: string }) {
       message,
     ].filter(Boolean).join('\n');
 
-    const emailSubject = subjectLabels[subject] ?? 'Demande de contact ESILAB';
+    const emailSubject = subjectLabels[subject] ?? 'Demande de contact EsiLab';
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(body)}`;
     window.open(gmailUrl, '_blank', 'noopener,noreferrer');
   };
@@ -73,7 +74,10 @@ export function ContactForm({ subject = 'contact' }: { subject?: string }) {
         className="min-h-40 rounded-2xl border border-line px-4 py-3 outline-none md:col-span-2"
         placeholder="Decrivez votre besoin, vos produits d interet ou votre contexte laboratoire."
       />
-      <button type="submit" className="rounded-full bg-orange px-6 py-3 text-sm font-semibold text-white transition hover:bg-scarlet md:col-span-2 md:justify-self-start">
+      <button
+        type="submit"
+        className="rounded-full bg-orange px-6 py-3 text-sm font-semibold text-white transition hover:bg-scarlet md:col-span-2 md:justify-self-start"
+      >
         Envoyer la demande
       </button>
     </form>
