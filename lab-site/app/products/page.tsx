@@ -8,16 +8,13 @@ import {
   Boxes,
   ChevronLeft,
   ChevronRight,
-  FlaskConical,
-  Microscope,
   Package,
-  Ruler,
-  ScanSearch,
   Search,
   SlidersHorizontal,
   Sparkles,
   X,
 } from 'lucide-react';
+import { productGroups } from '@/lib/product-groups';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api';
 type Product = {
@@ -27,12 +24,22 @@ type Product = {
   sku?: string;
   category?: string;
   category_id?: number;
+  category_slug?: string;
+  assigned_category?: string;
   supplier?: string;
   data: Record<string, unknown>;
 };
 
 type ApiProductsResponse = {
-  data: Product[];
+  data: Product[] | {
+    data?: Product[];
+    meta?: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+    };
+  };
   pagination?: {
     page: number;
     limit: number;
@@ -46,128 +53,6 @@ type ApiProductsResponse = {
     totalPages: number;
   };
 };
-
-type ProductGroup = {
-  slug: string;
-  name: string;
-  summary: string;
-  keywords: string[];
-  icon: typeof Microscope;
-  accent: string;
-  chip: string;
-  surface: string;
-};
-
-const productGroups: ProductGroup[] = [
-  {
-    slug: 'equipements-laboratoires',
-    name: 'Equipements Laboratoires',
-    summary:
-      'Instrumentation, centrifugation, hotte, microbiologie et solutions completes pour laboratoires scientifiques.',
-    keywords: [
-      'equipement',
-      'equipment',
-      'instrument',
-      'instrumentation',
-      'centrifuge',
-      'centrifugation',
-      'hotte',
-      'biosafety',
-      'cabinet',
-      'microbiologie',
-      'microbiology',
-      'oven',
-      'incubator',
-      'laboratoire',
-    ],
-    icon: Microscope,
-    accent: 'from-blue to-cyan',
-    chip: 'border-blue/25 bg-blue/5 text-blue',
-    surface: 'border-blue/20 bg-blue/5',
-  },
-  {
-    slug: 'metrologie-dimensionnelle',
-    name: 'Metrologie Dimensionnelle',
-    summary:
-      'Mesure, controle dimensionnel et verification de precision pour les environnements exigeants.',
-    keywords: [
-      'metrologie',
-      'metrology',
-      'dimension',
-      'dimensionnel',
-      'mesure',
-      'measure',
-      'controle',
-      'precision',
-      'caliper',
-      'micrometer',
-      'gauge',
-      'verification',
-      'viscometer',
-      'viscosimetre',
-      'analyzer',
-      'analyseur',
-      'cryoscope',
-    ],
-    icon: Ruler,
-    accent: 'from-cyan to-lime',
-    chip: 'border-cyan/25 bg-cyan/5 text-cyan',
-    surface: 'border-cyan/20 bg-cyan/5',
-  },
-  {
-    slug: 'inspection-emballage',
-    name: 'Inspection & Emballage',
-    summary:
-      'Controle qualite, inspection visuelle et solutions industrielles de conditionnement et tracabilite.',
-    keywords: [
-      'inspection',
-      'emballage',
-      'packaging',
-      'conditionnement',
-      'tracabilite',
-      'traceability',
-      'visual',
-      'vision',
-      'quality',
-      'qualite',
-      'controle qualite',
-      'industrial',
-      'industriel',
-      'lot',
-    ],
-    icon: ScanSearch,
-    accent: 'from-lime to-orange',
-    chip: 'border-lime/30 bg-lime/10 text-lime',
-    surface: 'border-lime/25 bg-lime/10',
-  },
-  {
-    slug: 'produits-chimiques-reactifs',
-    name: 'Produits Chimiques & Reactifs',
-    summary:
-      'Reactifs, consommables et produits de laboratoire adaptes aux usages de routine et de recherche.',
-    keywords: [
-      'chimique',
-      'chemical',
-      'reactif',
-      'reagent',
-      'consommable',
-      'consumable',
-      'cas',
-      'solution',
-      'buffer',
-      'kit',
-      'media',
-      'milieu',
-      'routine',
-      'research',
-      'recherche',
-    ],
-    icon: FlaskConical,
-    accent: 'from-orange to-scarlet',
-    chip: 'border-orange/25 bg-orange/5 text-orange',
-    surface: 'border-orange/20 bg-orange/5',
-  },
-];
 
 const productFamilyImages = [
   {
@@ -217,7 +102,7 @@ export default function ProductsPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -241,11 +126,16 @@ export default function ProductsPage() {
       });
       if (debouncedSearch) params.set('search', debouncedSearch);
 
-      const res = await fetch(`${API_BASE}/products?${params}`);
+      const endpoint = selectedGroup
+        ? `/categories/${selectedGroup}/products?${params}`
+        : `/products?${params}`;
+      const res = await fetch(`${API_BASE}${endpoint}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json: ApiProductsResponse = await res.json();
-      const pagination = json.pagination ?? json.meta;
-      setProducts(json.data ?? []);
+      const nested = Array.isArray(json.data) ? null : json.data;
+      const resultProducts = Array.isArray(json.data) ? json.data : nested?.data ?? [];
+      const pagination = json.pagination ?? json.meta ?? nested?.meta;
+      setProducts(resultProducts);
       setTotalPages(pagination?.totalPages ?? 1);
       setTotal(pagination?.total ?? 0);
     } catch (e) {
@@ -254,7 +144,7 @@ export default function ProductsPage() {
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, page]);
+  }, [debouncedSearch, page, selectedGroup]);
 
   useEffect(() => {
     fetchProducts();
@@ -303,14 +193,12 @@ export default function ProductsPage() {
     return productFamilyImages.find((family) => family.test(text))?.url ?? null;
   };
 
-  const classifyProduct = (product: Product) => {
-    const text = getProductText(product);
-    return productGroups.find((group) => group.keywords.some((keyword) => text.includes(keyword)));
-  };
+  const classifyProduct = (product: Product) =>
+    productGroups.find((group) =>
+      group.slug === product.category_slug || group.slug === product.data?.category_slug,
+    );
 
-  const visibleProducts = selectedGroup
-    ? products.filter((product) => classifyProduct(product)?.slug === selectedGroup)
-    : products;
+  const visibleProducts = products;
 
   const activeGroup = productGroups.find((group) => group.slug === selectedGroup) ?? null;
 
@@ -323,7 +211,7 @@ export default function ProductsPage() {
           <div className="max-w-3xl">
             <p className="eyebrow text-cyan">Catalogue EsiLab</p>
             <h1 className="mt-4 text-4xl font-semibold leading-tight lg:text-6xl">
-              Produits et solutions pour laboratoires exigeants
+              Produits et solutions pour laboratoires 
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-8 text-white/70">
               Trouvez rapidement les équipements, instruments de mesure, solutions
@@ -479,7 +367,7 @@ export default function ProductsPage() {
                 <p className="text-sm text-slate-500">
                   {visibleProducts.length > 0 ? (
                     <>
-                      <span className="font-semibold text-ink">{selectedGroup ? visibleProducts.length : total}</span> produit{(selectedGroup ? visibleProducts.length : total) > 1 ? 's' : ''} affiché{(selectedGroup ? visibleProducts.length : total) > 1 ? 's' : ''}
+                      <span className="font-semibold text-ink">{total}</span> produit{total > 1 ? 's' : ''} affiché{total > 1 ? 's' : ''}
                     </>
                   ) : (
                     'Aucun produit trouvé'
@@ -538,10 +426,10 @@ export default function ProductsPage() {
                   const sku = getField(product, 'sku', 'reference', 'ref', 'code') ?? product.sku;
                   const brand = getField(product, 'brand', 'marque', 'supplier', 'fabricant') ?? product.supplier;
                   const description = getField(product, 'short_description', 'description', 'excerpt', 'summary', 'details');
-                  const rawCategory = getField(product, 'category', 'categorie', 'category_name') ?? product.category;
+                  const rawCategory = product.assigned_category ?? getField(product, 'category', 'categorie', 'category_name') ?? product.category;
                   const image = getProductImage(product);
-                  const group = classifyProduct(product) ?? productGroups[0];
-                  const Icon = group.icon;
+                  const group = classifyProduct(product);
+                  const Icon = group?.icon ?? Package;
 
                   return (
                     <a
@@ -550,7 +438,7 @@ export default function ProductsPage() {
                       className="group flex overflow-hidden rounded-2xl border border-line/80 bg-white shadow-soft transition hover:-translate-y-1 hover:border-blue/35 hover:shadow-halo"
                     >
                       <article className="flex w-full flex-col">
-                        <div className={`relative flex h-40 items-center justify-center border-b border-line/70 ${group.surface}`}>
+                        <div className={`relative flex h-40 items-center justify-center border-b border-line/70 ${group?.surface ?? 'border-slate-200 bg-slate-50'}`}>
                           <div className="panel-grid absolute inset-0 opacity-50" />
                           {image ? (
                             <img
@@ -559,7 +447,7 @@ export default function ProductsPage() {
                               className="relative z-10 max-h-32 max-w-[80%] object-contain drop-shadow-md"
                             />
                           ) : (
-                            <span className={`relative z-10 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${group.accent} text-white shadow-soft`}>
+                            <span className={`relative z-10 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${group?.accent ?? 'from-slate-400 to-slate-500'} text-white shadow-soft`}>
                               <Icon size={30} />
                             </span>
                           )}
@@ -567,11 +455,11 @@ export default function ProductsPage() {
 
                         <div className="flex flex-1 flex-col p-5">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${group.chip}`}>
+                            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${group?.chip ?? 'border-slate-200 bg-slate-50 text-slate-500'}`}>
                               <Icon size={12} />
-                              {group.name}
+                              {group?.name ?? 'À classer'}
                             </span>
-                            {rawCategory && rawCategory !== group.name && (
+                            {rawCategory && rawCategory !== (group?.name ?? 'À classer') && (
                               <span className="rounded-full border border-line bg-mist px-2.5 py-1 text-xs text-slate-500">
                                 {rawCategory}
                               </span>
@@ -633,7 +521,7 @@ export default function ProductsPage() {
             )}
 
             {/* Pagination */}
-            {!loading && !selectedGroup && totalPages > 1 && (
+            {!loading && totalPages > 1 && (
               <div className="mt-12 flex items-center justify-center gap-2">
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}

@@ -1,30 +1,36 @@
 import type { Metadata } from 'next';
-import { DM_Mono, Manrope, Sora } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 import { GlobalNav } from '@/components/landing/GlobalNav';
 import { GlobalFooter } from '@/components/landing/GlobalFooter';
+import { CatalogueAssistant } from '@/components/landing/CatalogueAssistant';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab.tn';
 const siteName = 'EsiLab';
 const siteDescription =
   'EsiLab accompagne les laboratoires en Tunisie avec des equipements scientifiques, solutions de mesure, inspection, reactifs et support technique.';
 
-const sora = Sora({
-  subsets: ['latin'],
+const sora = localFont({
+  src: '../public/fonts/sora-latin.woff2',
   variable: '--font-display',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: '400 800',
+  display: 'swap',
 });
 
-const manrope = Manrope({
-  subsets: ['latin'],
+const manrope = localFont({
+  src: '../public/fonts/manrope-latin.woff2',
   variable: '--font-body',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: '400 800',
+  display: 'swap',
 });
 
-const dmMono = DM_Mono({
-  subsets: ['latin'],
+const dmMono = localFont({
+  src: [
+    { path: '../public/fonts/dm-mono-regular-latin.woff2', weight: '400' },
+    { path: '../public/fonts/dm-mono-medium-latin.woff2', weight: '500' },
+  ],
   variable: '--font-mono',
-  weight: ['400', '500'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -116,6 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GlobalNav />
         {children}
         <GlobalFooter />
+        <CatalogueAssistant />
       </body>
     </html>
   );

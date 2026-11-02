@@ -14,7 +14,7 @@ The system lets administrators:
 - manually create, edit, enable/disable, and delete catalogue products;
 - manage pending user registrations and approved admin/employer accounts.
 
-Visitors can browse, search, paginate through, and view product records. A product-detail assistant can use OpenRouter when configured and falls back to deterministic answers based only on the displayed product data.
+Visitors can browse, search, paginate through, and view product records. The catalogue assistant searches local EsiLab product records and uses prepared answers for support, compatibility, and quote questions.
 
 ## 2. Repository map
 
@@ -59,7 +59,7 @@ There are two Express entry points in `backend2/src/`:
 - **Database:** PostgreSQL. Product attributes live in flexible `jsonb` rather than a fixed product-column schema.
 - **Authentication:** custom HMAC-SHA256 JWT-like bearer token, PBKDF2 password hashes, user approval statuses, and role checks for account-management routes.
 - **Public/Admin UI:** Next.js 14 App Router, React 18, TypeScript, Tailwind CSS, Lucide icons. Admin also uses Recharts and a small built-in English/French dictionary.
-- **Optional AI:** server-side call from the public site to OpenRouter's chat-completions API.
+- **Catalogue assistant:** deterministic server-side product lookup against the public catalogue API; it does not call an external AI provider or web-search service.
 
 ## 5. Data model
 
@@ -159,14 +159,14 @@ Responses generally wrap entity data in `{ data: ... }`. Product lists use `{ da
 - `/products`: client-side catalogue with debounced search, category-style UI filters, pagination, loading and error states.
 - `/products/[slug]`: product detail, dynamic field display, JSON-LD product data, request-for-quote links (email/Gmail/WhatsApp), and product chat.
 - `/solutions`, `/about`, `/contact`: marketing and company information.
-- `/api/product-chat`: server route that calls OpenRouter when `OPENROUTER_API_KEY` exists.
+- `/api/assistant`: catalogue-only product search and prepared answers for product support, compatibility, and quote requests.
 - `robots.ts`, `sitemap.ts`, and root metadata: SEO discovery, social metadata, and Organization JSON-LD.
 
 ### Key frontend utilities
 
 - `lib/catalogue.ts`: server-side home-page catalogue fetch and `toHomeProduct` adapter. It supports `API_BASE_URL` or `NEXT_PUBLIC_API_BASE_URL` but falls back to localhost.
 - `lib/site-data.ts`: local content and featured-product definitions used by presentation and sitemap code.
-- Product detail contains `answerProductQuestion`, a local deterministic fallback. It never invents price, stock, safety, compatibility, installation, or regulatory certainty and redirects those questions to EsiLab.
+- The catalogue assistant reads product details from the public catalogue API. Prepared answers direct product-use questions to SAV and quote or fit questions to EsiLab; it does not call an external AI or search provider.
 - `ContactForm.tsx` composes a prefilled Gmail compose link. It does **not** persist or send the form to a backend email service.
 
 ## 9. Administration app (`lab-admin2`)
@@ -191,7 +191,7 @@ Use `backend2/.env.example` as the template. Required operational groups are dat
 
 ### Frontend environment
 
-- Public site: `NEXT_PUBLIC_SITE_URL`; optional `OPENROUTER_API_KEY` and `OPENROUTER_MODEL`; configure an API base URL for all catalogue callers.
+- Public site: `NEXT_PUBLIC_SITE_URL`; configure an API base URL for all catalogue callers.
 - Admin site: `ADMIN_API_URL`, normally the reachable admin Express URL.
 
 ### Typical local sequence
@@ -246,4 +246,4 @@ For an AI assigned a new feature or bug:
 | Admin login/session | `lab-admin2/components/auth/AuthProvider.tsx` -> backend `authentication/` |
 | Public catalogue UI | `lab-site/app/products/page.tsx` and `lab-site/app/products/[slug]/page.tsx` |
 | Home catalogue cards | `lab-site/app/page.tsx` -> `lab-site/lib/catalogue.ts` |
-| AI product assistant | `lab-site/app/products/[slug]/page.tsx` -> `lab-site/app/api/product-chat/route.ts` |
+| Catalogue product assistant | `lab-site/app/products/[slug]/page.tsx` -> `lab-site/app/api/assistant/route.ts` |

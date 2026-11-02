@@ -28,6 +28,15 @@ app.use(rateLimit({
 
 app.use(express.json());
 
+// Catalogue GETs change infrequently. A short browser cache makes repeat
+// searches and product views quicker without keeping updates stale for long.
+app.use('/api', (req, res, next) => {
+  if (req.method === 'GET') {
+    res.setHeader('Cache-Control', 'public, max-age=30, s-maxage=120, stale-while-revalidate=300');
+  }
+  next();
+});
+
 // ── Static assets (downloaded product images) ────────────────────────────
 app.use('/assets', express.static('storage/public'));
 

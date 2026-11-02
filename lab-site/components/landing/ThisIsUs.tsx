@@ -25,7 +25,7 @@ export function ThisIsUs() {
                   This is us
                 </p>
                 <h2 className="mt-4 text-3xl font-semibold leading-tight text-ink md:text-4xl">
-                  Une équipe tunisienne, proche de vos laboratoires.
+                  L'éxpertise de vos équipements, la réactivité à vos côtés.
                 </h2>
                 <p className="mt-4 text-sm leading-7 text-slate-600">
                   Depuis notre création, EsiLab accompagne les laboratoires
@@ -81,7 +81,7 @@ export function ThisIsUs() {
                 Sur le terrain
               </p>
               <h3 className="mt-4 text-2xl font-semibold text-ink">
-                Nous rencontrons nos clients là où ils exercent.
+                Nous rencontrons nos clients là où ils sont.
               </h3>
               <p className="mt-4 text-sm leading-7 text-slate-600">
                 Salons professionnels, journées techniques, formations sur site :

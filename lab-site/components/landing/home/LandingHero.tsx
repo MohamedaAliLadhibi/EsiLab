@@ -17,7 +17,7 @@ type LandingHeroProps = {
 const slides = [
   {
     src: '/hero-lab-1.png',
-    alt: 'Scientifique EsiLab en laboratoire',
+    alt: 'Scientifique ESILAB en laboratoire',
     eyebrow: 'Laboratoire moderne',
   },
   {
@@ -27,12 +27,12 @@ const slides = [
   },
   {
     src: '/hero-lab-3.png',
-    alt: 'Equipe scientifique EsiLab',
+    alt: 'Equipe scientifique ESILAB',
     eyebrow: 'Performance et precision',
   },
   {
     src: '/hero-lab-4.png',
-    alt: 'Chercheur EsiLab en laboratoire moderne',
+    alt: 'Chercheur ESILAB en laboratoire moderne',
     eyebrow: 'Qualite et controle',
   },
 ];
@@ -83,6 +83,7 @@ export function LandingHero({
 
   const activeProduct = rotatingProducts[activeProductIndex] ?? product ?? null;
   const activeProductImage = resolveHeroImage(activeProduct);
+  const backgroundSlide = slides[activeSlide] ?? slides[0];
 
   const stats = [
     {
@@ -96,22 +97,15 @@ export function LandingHero({
   return (
     <section className="relative min-h-[calc(100vh-72px)] overflow-hidden bg-navy">
       <div className="absolute inset-0">
-        {slides.map((slide, index) => (
-          <div
-            key={slide.src}
-            className={`absolute inset-0 transition-all duration-1000 ${
-              index === activeSlide ? 'scale-100 opacity-100' : 'scale-105 opacity-0'
-            }`}
-          >
-            <Image
-              src={slide.src}
-              alt={slide.alt}
-              fill
-              priority={index === 0}
-              className="object-cover"
-            />
-          </div>
-        ))}
+        <div key={backgroundSlide.src} className="absolute inset-0 animate-[fadeIn_700ms_ease-out]">
+          <Image
+            src={backgroundSlide.src}
+            alt={backgroundSlide.alt}
+            fill
+            priority={activeSlide === 0}
+            className="object-cover"
+          />
+        </div>
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,21,44,0.84)_0%,rgba(10,21,44,0.64)_38%,rgba(10,21,44,0.34)_58%,rgba(10,21,44,0.76)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(72,198,223,0.18),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(31,87,184,0.24),transparent_22%)]" />
       </div>
@@ -120,15 +114,15 @@ export function LandingHero({
         <div className="grid w-full gap-10 xl:grid-cols-[1.15fr_0.85fr] xl:items-end">
           <div className="max-w-4xl">
             <p className="eyebrow text-cyan">
-              {slides[activeSlide]?.eyebrow ?? 'Catalogue EsiLab'}
+              {slides[activeSlide]?.eyebrow ?? 'Catalogue ESILAB'}
             </p>
             <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-[0.95] text-white md:text-7xl xl:text-[6.2rem]">
-              EsiLab, solutions intelligentes pour laboratoires modernes.
+              ESILAB, solutions intelligentes pour laboratoires modernes.
             </h1>
 
             {/* Paragraph with frosted-glass background */}
             <p className="mt-6 max-w-2xl rounded-2xl border border-white/15 bg-white/10 px-5 py-4 text-lg leading-8 text-white/90 shadow-soft backdrop-blur-md md:text-xl">
-              Une presentation plus visuelle, premium et claire du catalogue EsiLab avec mise en
+              Une presentation plus visuelle, premium et claire du catalogue ESILAB avec mise en
               avant des equipements, de l&apos;expertise technique et de la demande de devis
               rapide.
             </p>
@@ -165,15 +159,15 @@ export function LandingHero({
           </div>
 
           {/* === FEATURED PRODUCT CARD — rotates === */}
-          <div className="overflow-hidden rounded-[2rem] border border-white/12 bg-white/10 shadow-halo backdrop-blur-md">
+          <div className="mx-auto w-full max-w-2xl overflow-hidden rounded-[2rem] border border-white/12 bg-white/10 shadow-halo backdrop-blur-md">
             <div key={activeProduct?.slug ?? 'empty'} className="animate-[fadeIn_500ms_ease-out]">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 bg-white/5 px-6 py-5">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 bg-white/5 px-5 py-4">
                 <div>
                   <p className="eyebrow text-cyan">Produit mis en avant</p>
-                  <h2 className="mt-2 line-clamp-2 text-2xl font-semibold text-white">
-                    {activeProduct?.name ?? 'Selection EsiLab'}
+                  <h2 className="mt-1 line-clamp-2 text-xl font-semibold text-white sm:text-2xl">
+                    {activeProduct?.name ?? 'Selection ESILAB'}
                   </h2>
-                  <p className="mt-2 text-sm text-white/68">
+                  <p className="mt-1 text-sm text-white/68">
                     {activeProduct
                       ? `${activeProduct.brand} - ${activeProduct.category}`
                       : 'Reference issue du catalogue'}
@@ -185,34 +179,34 @@ export function LandingHero({
               </div>
 
               {/* Image area — uses heroImage, falls back to image */}
-              <div className="relative aspect-[16/9] bg-gradient-to-br from-[#16305c] via-[#12264a] to-[#0b1730]">
+              <div className="relative aspect-[16/8] overflow-hidden bg-gradient-to-br from-[#16305c] via-[#12264a] to-[#0b1730]">
                 {activeProductImage && (
                   <Image
                     src={activeProductImage}
-                    alt={activeProduct?.name ?? 'Produit EsiLab'}
+                    alt={activeProduct?.name ?? 'Produit ESILAB'}
                     fill
-                    priority
-                    className="object-contain p-4"
+                    priority={activeProductIndex === 0}
+                    className="object-cover"
                   />
                 )}
               </div>
 
-              <div className="grid gap-4 border-t border-white/10 px-6 py-5 md:grid-cols-3">
+              <div className="grid gap-x-5 gap-y-2 border-t border-white/10 px-5 py-4 sm:grid-cols-2 xl:grid-cols-3">
                 <div className="flex items-start gap-3">
                   <ShieldCheck size={18} className="mt-1 text-cyan" />
-                  <p className="text-sm leading-7 text-white/75">
+                  <p className="text-sm leading-6 text-white/75">
                     {activeProduct?.brand ?? 'Marques techniques selectionnees'}
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <Wrench size={18} className="mt-1 text-orange" />
-                  <p className="text-sm leading-7 text-white/75">
+                  <p className="text-sm leading-6 text-white/75">
                     {activeProduct?.category ?? "Accompagnement a l'installation et au SAV"}
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <BriefcaseBusiness size={18} className="mt-1 text-lime" />
-                  <p className="text-sm leading-7 text-white/75">
+                  <p className="line-clamp-3 text-sm leading-6 text-white/75">
                     {activeProduct?.excerpt ??
                       'Conseil applicatif pour laboratoires, qualite et industrie.'}
                   </p>
@@ -221,7 +215,7 @@ export function LandingHero({
             </div>
 
             {/* Bottom bar — dots reflect rotating products when there's more than 1 */}
-            <div className="flex items-center justify-between border-t border-white/10 px-6 py-4">
+            <div className="flex items-center justify-between border-t border-white/10 px-5 py-3">
               <div className="flex items-center gap-2">
                 {rotatingProducts.length > 1
                   ? rotatingProducts.map((p, index) => (

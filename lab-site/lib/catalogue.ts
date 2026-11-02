@@ -109,7 +109,20 @@ async function fetchProducts(search: string, limit = 6) {
 }
 
 export async function getHomePageCatalogue() {
-  const responses = await Promise.all(featuredSearches.map((entry) => fetchProducts(entry.search)));
+  let responses: ProductsResponse[];
+  try {
+    responses = await Promise.all(featuredSearches.map((entry) => fetchProducts(entry.search)));
+  } catch (error) {
+    // Keep the marketing site buildable and available if the API/database is
+    // temporarily offline. Next.js will retry after the page revalidation window.
+    console.warn('Home catalogue unavailable; rendering the page without live products.', error);
+    return {
+      totalProducts: 0,
+      featuredBrands: [],
+      featuredProducts: [],
+      heroProduct: null,
+    };
+  }
 
   const featuredProducts = featuredSearches
     .map((entry, index) => {

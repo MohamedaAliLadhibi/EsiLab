@@ -45,112 +45,95 @@ type Product = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-  data: Record<string, string>;
+  data: Record<string, unknown>;
   _fieldMeta: Record<string, FieldMeta>;
+  related_variants?: Array<{
+    id: string;
+    slug: string;
+    data: Record<string, unknown>;
+  }>;
+  related_variants_total?: number;
 };
 
 type ProductChatMessage = {
   role: 'assistant' | 'user';
   text: string;
+  links?: Array<{ label: string; href: string }>;
 };
 
-const hiddenSpecKeys = new Set(['name', 'description', 'short_description', 'image_url']);
+const hiddenSpecKeys = new Set([
+  'name', 'description', 'short_description', 'image_url', 'technical_specs',
+  'product_family_key', 'product_family_name', 'variant_attributes', 'manufacturer_url',
+  'datasheet_url', 'information_sources', 'enrichment_status', 'equivalent_sku',
+  'equivalent_product_id', 'category_slug', 'enrichment_generated_name',
+  'enrichment_generated_short_description', 'model_code',
+]);
 
 const productFamilyImages = [
   {
-    test: (data: Record<string, string>) => /calibration weight|test weight|weight set|350-82/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
+    test: (data: Record<string, unknown>) => /calibration weight|test weight|weight set|350-82/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
     url: 'https://www.precisa.com/wp-content/uploads/2021/07/Precisa_Balances_360_EP_6200C-4.jpg',
   },
   {
-    test: (data: Record<string, string>) => /\b520\s+(PB|PT)\b|520 PB\/PT|carat bowl|LP4024|power splitter|anti-theft/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
+    test: (data: Record<string, unknown>) => /\b520\s+(PB|PT)\b|520 PB\/PT|carat bowl|LP4024|power splitter|anti-theft/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
     url: 'https://www.precisa.com/wp-content/uploads/2023/08/DSCF2762-Retouched-300x200.jpg',
   },
   {
-    test: (data: Record<string, string>) => /\b321\s+(LS|LT|LX)\b|321 LT\/LX\/LS|\bLT\s+\d|\bLS\s+\d|\bLX\s+\d/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
+    test: (data: Record<string, unknown>) => /\b321\s+(LS|LT|LX)\b|321 LT\/LX\/LS|\bLT\s+\d|\bLS\s+\d|\bLX\s+\d/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
     url: 'https://www.precisa.com/wp-content/uploads/2018/04/Precisa-321-LX-Range.png',
   },
   {
-    test: (data: Record<string, string>) => /\b(320|330|335|390|490)\b|balance|data cable|RJ45|adapter|interface|remote|secondary display|protective cover|night cover|printer|barcode|smartbox/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
+    test: (data: Record<string, unknown>) => /\b(320|330|335|390|490)\b|balance|data cable|RJ45|adapter|interface|remote|secondary display|protective cover|night cover|printer|barcode|smartbox/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
     url: 'https://www.precisa.com/wp-content/uploads/2018/04/Precisa-321-LS-Range.png',
   },
   {
-    test: (data: Record<string, string>) => /(^|\s)360\s+EP|\bEP\s+\d/i.test(`${data.category ?? ''} ${data.name ?? ''}`),
+    test: (data: Record<string, unknown>) => /(^|\s)360\s+EP|\bEP\s+\d/i.test(`${data.category ?? ''} ${data.name ?? ''}`),
     url: 'https://www.precisa.com/wp-content/uploads/2021/07/Precisa_Balances_360_EP_6200C-4.jpg',
   },
   {
-    test: (data: Record<string, string>) => /\bFLM300\b|ALP|cuvette|pipet/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
+    test: (data: Record<string, unknown>) => /\bFLM300\b|ALP|cuvette|pipet/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
     url: 'https://www.novabiomedical.com/inc/uploads/2019/12/FLM3000_800x554_New_Logo.png',
   },
   {
-    test: (data: Record<string, string>) => /\b4250\b|cryoscope|lactrol|calibration standard/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
+    test: (data: Record<string, unknown>) => /\b4250\b|cryoscope|lactrol|calibration standard/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
     url: 'https://www.novabiomedical.com/inc/uploads/2019/12/4250-Cryoscope_New_Logo_800x544_Isolated.png',
   },
 ];
 
-function getDisplayValue(data: Record<string, string>, ...keys: string[]) {
+function getDisplayValue(data: Record<string, unknown>, ...keys: string[]) {
   for (const key of keys) {
-    const value = data[key];
+    const value = key.split('.').reduce<unknown>((current, part) => (
+      current && typeof current === 'object' ? (current as Record<string, unknown>)[part] : undefined
+    ), data);
     if (typeof value === 'string' && value.trim()) return value.trim();
+    if (typeof value === 'number') return String(value);
   }
   return '';
 }
 
-function getProductImage(data: Record<string, string>) {
+function getProductImage(data: Record<string, unknown>) {
   const imageUrl = getDisplayValue(data, 'image_url', 'image', 'photo', 'picture');
   if (imageUrl) return imageUrl;
+  if (/^350-869[45]$/.test(getDisplayValue(data, 'sku')) && /protection IP65/i.test(getDisplayValue(data, 'name'))) return '';
   return productFamilyImages.find((family) => family.test(data))?.url ?? '';
 }
 
 function formatLabel(key: string) {
+  const labels: Record<string, string> = {
+    valeur_nominale: 'Valeur nominale',
+    plage_du_jeu: 'Plage du jeu',
+    classe_de_poids: 'Classe de poids',
+    erreur_maximale_admise: 'Erreur maximale admise',
+    certificat: 'Certificat',
+  };
+  if (labels[key]) return labels[key];
   return key
     .replace(/_/g, ' ')
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-function answerProductQuestion(question: string, context: ProductAssistantContext) {
-  const normalizedQuestion = question.toLowerCase();
-  const specLines = context.specFields
-    .slice(0, 8)
-    .map((field) => `${field.field_label}: ${getDisplayValue(context.data, field.field_key)}`)
-    .filter(Boolean);
-
-  if (/use|utilis|mode|comment|operate|installer|install|start|demarr|fonction/i.test(normalizedQuestion)) {
-    return [
-      `Pour utiliser ${context.name}, commencez par confirmer la reference ${context.sku || 'du produit'} et son application avec votre procedure interne.`,
-      context.description || context.shortDescription
-        ? `D'apres la fiche, ${context.description || context.shortDescription}`
-        : 'La fiche ne donne pas encore de mode operatoire detaille.',
-      'Pour une utilisation en laboratoire, EsiLab peut vous aider avec le choix, la mise en service, la formation et les accessoires compatibles.',
-    ].join(' ');
-  }
-
-  if (/spec|fiche|caracter|capacity|capacite|size|dimension|detail|technical|technique/i.test(normalizedQuestion)) {
-    return specLines.length
-      ? `Voici les points techniques disponibles pour ${context.name}: ${specLines.join('; ')}.`
-      : `La fiche de ${context.name} ne contient pas encore de specifications detaillees. Le mieux est de demander une confirmation EsiLab avec la reference ${context.sku || context.name}.`;
-  }
-
-  if (/price|prix|devis|cost|cout|commande|acheter|buy|availability|disponib/i.test(normalizedQuestion)) {
-    return `Pour le prix, la disponibilite et les delais de ${context.name}, il faut demander un devis EsiLab. La reference a transmettre est ${context.sku || context.name}${context.packageSize ? `, conditionnement ${context.packageSize}` : ''}.`;
-  }
-
-  if (/compatible|compatibil|accessoire|accessory|alternative|replace|remplace|spare|piece/i.test(normalizedQuestion)) {
-    return `Pour verifier la compatibilite de ${context.name}, il faut croiser la reference ${context.sku || 'produit'}, la famille ${context.category || 'catalogue'} et votre equipement actuel. EsiLab peut confirmer l'accessoire, une alternative ou une piece equivalente avant commande.`;
-  }
-
-  if (/brand|marque|supplier|fabricant|category|categorie|family|famille/i.test(normalizedQuestion)) {
-    return `${context.name} est classe dans ${context.category || 'le catalogue EsiLab'}${context.brand ? ` et associe a la marque ${context.brand}` : ''}${context.sku ? `. Reference: ${context.sku}` : ''}.`;
-  }
-
-  return [
-    `Je peux vous aider sur ${context.name} avec les informations de cette fiche catalogue.`,
-    context.shortDescription && context.shortDescription !== context.name ? context.shortDescription : '',
-    specLines.length ? `Quelques donnees utiles: ${specLines.slice(0, 4).join('; ')}.` : '',
-    'Pour une reponse engageante sur compatibilite, prix ou disponibilite, envoyez une demande a EsiLab.',
-  ].filter(Boolean).join(' ');
-}
-
 type ProductAssistantContext = {
+  slug: string;
   name: string;
   sku: string;
   brand: string;
@@ -158,7 +141,7 @@ type ProductAssistantContext = {
   packageSize: string;
   shortDescription: string;
   description: string;
-  data: Record<string, string>;
+  data: Record<string, unknown>;
   specFields: Array<{
     field_key: string;
     field_label: string;
@@ -213,6 +196,26 @@ export default function ProductDetailPage() {
       sort_order: meta[key]?.sort_order ?? 999,
     }))
     .sort((a, b) => a.sort_order - b.sort_order || a.field_label.localeCompare(b.field_label));
+  const technicalSpecs = d.technical_specs && typeof d.technical_specs === 'object' && !Array.isArray(d.technical_specs)
+    ? d.technical_specs as Record<string, unknown>
+    : {};
+  for (const [key, value] of Object.entries(technicalSpecs)) {
+    if (typeof value !== 'string' && typeof value !== 'number') continue;
+    specFields.push({
+      field_key: `technical_specs.${key}`,
+      field_label: formatLabel(key),
+      field_type: 'text',
+      sort_order: 1000,
+    });
+  }
+  const getSpecValue = (fieldKey: string) => {
+    if (fieldKey.startsWith('technical_specs.')) {
+      return getDisplayValue(technicalSpecs, fieldKey.slice('technical_specs.'.length));
+    }
+    return getDisplayValue(d, fieldKey);
+  };
+  const manufacturerUrl = getDisplayValue(d, 'manufacturer_url');
+  const datasheetUrl = getDisplayValue(d, 'datasheet_url');
 
   const quickFacts = [
     brand && { label: 'Marque', value: brand, icon: BadgeCheck },
@@ -231,15 +234,18 @@ export default function ProductDetailPage() {
     shortDescription: shortDescription || undefined,
     description: description || undefined,
     imageUrl: imageUrl || undefined,
+    manufacturerUrl: manufacturerUrl || undefined,
+    datasheetUrl: datasheetUrl || undefined,
     specs: specFields
       .map((field) => ({
         label: field.field_label,
-        value: getDisplayValue(d, field.field_key),
+        value: getSpecValue(field.field_key),
       }))
       .filter((spec) => spec.value),
   };
 
   const assistantContext: ProductAssistantContext = {
+    slug: product.slug,
     name,
     sku,
     brand,
@@ -506,7 +512,7 @@ export default function ProductDetailPage() {
                 </div>
                 <div className="grid sm:grid-cols-2">
                   {specFields.map((field) => {
-                    const val = getDisplayValue(d, field.field_key);
+                    const val = getSpecValue(field.field_key);
                     if (!val) return null;
                     return (
                       <div key={field.field_key} className="border-b border-line px-6 py-4 sm:px-8 sm:odd:border-r">
@@ -521,6 +527,55 @@ export default function ProductDetailPage() {
                       </div>
                     );
                   })}
+                </div>
+              </section>
+            )}
+
+            {product.related_variants && product.related_variants.length > 0 && (
+              <section className="overflow-hidden rounded-[2rem] border border-line bg-white shadow-soft">
+                <div className="border-b border-line px-6 py-5 sm:px-8">
+                  <p className="eyebrow text-slate-400">Même famille produit</p>
+                  <h2 className="mt-2 text-2xl font-semibold text-ink">Autres références et variantes</h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-500">Chaque référence reste un produit distinct. Vérifiez les différences de configuration avant de choisir.</p>
+                </div>
+                <div
+                  tabIndex={product.related_variants.length > 4 ? 0 : undefined}
+                  aria-label={product.related_variants.length > 4 ? 'Liste défilante des autres références et variantes' : undefined}
+                  className={`divide-y divide-line ${product.related_variants.length > 4 ? 'max-h-[26rem] overflow-y-auto overscroll-contain focus:outline-none focus-visible:ring-2 focus-visible:ring-blue/40' : ''}`}
+                >
+                  {product.related_variants.map((variant) => {
+                    const variantName = getDisplayValue(variant.data, 'name') || 'Variante';
+                    const variantSku = getDisplayValue(variant.data, 'sku');
+                    const attributes = variant.data.variant_attributes && typeof variant.data.variant_attributes === 'object'
+                      ? Object.entries(variant.data.variant_attributes as Record<string, unknown>)
+                        .map(([key, value]) => `${formatLabel(key)}: ${String(value)}`)
+                        .join(' · ')
+                      : '';
+                    return (
+                      <Link key={variant.id} href={`/products/${variant.slug}`} className="block px-6 py-4 transition hover:bg-slate-50 sm:px-8">
+                        <span className="text-sm font-semibold text-blue">{variantName}{variantSku ? ` — Réf. ${variantSku}` : ''}</span>
+                        {attributes && <span className="mt-1 block text-xs leading-5 text-slate-500">{attributes}</span>}
+                      </Link>
+                    );
+                  })}
+                </div>
+                {(product.related_variants_total ?? 0) > product.related_variants.length && (
+                  <div className="border-t border-line px-6 py-4 sm:px-8">
+                    <Link href={`/products?search=${encodeURIComponent(getDisplayValue(d, 'product_family_key'))}`} className="text-sm font-semibold text-blue hover:underline">
+                      Voir toutes les références de cette famille ({product.related_variants_total}) <ArrowRight size={14} className="ml-1 inline" />
+                    </Link>
+                  </div>
+                )}
+              </section>
+            )}
+
+            {(manufacturerUrl || datasheetUrl) && (
+              <section className="rounded-[2rem] border border-line bg-white p-6 shadow-soft sm:p-8">
+                <p className="eyebrow text-slate-400">Documentation vérifiée</p>
+                <h2 className="mt-2 text-xl font-semibold text-ink">Sources fabricant</h2>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  {manufacturerUrl && <a href={manufacturerUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-blue hover:bg-slate-50">Page fabricant <ExternalLink size={14} /></a>}
+                  {datasheetUrl && <a href={datasheetUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-blue hover:bg-slate-50">Catalogue / fiche fabricant <ExternalLink size={14} /></a>}
                 </div>
               </section>
             )}
@@ -626,69 +681,50 @@ function QuoteChoiceCard({
 function ProductFaqChat({ context }: { context: ProductAssistantContext }) {
   const starterQuestions = [
     'Comment utiliser ce produit ?',
-    'Quelles sont ses specifications ?',
+    'Quelles sont ses spécifications ?',
     'Est-il compatible avec mon besoin ?',
     'Comment demander un devis ?',
   ];
   const [messages, setMessages] = useState<ProductChatMessage[]>([
     {
       role: 'assistant',
-      text: `Posez une question sur ${context.name}. Je peux resumer la fiche, expliquer l'usage, aider sur les specifications ou preparer une demande de devis.`,
+      text: `Posez une question sur ${context.name}. Je peux rechercher ses informations dans le catalogue et vous orienter vers le SAV ou l'équipe commerciale.`,
     },
   ]);
   const [question, setQuestion] = useState('');
   const [isThinking, setIsThinking] = useState(false);
-  const [isUsingFallback, setIsUsingFallback] = useState(false);
+  const [assistantUnavailable, setAssistantUnavailable] = useState(false);
 
   const askQuestion = async (value: string) => {
     const trimmedQuestion = value.trim();
     if (!trimmedQuestion || isThinking) return;
 
-    setMessages((currentMessages) => [
-      ...currentMessages,
-      { role: 'user', text: trimmedQuestion },
-    ]);
+    const conversation = [...messages, { role: 'user' as const, text: trimmedQuestion }];
+    setMessages(conversation);
     setQuestion('');
     setIsThinking(true);
 
     try {
-      const response = await fetch('/api/product-chat', {
+      const response = await fetch('/api/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          question: trimmedQuestion,
-          product: {
-            name: context.name,
-            sku: context.sku,
-            brand: context.brand,
-            category: context.category,
-            packageSize: context.packageSize,
-            shortDescription: context.shortDescription,
-            description: context.description,
-            specs: context.specFields
-              .map((field) => ({
-                label: field.field_label,
-                value: getDisplayValue(context.data, field.field_key),
-              }))
-              .filter((spec) => spec.value),
-          },
+          productSlug: context.slug,
+          messages: conversation.slice(-8).map(({ role, text }) => ({ role, content: text })),
         }),
       });
-
-      if (!response.ok) throw new Error('AI provider unavailable');
-
       const json = await response.json();
-      const answer = typeof json.answer === 'string' ? json.answer : answerProductQuestion(trimmedQuestion, context);
-      setIsUsingFallback(false);
+      if (!response.ok) throw new Error(json.error || 'Impossible de joindre l’assistant.');
+      setAssistantUnavailable(false);
       setMessages((currentMessages) => [
         ...currentMessages,
-        { role: 'assistant', text: answer },
+        { role: 'assistant', text: json.answer, links: json.links || [] },
       ]);
-    } catch {
-      setIsUsingFallback(true);
+    } catch (error) {
+      setAssistantUnavailable(true);
       setMessages((currentMessages) => [
         ...currentMessages,
-        { role: 'assistant', text: answerProductQuestion(trimmedQuestion, context) },
+        { role: 'assistant', text: error instanceof Error ? error.message : 'L’assistant est indisponible. Reessayez dans un instant.' },
       ]);
     } finally {
       setIsThinking(false);
@@ -709,7 +745,7 @@ function ProductFaqChat({ context }: { context: ProductAssistantContext }) {
             </div>
           </div>
           <span className="rounded-full border border-cyan/25 bg-cyan/10 px-3 py-1.5 text-xs font-semibold text-cyan">
-            {isUsingFallback ? 'Mode fiche locale' : 'IA connectee si configuree'}
+            {assistantUnavailable ? 'Catalogue indisponible' : 'Réponses catalogue'}
           </span>
         </div>
       </div>
@@ -733,7 +769,20 @@ function ProductFaqChat({ context }: { context: ProductAssistantContext }) {
                         : 'border border-line bg-cloud/80 text-slate-700'
                     }`}
                   >
-                    {message.text}
+                    <p className="whitespace-pre-wrap">{message.text}</p>
+                    {message.links && message.links.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {message.links.map((action) => action.href.startsWith('/') ? (
+                          <Link key={`${action.href}-${action.label}`} href={action.href} className="inline-flex items-center gap-1 rounded-full border border-blue/20 bg-blue/5 px-3 py-1.5 text-xs font-semibold text-blue transition hover:bg-blue/10">
+                            {action.label}<ArrowRight size={13} />
+                          </Link>
+                        ) : (
+                          <a key={`${action.href}-${action.label}`} href={action.href} className="inline-flex items-center gap-1 rounded-full border border-blue/20 bg-blue/5 px-3 py-1.5 text-xs font-semibold text-blue transition hover:bg-blue/10">
+                            {action.label}<ArrowRight size={13} />
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   {isUser && (
                     <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-ink text-white">
@@ -749,7 +798,7 @@ function ProductFaqChat({ context }: { context: ProductAssistantContext }) {
                   <Bot size={16} />
                 </span>
                 <div className="rounded-2xl border border-line bg-cloud/80 px-4 py-3 text-sm leading-7 text-slate-500">
-                  Analyse de la fiche produit...
+                  Recherche dans le catalogue...
                 </div>
               </div>
             )}

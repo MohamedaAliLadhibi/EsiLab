@@ -1,6 +1,11 @@
 const { hashPassword } = require('../../authentication/passwords');
 
 exports.up = async function (knex) {
+  const initialAdminPassword = process.env.INITIAL_ADMIN_PASSWORD;
+  if (!initialAdminPassword) {
+    throw new Error('INITIAL_ADMIN_PASSWORD must be set before running migrations.');
+  }
+
   const exists = await knex.schema.hasTable('users');
 
   if (!exists) {
@@ -20,7 +25,7 @@ exports.up = async function (knex) {
     .insert({
       name: 'Mohamed Ali',
       email: 'ammamedali@gmail.com',
-      password_hash: hashPassword(process.env.INITIAL_ADMIN_PASSWORD || 'mohamedali2003'),
+      password_hash: hashPassword(initialAdminPassword),
       role: 'admin',
       status: 'approved',
       approved_at: knex.fn.now(),

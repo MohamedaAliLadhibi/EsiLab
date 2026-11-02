@@ -1,0 +1,14 @@
+{$APEX_DOMAIN}, {$SITE_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy public-site:4001
+}
+
+{$ADMIN_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy admin-site:4000
+}
+
+{$API_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy public-api:3000
+}

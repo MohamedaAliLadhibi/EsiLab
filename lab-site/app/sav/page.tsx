@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import {
   Wrench,
   ShieldCheck,
@@ -149,6 +148,16 @@ const savSlides = [
   },
 ];
 
+const additionalSavContacts = [
+  {
+    name: 'Ahmed Zouaghi',
+    role: 'Service Après-Vente',
+    phone: '28783200',
+    phoneDisplay: '+216 28 783 200',
+    whatsapp: '21628783200',
+  },
+];
+
 export default function SavPage() {
   return (
     <main className="bg-white">
@@ -197,7 +206,7 @@ export default function SavPage() {
 
           {/* RIGHT CARD — CONTACTS */}
           <div className="rounded-[2rem] border border-white/15 bg-white/5 p-8 backdrop-blur">
-            {/* SAV DEDICATED CONTACT */}
+            {/* SAV DEDICATED CONTACTS — merged into a single card */}
             <div className="relative overflow-hidden rounded-2xl border border-cyan/30 bg-gradient-to-br from-cyan/10 via-white/5 to-transparent p-5">
               <span
                 aria-hidden
@@ -213,54 +222,94 @@ export default function SavPage() {
                 </p>
               </div>
 
-              <div className="relative mt-4">
-                <p className="text-lg font-semibold text-white">{savContact.name}</p>
-                <p className="mt-0.5 text-xs text-white/60">{savContact.role}</p>
-              </div>
+              <div className="relative mt-5 divide-y divide-white/10">
+                {/* Primary SAV contact */}
+                <div className="pb-5">
+                  <p className="text-lg font-semibold text-white">{savContact.name}</p>
+                  <p className="mt-0.5 text-xs text-white/60">{savContact.role}</p>
 
-              <div className="relative mt-5 space-y-2">
-                {/* Email */}
-                <a
-                  href={`mailto:${savContact.email}`}
-                  className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition hover:border-cyan/40 hover:bg-white/10"
-                >
-                  <Mail size={16} className="shrink-0 text-cyan" />
-                  <span className="truncate text-sm text-white/90 group-hover:text-white">
-                    {savContact.email}
-                  </span>
-                </a>
+                  <div className="mt-4 space-y-2">
+                    <a
+                      href={`mailto:${savContact.email}`}
+                      className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition hover:border-cyan/40 hover:bg-white/10"
+                    >
+                      <Mail size={16} className="shrink-0 text-cyan" />
+                      <span className="truncate text-sm text-white/90 group-hover:text-white">
+                        {savContact.email}
+                      </span>
+                    </a>
 
-                {/* Phone */}
-                <a
-                  href={`tel:+216${savContact.phone}`}
-                  className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition hover:border-cyan/40 hover:bg-white/10"
-                >
-                  <Phone size={16} className="shrink-0 text-cyan" />
-                  <span className="text-sm text-white/90 group-hover:text-white">
-                    {savContact.phoneDisplay}
-                  </span>
-                </a>
+                    <a
+                      href={`tel:+216${savContact.phone}`}
+                      className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition hover:border-cyan/40 hover:bg-white/10"
+                    >
+                      <Phone size={16} className="shrink-0 text-cyan" />
+                      <span className="text-sm text-white/90 group-hover:text-white">
+                        {savContact.phoneDisplay}
+                      </span>
+                    </a>
 
-                {/* WhatsApp */}
-                <a
-                  href={`https://wa.me/${savContact.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-[#25D366]/40 bg-[#25D366]/10 px-3 py-2.5 transition hover:border-[#25D366] hover:bg-[#25D366]/20"
-                >
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#25D366]/25 blur-2xl transition group-hover:bg-[#25D366]/40"
-                  />
-                  <MessageCircle size={16} className="relative shrink-0 text-[#25D366]" />
-                  <span className="relative flex-1 text-sm font-semibold text-white">
-                    WhatsApp direct
-                  </span>
-                  <ArrowRight
-                    size={14}
-                    className="relative shrink-0 text-[#25D366] transition group-hover:translate-x-1"
-                  />
-                </a>
+                    <a
+                      href={`https://wa.me/${savContact.whatsapp}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-[#25D366]/40 bg-[#25D366]/10 px-3 py-2.5 transition hover:border-[#25D366] hover:bg-[#25D366]/20"
+                    >
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#25D366]/25 blur-2xl transition group-hover:bg-[#25D366]/40"
+                      />
+                      <MessageCircle size={16} className="relative shrink-0 text-[#25D366]" />
+                      <span className="relative flex-1 text-sm font-semibold text-white">
+                        WhatsApp direct
+                      </span>
+                      <ArrowRight
+                        size={14}
+                        className="relative shrink-0 text-[#25D366] transition group-hover:translate-x-1"
+                      />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Additional SAV contacts */}
+                {additionalSavContacts.map((contact) => (
+                  <div key={`hero-${contact.name}`} className="pt-5">
+                    <p className="text-lg font-semibold text-white">{contact.name}</p>
+                    <p className="mt-0.5 text-xs text-white/60">{contact.role}</p>
+
+                    <div className="mt-4 space-y-2">
+                      <a
+                        href={`tel:+216${contact.phone}`}
+                        className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition hover:border-cyan/40 hover:bg-white/10"
+                      >
+                        <Phone size={16} className="shrink-0 text-cyan" />
+                        <span className="text-sm text-white/90 group-hover:text-white">
+                          {contact.phoneDisplay}
+                        </span>
+                      </a>
+
+                      <a
+                        href={`https://wa.me/${contact.whatsapp}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-[#25D366]/40 bg-[#25D366]/10 px-3 py-2.5 transition hover:border-[#25D366] hover:bg-[#25D366]/20"
+                      >
+                        <span
+                          aria-hidden
+                          className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#25D366]/25 blur-2xl transition group-hover:bg-[#25D366]/40"
+                        />
+                        <MessageCircle size={16} className="relative shrink-0 text-[#25D366]" />
+                        <span className="relative flex-1 text-sm font-semibold text-white">
+                          WhatsApp direct
+                        </span>
+                        <ArrowRight
+                          size={14}
+                          className="relative shrink-0 text-[#25D366] transition group-hover:translate-x-1"
+                        />
+                      </a>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -331,8 +380,8 @@ export default function SavPage() {
         <div className="site-shell">
           <SectionTitle
             eyebrow="Nos interventions en images"
-            title="Le SAV EsiLab, en action sur le terrain."
-            text="Installation, maintenance, calibration et formation : un aperçu de nos interventions auprès des laboratoires tunisiens."
+            title="Maintenance, métrologie & calibration : l'excellence technique sur le terrain."
+            text=""
           />
 
           <div className="mt-14">
@@ -364,7 +413,7 @@ export default function SavPage() {
         <div className="site-shell">
           <SectionTitle
             eyebrow="Notre processus"
-            title="De votre demande à la remise en service."
+            title="Depuis votre demande à la remise en service."
             text="Une méthode simple et transparente pour vous garantir une prise en charge rapide et efficace."
           />
           <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -425,7 +474,7 @@ export default function SavPage() {
 
       {/* DEMANDE SAV */}
       <section id="demande-sav" className="bg-cloud/60 py-24">
-        <div className="site-shell grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="site-shell grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
             <SectionTitle
               eyebrow="Demande d’intervention"
@@ -445,38 +494,69 @@ export default function SavPage() {
               ))}
             </ul>
 
+            {/* MERGED CONTACT CARD */}
             <div className="mt-10 rounded-[2rem] border border-line bg-white p-6">
               <p className="text-xs font-mono uppercase tracking-[0.25em] text-blue">
                 Contact SAV direct
               </p>
-              <p className="mt-3 text-base font-semibold text-ink">{savContact.name}</p>
-              <p className="text-xs text-slate-500">{savContact.role}</p>
-              <div className="mt-4 space-y-2 text-sm">
-                <a
-                  href={`mailto:${savContact.email}`}
-                  className="flex items-center gap-2 text-slate-700 hover:text-blue"
-                >
-                  <Mail size={15} /> {savContact.email}
-                </a>
-                <a
-                  href={`tel:+216${savContact.phone}`}
-                  className="flex items-center gap-2 text-slate-700 hover:text-blue"
-                >
-                  <Phone size={15} /> {savContact.phoneDisplay}
-                </a>
-                <a
-                  href={`https://wa.me/${savContact.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 font-semibold text-[#25D366] hover:text-[#1ebe5d]"
-                >
-                  <MessageCircle size={15} /> WhatsApp direct
-                </a>
+
+              <div className="mt-5 divide-y divide-line">
+                {/* Primary contact from site-data */}
+                <div className="pb-5">
+                  <p className="text-base font-semibold text-ink">{savContact.name}</p>
+                  <p className="text-xs text-slate-500">{savContact.role}</p>
+                  <div className="mt-3 space-y-2 text-sm">
+                    <a
+                      href={`mailto:${savContact.email}`}
+                      className="flex items-center gap-2 text-slate-700 hover:text-blue"
+                    >
+                      <Mail size={15} /> {savContact.email}
+                    </a>
+                    <a
+                      href={`tel:+216${savContact.phone}`}
+                      className="flex items-center gap-2 text-slate-700 hover:text-blue"
+                    >
+                      <Phone size={15} /> {savContact.phoneDisplay}
+                    </a>
+                    <a
+                      href={`https://wa.me/${savContact.whatsapp}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 font-semibold text-[#25D366] hover:text-[#1ebe5d]"
+                    >
+                      <MessageCircle size={15} /> WhatsApp direct
+                    </a>
+                  </div>
+                </div>
+
+                {/* Additional contacts */}
+                {additionalSavContacts.map((contact) => (
+                  <div key={`demande-${contact.name}`} className="pt-5">
+                    <p className="text-base font-semibold text-ink">{contact.name}</p>
+                    <p className="text-xs text-slate-500">{contact.role}</p>
+                    <div className="mt-3 space-y-2 text-sm">
+                      <a
+                        href={`tel:+216${contact.phone}`}
+                        className="flex items-center gap-2 text-slate-700 hover:text-blue"
+                      >
+                        <Phone size={15} /> {contact.phoneDisplay}
+                      </a>
+                      <a
+                        href={`https://wa.me/${contact.whatsapp}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 font-semibold text-[#25D366] hover:text-[#1ebe5d]"
+                      >
+                        <MessageCircle size={15} /> WhatsApp direct
+                      </a>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-line bg-white p-8 shadow-soft">
+          <div className="rounded-[2rem] border border-line bg-white p-8 shadow-soft lg:sticky lg:top-24">
             <ContactForm subject="sav" />
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from 'react';
 
-const CONTACT_EMAIL = 'contact@esilab.tn';
+const CONTACT_EMAIL = 'contact.esilab@esilab.tn';
 
 const subjectLabels: Record<string, string> = {
   commande: 'Demande de commande EsiLab',

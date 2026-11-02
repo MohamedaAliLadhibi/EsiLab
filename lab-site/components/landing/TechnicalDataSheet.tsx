@@ -6,6 +6,7 @@ import {
   Text,
   View,
   Image,
+  Link,
   StyleSheet,
 } from '@react-pdf/renderer';
 
@@ -57,6 +58,8 @@ export type DataSheetProduct = {
   imageUrl?: string;
   /** Optional pre-resolved data URL (used internally by the button after fetching). */
   imageDataUrl?: string;
+  manufacturerUrl?: string;
+  datasheetUrl?: string;
   specs: Array<{ label: string; value: string }>;
 };
 
@@ -129,6 +132,26 @@ export function TechnicalDataSheet({ product, generatedAt }: Props) {
                   <Text style={styles.tableValue}>{spec.value}</Text>
                 </View>
               ))}
+            </View>
+          </>
+        )}
+
+        {(product.manufacturerUrl || product.datasheetUrl) && (
+          <>
+            <Text style={styles.sectionTitle}>Sources et documentation</Text>
+            <View style={styles.table}>
+              {product.manufacturerUrl && (
+                <View style={styles.tableRow}>
+                  <Text style={styles.tableKey}>Fabricant</Text>
+                  <Link src={product.manufacturerUrl} style={styles.tableValue}>Page produit officielle</Link>
+                </View>
+              )}
+              {product.datasheetUrl && (
+                <View style={styles.tableRow}>
+                  <Text style={styles.tableKey}>Documentation</Text>
+                  <Link src={product.datasheetUrl} style={styles.tableValue}>Catalogue / fiche fabricant</Link>
+                </View>
+              )}
             </View>
           </>
         )}

@@ -1,6 +1,7 @@
 // src/models/Product.js
 const db = require('../db/knex');
 const slugify = require('slugify');
+const { classifyProduct } = require('../services/ProductCategorizer');
 
 const TABLE = 'products';
 
@@ -29,7 +30,8 @@ const Product = {
             .orWhereRaw(`${TABLE}.data->>'short_description' ILIKE ?`, [term])
             .orWhereRaw(`${TABLE}.data->>'description' ILIKE ?`, [term])
             .orWhereRaw(`${TABLE}.data->>'brand' ILIKE ?`, [term])
-            .orWhereRaw(`${TABLE}.data->>'category' ILIKE ?`, [term]);
+            .orWhereRaw(`${TABLE}.data->>'category' ILIKE ?`, [term])
+            .orWhereRaw(`${TABLE}.data->>'product_family_key' ILIKE ?`, [term]);
         });
       }
     };
@@ -40,7 +42,9 @@ const Product = {
     const rows = await db(TABLE)
       .modify(applyFilters)
       .orderBy(`${TABLE}.created_at`, 'desc')
-      .select(`${TABLE}.*`)
+      .leftJoin('product_categories as pc_display', 'pc_display.product_id', `${TABLE}.id`)
+      .leftJoin('categories as c_display', 'c_display.id', 'pc_display.category_id')
+      .select(`${TABLE}.*`, 'c_display.slug as category_slug', 'c_display.name as assigned_category')
       .limit(limit)
       .offset(offset);
 
@@ -57,7 +61,10 @@ const Product = {
 
   async findBySlug(slug) {
     const row = await db(TABLE)
-      .where({ slug, is_active: true })
+      .leftJoin('product_categories as pc_display', 'pc_display.product_id', `${TABLE}.id`)
+      .leftJoin('categories as c_display', 'c_display.id', 'pc_display.category_id')
+      .where({ [`${TABLE}.slug`]: slug, [`${TABLE}.is_active`]: true })
+      .select(`${TABLE}.*`, 'c_display.slug as category_slug', 'c_display.name as assigned_category')
       .first();
     return row ? Product._deserialize(row) : null;
   },
@@ -79,34 +86,49 @@ const Product = {
   // ── Mutations ─────────────────────────────────────────────────────────────
 
   async create({ supplierId, data }) {
+    data = { ...data };
+    const category = classifyProduct(data);
+    if (category) data.category_slug = category.slug;
+    else delete data.category_slug;
+
     const slug = await Product._uniqueSlug(data.name || data.sku || String(Date.now()));
-    const [row] = await db(TABLE)
-      .insert({
+    return db.transaction(async (trx) => {
+      const [row] = await trx(TABLE).insert({
         supplier_id: supplierId,
         slug,
         data: JSON.stringify(data),
         is_active: true,
       })
       .returning('*');
-    return Product._deserialize(row);
+      await Product._syncCategory(trx, row.id, category);
+      return Product._deserialize(row);
+    });
   },
 
   async update(id, { data, is_active }) {
     const updates = { updated_at: db.fn.now() };
-    if (data !== undefined)      updates.data = JSON.stringify(data);
+    let category = null;
+    if (data !== undefined) {
+      data = { ...data };
+      category = classifyProduct(data);
+      if (category) data.category_slug = category.slug;
+      else delete data.category_slug;
+      updates.data = JSON.stringify(data);
+    }
     if (is_active !== undefined) updates.is_active = is_active;
 
-    const [row] = await db(TABLE)
-      .where({ id })
-      .update(updates)
-      .returning('*');
-    return Product._deserialize(row);
+    return db.transaction(async (trx) => {
+      const [row] = await trx(TABLE).where({ id }).update(updates).returning('*');
+      if (row && data !== undefined) await Product._syncCategory(trx, id, category);
+      return row ? Product._deserialize(row) : null;
+    });
   },
 
   // Bulk upsert used during Excel import
   async upsertBySku(supplierId, productDataArray) {
     return db.transaction(async (trx) => {
       const results = { inserted: 0, updated: 0, skipped: 0, errors: [] };
+      const supplier = await trx('suppliers').where({ id: supplierId }).first('name');
 
       for (const data of productDataArray) {
         try {
@@ -114,6 +136,11 @@ const Product = {
             results.skipped++;
             continue;
           }
+
+          const category = classifyProduct(data, supplier?.name || '');
+          const productData = { ...data };
+          if (category) productData.category_slug = category.slug;
+          else delete productData.category_slug;
 
           const existing = await trx(TABLE)
             .where({ supplier_id: supplierId })
@@ -123,16 +150,18 @@ const Product = {
           if (existing) {
             await trx(TABLE)
               .where({ id: existing.id })
-              .update({ data: JSON.stringify(data), updated_at: trx.fn.now() });
+              .update({ data: JSON.stringify(productData), updated_at: trx.fn.now() });
+            await Product._syncCategory(trx, existing.id, category);
             results.updated++;
           } else {
-            const slug = await Product._uniqueSlug(data.name || data.sku, trx);
-            await trx(TABLE).insert({
+            const slug = await Product._uniqueSlug(productData.name || productData.sku, trx);
+            const [inserted] = await trx(TABLE).insert({
               supplier_id: supplierId,
               slug,
-              data: JSON.stringify(data),
+              data: JSON.stringify(productData),
               is_active: true,
-            });
+            }).returning('id');
+            await Product._syncCategory(trx, inserted.id, category);
             results.inserted++;
           }
         } catch (err) {
@@ -155,6 +184,13 @@ const Product = {
       ...row,
       data: typeof row.data === 'string' ? JSON.parse(row.data) : row.data,
     };
+  },
+
+  async _syncCategory(trx, productId, category) {
+    await trx('product_categories').where({ product_id: productId }).delete();
+    if (!category) return;
+    const record = await trx('categories').where({ slug: category.slug }).first('id');
+    if (record) await trx('product_categories').insert({ product_id: productId, category_id: record.id });
   },
 
   async _uniqueSlug(base, trx = db) {

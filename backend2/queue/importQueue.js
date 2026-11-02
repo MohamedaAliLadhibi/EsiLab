@@ -3,15 +3,39 @@ const Bull = require('bull');
 const { runImport } = require('../src/services/ImportService');
 const logger = require('../src/utils/logger');
 
-// Connect to Redis using environment variables
-const REDIS_HOST = process.env.REDIS_HOST || '127.0.0.1';
-const REDIS_PORT = process.env.REDIS_PORT || 6379;
+// Prefer a managed Redis URL (Railway and most cloud providers provide one).
+// Keep the host/port form for local development and existing deployments.
+function getRedisConfig() {
+  if (process.env.REDIS_URL) {
+    const url = new URL(process.env.REDIS_URL);
+    const database = url.pathname.replace(/^\//, '');
+    const config = {
+      host: url.hostname,
+      port: Number(url.port || (url.protocol === 'rediss:' ? 6380 : 6379)),
+    };
+
+    if (url.username) config.username = decodeURIComponent(url.username);
+    if (url.password) config.password = decodeURIComponent(url.password);
+    if (database) config.db = Number(database);
+    if (url.protocol === 'rediss:') config.tls = {};
+
+    return config;
+  }
+
+  const config = {
+    host: process.env.REDIS_HOST || '127.0.0.1',
+    port: Number(process.env.REDIS_PORT || 6379),
+  };
+
+  if (process.env.REDIS_USERNAME) config.username = process.env.REDIS_USERNAME;
+  if (process.env.REDIS_PASSWORD) config.password = process.env.REDIS_PASSWORD;
+  if (process.env.REDIS_TLS === 'true') config.tls = {};
+
+  return config;
+}
 
 const importQueue = new Bull('import', {
-  redis: {
-    host: REDIS_HOST,
-    port: REDIS_PORT,
-  },
+  redis: getRedisConfig(),
   defaultJobOptions: {
     attempts: 1,          // retry once if fails
     timeout: 600000,      // 10 minutes max per job

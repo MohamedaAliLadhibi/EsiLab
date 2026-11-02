@@ -268,7 +268,7 @@ export const clientReferences = ['Delice', 'Azur', 'Unimed', 'Saiph', 'Coficab',
 
 export const company = {
   phone: '(+216) 70 036 096 / (+216) 31 586 072',
-  email: 'contact@esilab.tn',
+  email: 'contact.esilab@esilab.tn',
   address: 'Bloc C, 4 Boulevard de la qualite de la vie, Ariana 2058.',
 };
 

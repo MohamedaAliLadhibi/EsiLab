@@ -10,7 +10,12 @@ const config = {
     user:     process.env.DB_USER     || 'postgres',
     password: process.env.DB_PASSWORD || '',
   },
-  pool: { min: 2, max: 10 },
+  // Keep idle connections low on the single 4 GB VPS; connections are opened
+  // on demand and capped so both API processes share PostgreSQL comfortably.
+  pool: {
+    min: Number(process.env.DB_POOL_MIN ?? 0),
+    max: Number(process.env.DB_POOL_MAX ?? 5),
+  },
   migrations: {
     directory: './src/db/migrations',
     tableName:  'knex_migrations',

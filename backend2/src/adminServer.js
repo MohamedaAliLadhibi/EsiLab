@@ -22,7 +22,9 @@ const errorHandler = require('./middleware/errorHandler');
 const logger = require('./utils/logger');
 
 const app = express();
-const PORT = process.env.ADMIN_PORT || 3001;
+// Railway and other managed hosts provide PORT. ADMIN_PORT remains the local
+// development fallback and can still be used by existing deployments.
+const PORT = process.env.PORT || process.env.ADMIN_PORT || 3001;
 
 // Trust the first proxy (required when running behind a reverse proxy,
 // and silences the express-rate-limit X-Forwarded-For warning).

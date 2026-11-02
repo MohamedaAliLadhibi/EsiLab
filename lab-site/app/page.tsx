@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { BadgeCheck } from 'lucide-react';
-import { ProductCard } from '@/components/landing/ProductCard';
 import { SectionTitle } from '@/components/landing/SectionTitle';
 import { LandingHero } from '@/components/landing/home/LandingHero';
 import { QuickPanels } from '@/components/landing/home/QuickPanels';
+import { SupplierCarousel } from '@/components/landing/home/SupplierCarousel';
 import { ServiceHighlights } from '@/components/landing/home/ServiceHighlights';
 import { TrustBar } from '@/components/landing/home/TrustBar';
 import { BrowseByNeed } from '@/components/landing/home/BrowseByNeed';
@@ -38,6 +38,7 @@ export default async function HomePage() {
 />
       <TrustBar />
       <QuickPanels />
+      <SupplierCarousel />
       <BrowseByNeed />
       <ServiceHighlights />
 
@@ -83,28 +84,6 @@ export default async function HomePage() {
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white py-24">
-        <div className="site-shell">
-          <SectionTitle
-            eyebrow="Produits phares"
-            title="Une selection chargee depuis la base catalogue EsiLab."
-            text="Les references ci-dessous viennent du catalogue actif et sont presentees avec des visuels dedies pour une lecture plus nette."
-          />
-          <div className="mt-10 flex flex-wrap gap-3">
-            {featuredBrands.map((brand) => (
-              <span key={brand} className="rounded-full border border-line bg-white px-4 py-2 text-sm text-slate-600 shadow-soft">
-                {brand}
-              </span>
-            ))}
-          </div>
-          <div className="mt-14 grid gap-8 lg:grid-cols-3">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.slug} {...product} />
             ))}
           </div>
         </div>
