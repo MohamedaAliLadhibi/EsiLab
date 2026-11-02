@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
 import {
   ArrowRight,
   BadgeCheck,
@@ -95,7 +94,6 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 
 export default function ProductsPage() {
-  const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
@@ -110,10 +108,11 @@ export default function ProductsPage() {
   const debouncedSearch = useDebounce(search, 350);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
     setSearch(searchParams.get('search') ?? '');
     const group = searchParams.get('group');
     setSelectedGroup(productGroups.some((item) => item.slug === group) ? group : null);
-  }, [searchParams]);
+  }, []);
 
   // Fetch products when filters change
   const fetchProducts = useCallback(async () => {
