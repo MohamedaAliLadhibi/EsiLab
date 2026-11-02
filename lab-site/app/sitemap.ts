@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tunisie.com';
-const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tn.com';
+const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.esilab-tn.com/api';
 
 // Static pages – these never change
 const staticRoutes = [

@@ -5,7 +5,7 @@ import { GlobalNav } from '@/components/landing/GlobalNav';
 import { GlobalFooter } from '@/components/landing/GlobalFooter';
 import { CatalogueAssistant } from '@/components/landing/CatalogueAssistant';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tunisie.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tn.com';
 const siteName = 'EsiLab';
 const siteDescription =
   'EsiLab accompagne les laboratoires en Tunisie avec des equipements scientifiques, solutions de mesure, inspection, reactifs et support technique.';

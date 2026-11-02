@@ -7,9 +7,9 @@ and compresses HTTP responses.
 
 ## Before deploying
 
-1. Use an Ubuntu LTS VPS and point DNS A records for `esilab-tunisie.com`,
-   `www.esilab-tunisie.com`, `admin.esilab-tunisie.com`, and
-   `api.esilab-tunisie.com` to its public IPv4. The `.tn` hostnames redirect to
+1. Use an Ubuntu LTS VPS and point DNS A records for `esilab-tn.com`,
+   `www.esilab-tn.com`, `admin.esilab-tn.com`, and
+   `api.esilab-tn.com` to its public IPv4. The `.tn` hostnames redirect to
    their `.com` equivalents.
 2. Install Docker Engine and the Docker Compose plugin.
 3. Open inbound TCP ports 22, 80, and 443 in the OVH firewall. Do not expose
@@ -62,8 +62,8 @@ docker compose ps
 docker compose logs --tail=100 caddy public-site admin-site public-api admin-api
 ```
 
-Once DNS has propagated, verify `https://api.esilab-tunisie.com/health`,
-`https://www.esilab-tunisie.com`, and `https://admin.esilab-tunisie.com`. Caddy obtains and renews
+Once DNS has propagated, verify `https://api.esilab-tn.com/health`,
+`https://www.esilab-tn.com`, and `https://admin.esilab-tn.com`. Caddy obtains and renews
 HTTPS certificates automatically; keep ports 80 and 443 reachable.
 
 ## Keep it responsive

@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { productGroups } from '@/lib/product-groups';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.esilab-tn.com/api';
 type Product = {
   id: number;
   slug: string;

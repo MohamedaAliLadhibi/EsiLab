@@ -1,13 +1,13 @@
 esilab.tn, www.esilab.tn {
-	redir https://www.esilab-tunisie.com{uri} permanent
+	redir https://www.esilab-tn.com{uri} permanent
 }
 
 admin.esilab.tn {
-	redir https://admin.esilab-tunisie.com{uri} permanent
+	redir https://admin.esilab-tn.com{uri} permanent
 }
 
 api.esilab.tn {
-	redir https://api.esilab-tunisie.com{uri} permanent
+	redir https://api.esilab-tn.com{uri} permanent
 }
 
 {$APEX_DOMAIN}, {$SITE_DOMAIN} {

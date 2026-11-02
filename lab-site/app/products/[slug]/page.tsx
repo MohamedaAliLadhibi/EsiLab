@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { DownloadTechnicalSheetButton } from '@/components/landing/DownloadTechnicalSheetButton';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.esilab-tn.com/api';
 
 const QUOTE_EMAIL = 'Contact@esilab.tn';
 const QUOTE_WHATSAPP_NUMBER = '21650601783';
@@ -256,7 +256,7 @@ export default function ProductDetailPage() {
     data: d,
     specFields,
   };
-  const currentUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tunisie.com'}/products/${product.slug}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tn.com'}/products/${product.slug}`;
   const quoteLines = [
     'Bonjour EsiLab,',
     '',
@@ -304,13 +304,13 @@ export default function ProductDetailPage() {
         '@type': 'ListItem',
         position: 1,
         name: 'Accueil',
-        item: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tunisie.com',
+        item: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tn.com',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Produits',
-        item: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tunisie.com'}/products`,
+        item: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tn.com'}/products`,
       },
       {
         '@type': 'ListItem',
