@@ -31,7 +31,7 @@ export function GlobalFooter() {
             <div>
               <h2 className="text-4xl font-semibold">ESILAB</h2>
               <p className="mt-3 max-w-xl text-base leading-8 text-slate-300">
-                Depuis plus de 85 ans dans l’esprit des grandes maisons du laboratoire,
+                Depuis plus de 10 ans dans l’esprit des grandes maisons du laboratoire,
                 EsiLab accompagne les équipes avec des équipements, des réactifs,
                 des services et un support technique centré sur la qualité,
                 la précision et la performance.
