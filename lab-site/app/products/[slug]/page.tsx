@@ -256,7 +256,7 @@ export default function ProductDetailPage() {
     data: d,
     specFields,
   };
-  const currentUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab.tn'}/products/${product.slug}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tunisie.com'}/products/${product.slug}`;
   const quoteLines = [
     'Bonjour EsiLab,',
     '',
@@ -304,13 +304,13 @@ export default function ProductDetailPage() {
         '@type': 'ListItem',
         position: 1,
         name: 'Accueil',
-        item: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab.tn',
+        item: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tunisie.com',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Produits',
-        item: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab.tn'}/products`,
+        item: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tunisie.com'}/products`,
       },
       {
         '@type': 'ListItem',

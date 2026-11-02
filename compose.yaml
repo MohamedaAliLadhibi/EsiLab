@@ -57,7 +57,7 @@ services:
       NODE_ENV: production
       PORT: "3001"
       ADMIN_PORT: "3001"
-      ADMIN_CORS_ORIGINS: https://${ADMIN_DOMAIN:-admin.esilab.tn}
+      ADMIN_CORS_ORIGINS: https://${ADMIN_DOMAIN:-admin.esilab-tunisie.com}
       DB_HOST: postgres
       DB_PORT: "5432"
       DB_NAME: ${POSTGRES_DB:-lab_catalogue}
@@ -79,14 +79,14 @@ services:
       context: ./lab-site
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_BASE_URL: https://${API_DOMAIN:-api.esilab.tn}/api
-        NEXT_PUBLIC_SITE_URL: https://${SITE_DOMAIN:-www.esilab.tn}
+        NEXT_PUBLIC_API_BASE_URL: https://${API_DOMAIN:-api.esilab-tunisie.com}/api
+        NEXT_PUBLIC_SITE_URL: https://${SITE_DOMAIN:-www.esilab-tunisie.com}
     restart: unless-stopped
     environment:
       NODE_ENV: production
       PORT: "4001"
-      NEXT_PUBLIC_API_BASE_URL: https://${API_DOMAIN:-api.esilab.tn}/api
-      NEXT_PUBLIC_SITE_URL: https://${SITE_DOMAIN:-www.esilab.tn}
+      NEXT_PUBLIC_API_BASE_URL: https://${API_DOMAIN:-api.esilab-tunisie.com}/api
+      NEXT_PUBLIC_SITE_URL: https://${SITE_DOMAIN:-www.esilab-tunisie.com}
       API_BASE_URL: http://public-api:3000/api
     depends_on:
       - public-api
@@ -107,10 +107,10 @@ services:
     image: caddy:2-alpine
     restart: unless-stopped
     environment:
-      APEX_DOMAIN: ${APEX_DOMAIN:-esilab.tn}
-      SITE_DOMAIN: ${SITE_DOMAIN:-www.esilab.tn}
-      ADMIN_DOMAIN: ${ADMIN_DOMAIN:-admin.esilab.tn}
-      API_DOMAIN: ${API_DOMAIN:-api.esilab.tn}
+      APEX_DOMAIN: ${APEX_DOMAIN:-esilab-tunisie.com}
+      SITE_DOMAIN: ${SITE_DOMAIN:-www.esilab-tunisie.com}
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN:-admin.esilab-tunisie.com}
+      API_DOMAIN: ${API_DOMAIN:-api.esilab-tunisie.com}
     ports:
       - "80:80"
       - "443:443"
