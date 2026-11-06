@@ -42,7 +42,8 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   icons: {
-    icon: '/logo-esilab-bleu.png',
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
     apple: '/logo-esilab-bleu.png',
   },
   keywords: [

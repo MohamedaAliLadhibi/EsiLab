@@ -10,21 +10,21 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="bg-white py-24">
+    <section className="bg-white py-14 sm:py-20 lg:py-24">
       <div className="site-shell">
-        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+        <div className="grid gap-6 sm:gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <SectionTitle eyebrow="Une approche simple" title="De la question terrain a la bonne solution." text="Notre role ne s arrete pas au catalogue : nous vous aidons a choisir une solution pertinente et a la mettre en place." />
           <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-semibold text-blue transition hover:text-navy lg:justify-self-end">Parler a un expert <ArrowRight size={17} /></Link>
         </div>
-        <div className="mt-14 grid gap-5 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:mt-12 sm:gap-5 lg:grid-cols-3">
           {steps.map((step, index) => {
             const Icon = step.icon;
 
             return (
-              <div key={step.number} className="relative rounded-[2rem] border border-line bg-panel p-7">
+              <div key={step.number} className="relative rounded-3xl border border-line bg-panel p-5 sm:rounded-[2rem] sm:p-7">
                 <span className="font-mono text-xs tracking-[0.24em] text-cyan">{step.number}</span>
                 <span className="absolute right-7 top-7 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-blue shadow-soft"><Icon size={20} /></span>
-                <h3 className="mt-8 max-w-[14rem] text-2xl font-semibold text-ink">{step.title}</h3>
+                <h3 className="mt-6 max-w-[14rem] text-xl font-semibold text-ink sm:mt-8 sm:text-2xl">{step.title}</h3>
                 <p className="mt-4 text-sm leading-7 text-slate-600">{step.text}</p>
                 {index < steps.length - 1 && <ArrowRight className="absolute -right-8 top-1/2 hidden text-cyan lg:block" size={28} />}
               </div>

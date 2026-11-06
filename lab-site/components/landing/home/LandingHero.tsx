@@ -95,7 +95,7 @@ export function LandingHero({
   ];
 
   return (
-    <section className="relative min-h-[calc(100vh-72px)] overflow-hidden bg-navy">
+    <section className="relative min-h-[calc(100svh-72px)] overflow-hidden bg-navy">
       <div className="absolute inset-0">
         <div key={backgroundSlide.src} className="absolute inset-0 animate-[fadeIn_700ms_ease-out]">
           <Image
@@ -110,47 +110,47 @@ export function LandingHero({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(72,198,223,0.18),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(31,87,184,0.24),transparent_22%)]" />
       </div>
 
-      <div className="site-shell relative flex min-h-[calc(100vh-72px)] items-end py-16 lg:py-20">
-        <div className="grid w-full gap-10 xl:grid-cols-[1.15fr_0.85fr] xl:items-end">
+      <div className="site-shell relative flex min-h-[calc(100svh-72px)] items-start py-10 sm:items-end sm:py-16 lg:py-20">
+        <div className="grid w-full gap-8 xl:grid-cols-[1.15fr_0.85fr] xl:items-end sm:gap-10">
           <div className="max-w-4xl">
-            <p className="eyebrow text-cyan">
+            <p className="eyebrow text-[10px] text-cyan sm:text-xs">
               {slides[activeSlide]?.eyebrow ?? 'Catalogue ESILAB'}
             </p>
-            <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-[0.95] text-white md:text-7xl xl:text-[6.2rem]">
+            <h1 className="mt-4 max-w-3xl text-[2.65rem] font-semibold leading-[0.98] text-white sm:mt-6 sm:text-5xl md:text-7xl xl:text-[6.2rem]">
               ESILAB, solutions intelligentes pour laboratoires modernes.
             </h1>
 
             {/* Paragraph with frosted-glass background */}
-            <p className="mt-6 max-w-2xl rounded-2xl border border-white/15 bg-white/10 px-5 py-4 text-lg leading-8 text-white/90 shadow-soft backdrop-blur-md md:text-xl">
+            <p className="mt-5 max-w-2xl rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm leading-6 text-white/90 shadow-soft backdrop-blur-md sm:mt-6 sm:px-5 sm:py-4 sm:text-lg sm:leading-8 md:text-xl">
               Une presentation plus visuelle, premium et claire du catalogue ESILAB avec mise en
               avant des equipements, de l&apos;expertise technique et de la demande de devis
               rapide.
             </p>
 
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-6 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
               <Link
                 href="/products"
-                className="inline-flex items-center gap-2 rounded-xl bg-cyan px-7 py-4 text-sm font-semibold text-ink transition hover:bg-white"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-cyan px-5 py-3.5 text-sm font-semibold text-ink transition hover:bg-white sm:px-7 sm:py-4"
               >
                 Voir les produits
                 <ArrowRight size={16} />
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-7 py-4 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/16"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/16 sm:px-7 sm:py-4"
               >
                 Demander un devis
               </Link>
             </div>
 
-            <div className="mt-12 grid max-w-3xl gap-4 sm:grid-cols-3">
+            <div className="mt-7 grid max-w-3xl grid-cols-3 gap-2 sm:mt-12 sm:gap-4">
               {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-[1.5rem] border border-white/12 bg-white/10 p-5 shadow-soft backdrop-blur-md"
+                  className="min-w-0 rounded-2xl border border-white/12 bg-white/10 p-3 shadow-soft backdrop-blur-md sm:rounded-[1.5rem] sm:p-5"
                 >
-                  <p className="text-3xl font-semibold text-cyan">{stat.value}</p>
-                  <p className="mt-2 text-xs font-mono uppercase tracking-[0.24em] text-white/68">
+                  <p className="text-xl font-semibold text-cyan sm:text-3xl">{stat.value}</p>
+                  <p className="mt-1 text-[9px] font-mono uppercase leading-4 tracking-wide text-white/75 sm:mt-2 sm:text-xs sm:tracking-[0.18em]">
                     {stat.label}
                   </p>
                 </div>

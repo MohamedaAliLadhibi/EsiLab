@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Mail, MapPin, Phone, ExternalLink } from 'lucide-react';
 import { company, solutions } from '@/lib/site-data';
 
+const mapAddress = 'Boulevard de la qualite de la vie, Ariana 2058.';
+
 export function GlobalFooter() {
   return (
     <footer className="border-t border-white/70 bg-slate-950 text-white">
@@ -44,7 +46,7 @@ export function GlobalFooter() {
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">
                   Adresse
                 </p>
-                <p className="mt-3 text-lg font-medium text-white">
+                <p className="mt-3 break-words text-base font-medium text-white sm:text-lg">
                   {company.address}
                 </p>
               </div>
@@ -53,7 +55,7 @@ export function GlobalFooter() {
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">
                   Email
                 </p>
-                <p className="mt-3 text-lg font-medium text-white">
+                <p className="mt-3 break-all text-base font-medium text-white sm:text-lg">
                   {company.email}
                 </p>
               </div>
@@ -66,7 +68,7 @@ export function GlobalFooter() {
               </p>
               <a
                 href={`tel:${company.phone}`}
-                className="mt-3 inline-flex items-center text-lg font-medium text-white transition hover:text-cyan"
+                className="mt-3 inline-flex items-center break-words text-base font-medium text-white transition hover:text-cyan sm:text-lg"
               >
                 <Phone size={20} className="mr-2 text-cyan" />
                 {company.phone}
@@ -101,7 +103,7 @@ export function GlobalFooter() {
                 <iframe
                   title="ESILAB location"
                   src={`https://maps.google.com/maps?q=${encodeURIComponent(
-                    company.address
+                    mapAddress
                   )}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
                   className="absolute inset-0 h-full w-full"
                   loading="lazy"
@@ -112,7 +114,7 @@ export function GlobalFooter() {
               {/* “View larger map” link */}
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                  company.address
+                  mapAddress
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"

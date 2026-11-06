@@ -29,17 +29,19 @@ const items = [
 
 export function ServiceHighlights() {
   return (
-    <section className="bg-white py-8">
-      <div className="site-shell grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+    <section className="bg-white py-8 sm:py-12">
+      <div className="site-shell grid gap-5 sm:grid-cols-2 sm:gap-8 xl:grid-cols-4">
         {items.map((item) => {
           const Icon = item.icon;
           return (
-            <div key={item.title} className="text-center">
-              <div className="mx-auto inline-flex h-24 w-24 items-center justify-center rounded-full bg-cloud">
-                <Icon size={38} className={item.accent} />
+            <div key={item.title} className="flex items-center gap-4 text-left sm:flex-col sm:text-center">
+              <div className="inline-flex size-16 shrink-0 items-center justify-center rounded-2xl bg-cloud sm:size-20 sm:rounded-full xl:size-24">
+                <Icon size={30} className={`${item.accent} sm:h-9 sm:w-9`} />
               </div>
-              <h3 className="mt-6 text-4xl font-semibold uppercase leading-none text-ink">{item.title}</h3>
-              <p className="mx-auto mt-4 max-w-xs text-base leading-7 text-slate-600">{item.text}</p>
+              <div className="min-w-0 sm:mt-5">
+                <h3 className="text-lg font-semibold uppercase leading-tight text-ink sm:text-2xl xl:text-3xl">{item.title}</h3>
+                <p className="mt-1.5 max-w-xs text-sm leading-6 text-slate-600 sm:mx-auto sm:mt-3 sm:text-base sm:leading-7">{item.text}</p>
+              </div>
             </div>
           );
         })}

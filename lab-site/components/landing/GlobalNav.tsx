@@ -57,7 +57,7 @@ export function GlobalNav() {
           <div className="site-shell h-full">
             <div className="flex h-full items-center justify-between gap-4">
               <Link href="/" className="flex shrink-0 items-center" aria-label="EsiLab, accueil">
-                <div className="w-[82px] transition-[width] duration-300 lg:w-[112px]">
+                <div className="w-[68px] transition-[width] duration-300 sm:w-[82px] lg:w-[112px]">
                   <Image
                     src="/logo-esilab-transparent.png"
                     alt="EsiLab"
@@ -146,6 +146,27 @@ export function GlobalNav() {
                 </div>
               </div>
 
+              <div className="flex shrink-0 items-center gap-1.5 lg:hidden">
+                <Link
+                  href="https://www.linkedin.com/company/esilab-tunisie/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn EsiLab Tunisie"
+                  className={`grid size-10 place-items-center rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan ${isScrolled ? 'hover:bg-blue/5' : 'hover:bg-white/10'}`}
+                >
+                  <Image src="/linkedin-logo.png" width={30} height={30} alt="" className="size-[30px] rounded-lg object-contain" />
+                </Link>
+                <Link
+                  href="https://wa.me/21650601783"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp EsiLab"
+                  className={`grid size-10 place-items-center rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan ${isScrolled ? 'hover:bg-blue/5' : 'hover:bg-white/10'}`}
+                >
+                  <Image src="/whatsapp-logo.png" width={30} height={30} alt="" className="size-[30px] rounded-lg object-contain" />
+                </Link>
+              </div>
+
               <button
                 type="button"
                 onClick={() => setIsMobileMenuOpen((open) => !open)}
@@ -164,7 +185,7 @@ export function GlobalNav() {
           {isMobileMenuOpen && (
             <div
               id="mobile-navigation"
-              className={`absolute inset-x-0 top-full border-t px-5 pb-5 pt-3 shadow-xl lg:hidden ${
+              className={`absolute inset-x-0 top-full max-h-[calc(100svh-72px)] overflow-y-auto border-t px-5 pb-5 pt-3 shadow-xl lg:hidden ${
                 isScrolled ? 'border-line bg-white text-ink' : 'border-white/10 bg-[#0a152c] text-white'
               }`}
             >
@@ -202,11 +223,13 @@ export function GlobalNav() {
                   Rechercher
                 </button>
               </form>
-              <div className="mt-4 flex gap-5 px-3 text-sm font-semibold">
-                <Link href="https://www.linkedin.com/company/esilab-tunisie/" target="_blank" rel="noopener noreferrer" className="hover:text-cyan">
+              <div className="mt-4 grid grid-cols-2 gap-2 border-t border-current/10 pt-4">
+                <Link href="https://www.linkedin.com/company/esilab-tunisie/" target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-current/10 px-3 text-sm font-semibold transition hover:bg-current/5">
+                  <Image src="/linkedin-logo.png" width={24} height={24} alt="" className="size-6 rounded-md object-contain" />
                   LinkedIn
                 </Link>
-                <Link href="https://wa.me/21650601783" target="_blank" rel="noopener noreferrer" className="hover:text-cyan">
+                <Link href="https://wa.me/21650601783" target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-current/10 px-3 text-sm font-semibold transition hover:bg-current/5">
+                  <Image src="/whatsapp-logo.png" width={24} height={24} alt="" className="size-6 rounded-md object-contain" />
                   WhatsApp
                 </Link>
               </div>

@@ -16,14 +16,14 @@ export function SectionTitle({
       <p className={clsx('eyebrow', light ? 'text-cyan' : 'text-blue')}>{eyebrow}</p>
       <h2
         className={clsx(
-          'mt-3 text-3xl font-semibold leading-tight text-balance md:text-5xl',
+          'mt-3 text-2xl font-semibold leading-tight text-balance sm:text-3xl md:text-5xl',
           light ? 'text-white' : 'text-ink',
         )}
       >
         {title}
       </h2>
       {text ? (
-        <p className={clsx('mt-4 text-base leading-8', light ? 'text-white/72' : 'text-slate-600')}>{text}</p>
+        <p className={clsx('mt-4 text-sm leading-7 sm:text-base sm:leading-8', light ? 'text-white/72' : 'text-slate-600')}>{text}</p>
       ) : null}
     </div>
   );

@@ -26,7 +26,7 @@ export default function ContactPage({
   return (
     <main className="bg-panel">
       {/* === HERO with background image === */}
-      <section className="relative overflow-hidden bg-navy py-24 text-white">
+      <section className="relative overflow-hidden bg-navy py-14 text-white sm:py-20 lg:py-24">
         <Image
           src="/Us/us-1.jpg"
           alt=""
@@ -41,10 +41,10 @@ export default function ContactPage({
           <p className="text-xs font-mono uppercase tracking-[0.25em] text-cyan">
             Contact
           </p>
-          <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-tight md:text-5xl">
+          <h1 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight sm:mt-6 sm:text-4xl md:text-5xl">
             Parlons de votre laboratoire, de vos projets et de vos équipements.
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-8 text-white/75">
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 sm:mt-6 sm:text-base sm:leading-8">
             Devis, recommandation produit, installation ou accompagnement
             technique : notre équipe vous répond dans les meilleurs délais.
           </p>
@@ -55,14 +55,14 @@ export default function ContactPage({
       <ThisIsUs />
 
       {/* === CONTACT FORM + INFOS === */}
-      <section className="bg-panel py-24">
-        <div className="site-shell grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+      <section className="bg-panel py-14 sm:py-20 lg:py-24">
+        <div className="site-shell grid gap-8 sm:gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <SectionTitle
             eyebrow="Contact"
             title="Un site qui pousse naturellement vers le devis et la prise de contact."
             text="Pour le lancement, cette page peut servir de formulaire simple, puis evoluer plus tard vers un vrai workflow de demande de devis."
           />
-          <div className="rounded-[2.25rem] border border-line bg-white p-8 shadow-halo">
+          <div className="rounded-3xl border border-line bg-white p-5 shadow-halo sm:rounded-[2.25rem] sm:p-8">
             <div className="grid gap-6 md:grid-cols-2">
               <div className="rounded-2xl bg-mist p-5">
                 <p className="text-xs font-mono uppercase tracking-[0.22em] text-slate-500">
