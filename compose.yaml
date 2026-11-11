@@ -11,9 +11,10 @@ services:
     volumes:
       - postgres18_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
-      interval: 10s
-      timeout: 5s
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-p", "5432"]
+      interval: 15s
+      timeout: 10s
+      start_period: 30s
       retries: 5
 
   redis:
