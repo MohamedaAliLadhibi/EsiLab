@@ -8,6 +8,55 @@ const updateSchema = Joi.object({
   is_active: Joi.boolean(),
 }).min(1);
 
+function csvCell(value) {
+  const text = value == null ? '' : typeof value === 'object' ? JSON.stringify(value) : String(value);
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+// GET /admin/products/export — download the complete catalogue as UTF-8 CSV.
+exports.exportCsv = async (_req, res, next) => {
+  try {
+    const rows = await db('products as p')
+      .leftJoin('suppliers as s', 's.id', 'p.supplier_id')
+      .select(
+        'p.id', 'p.slug', 'p.is_active', 'p.supplier_id', 's.name as supplier_name', 'p.data',
+        db.raw(`(
+          SELECT c.name
+          FROM product_categories pc
+          JOIN categories c ON c.id = pc.category_id
+          WHERE pc.product_id = p.id
+          ORDER BY c.name
+          LIMIT 1
+        ) AS assigned_category`),
+      )
+      .orderBy('p.id');
+
+    const headers = [
+      'Product ID', 'Slug', 'Active', 'Supplier ID', 'Supplier', 'SKU', 'Product name',
+      'Brand', 'Category', 'Description', 'Image URL', 'Datasheet URL', 'Manufacturer URL',
+      'Technical specs (JSON)', 'Product data (JSON)',
+    ];
+    const lines = [headers.map(csvCell).join(',')];
+
+    for (const row of rows) {
+      const data = typeof row.data === 'string' ? JSON.parse(row.data) : row.data || {};
+      lines.push([
+        row.id, row.slug, row.is_active, row.supplier_id, row.supplier_name,
+        data.sku, data.name || data.product_name || data.title, data.brand || data.supplier || data.manufacturer,
+        row.assigned_category || data.category, data.description || data.short_description,
+        data.image_url || data.image, data.datasheet_url, data.manufacturer_url,
+        data.technical_specs, data,
+      ].map(csvCell).join(','));
+    }
+
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="esilab-catalogue.csv"');
+    res.send(`\uFEFF${lines.join('\r\n')}`);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // GET /admin/products
 exports.list = async (req, res, next) => {
   try {

@@ -40,7 +40,7 @@ export default function SignupPage() {
       <div className="relative mx-auto flex min-h-screen max-w-5xl items-center justify-center px-6 py-10">
         <section className="glass grid w-full max-w-4xl grid-cols-1 overflow-hidden rounded-3xl shadow-2xl shadow-esi/10 lg:grid-cols-2">
           <div className="bg-esi p-8 text-white">
-            <Image src="/logo-esilab-bleu.png" alt="EsiLab logo" width={128} height={128} priority className="rounded-xl bg-white/95 p-2" />
+            <Image src="/logo-esilab-bleu.png" alt="Logo ESILAB" width={128} height={128} priority className="rounded-xl bg-white/95 p-2" />
             <h1 className="mt-10 text-4xl font-extrabold leading-tight">
               Request dashboard access.
             </h1>

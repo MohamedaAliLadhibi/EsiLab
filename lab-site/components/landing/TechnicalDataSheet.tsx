@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   },
   brand: { fontSize: 20, fontWeight: 'bold', color: '#111' },
   brandAccent: { color: '#1e40af' },
+  logo: { width: 90, height: 34, objectFit: 'contain' },
   docTitle: { fontSize: 11, color: '#666', textTransform: 'uppercase', letterSpacing: 1.5 },
   productRow: { flexDirection: 'row', marginBottom: 20 },
   imageBox: {
@@ -58,6 +59,7 @@ export type DataSheetProduct = {
   imageUrl?: string;
   /** Optional pre-resolved data URL (used internally by the button after fetching). */
   imageDataUrl?: string;
+  logoDataUrl?: string;
   manufacturerUrl?: string;
   datasheetUrl?: string;
   specs: Array<{ label: string; value: string }>;
@@ -74,16 +76,18 @@ export function TechnicalDataSheet({ product, generatedAt }: Props) {
   const baseRows: Array<{ key: string; value: string }> = [];
   if (product.sku) baseRows.push({ key: 'Référence', value: product.sku });
   if (product.brand) baseRows.push({ key: 'Marque', value: product.brand });
-  if (product.category) baseRows.push({ key: 'Univers', value: product.category });
+  if (product.category) baseRows.push({ key: 'Catégorie', value: product.category });
   if (product.packageSize) baseRows.push({ key: 'Conditionnement', value: product.packageSize });
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.brand}>
-            ESI<Text style={styles.brandAccent}>LAB</Text>
-          </Text>
+          {product.logoDataUrl ? (
+            <Image style={styles.logo} src={product.logoDataUrl} />
+          ) : (
+            <Text style={styles.brand}>ESILAB</Text>
+          )}
           <Text style={styles.docTitle}>Fiche Technique</Text>
         </View>
 
@@ -157,7 +161,8 @@ export function TechnicalDataSheet({ product, generatedAt }: Props) {
         )}
 
         <View style={styles.footer} fixed>
-          <Text>EsiLab — Généré le {date}</Text>
+          <Text>ESILAB · contact.esilab@esilab.tn
+4 Boulevard de la Qualité de la Vie, Ariana 2058, Tunisie · +216 70 036 096</Text>
           <Text
             render={({ pageNumber, totalPages }) =>
               `${pageNumber} / ${totalPages}`

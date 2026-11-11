@@ -11,7 +11,7 @@ export function ThisIsUs() {
             <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-line">
               <Image
                 src="/Us/us-2.jpg"
-                alt="L'équipe EsiLab sur le terrain"
+                alt="L'équipe ESILAB sur le terrain"
                 fill
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 className="object-cover"
@@ -22,13 +22,13 @@ export function ThisIsUs() {
             <div className="flex flex-col gap-6">
               <div>
                 <p className="text-xs font-mono uppercase tracking-[0.25em] text-blue">
-                  This is us
+                  Qui sommes-nous
                 </p>
                 <h2 className="mt-4 text-3xl font-semibold leading-tight text-ink md:text-4xl">
-                  L'éxpertise de vos équipements, la réactivité à vos côtés.
+                  L'expertise de vos équipements, la réactivité à vos côtés.
                 </h2>
                 <p className="mt-4 text-sm leading-7 text-slate-600">
-                  Depuis notre création, EsiLab accompagne les laboratoires
+                  Depuis notre création, ESILAB accompagne les laboratoires
                   d’analyses, de recherche et d’enseignement partout en Tunisie.
                   Nous combinons expertise technique, réactivité et proximité
                   pour équiper et faire durer vos instruments.
@@ -39,7 +39,7 @@ export function ThisIsUs() {
                 <div className="relative aspect-square overflow-hidden rounded-2xl border border-line">
                   <Image
                     src="/Us/us-3.jpg"
-                    alt="Stand EsiLab lors d'un salon professionnel"
+                    alt="Stand ESILAB lors d'un salon professionnel"
                     fill
                     sizes="30vw"
                     className="object-cover"
@@ -68,7 +68,7 @@ export function ThisIsUs() {
             <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-line md:row-span-2">
               <Image
                 src="/Us/us-5.jpg"
-                alt="EsiLab lors d'un salon professionnel en Tunisie"
+                alt="ESILAB lors d'un salon professionnel en Tunisie"
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover"
@@ -94,7 +94,7 @@ export function ThisIsUs() {
             <div className="relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-line">
               <Image
                 src="/Us/us-6.jpg"
-                alt="Échanges avec les visiteurs sur le stand EsiLab"
+                alt="Échanges avec les visiteurs sur le stand ESILAB"
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover"

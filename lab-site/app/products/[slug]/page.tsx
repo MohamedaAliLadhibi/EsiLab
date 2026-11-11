@@ -28,7 +28,7 @@ import { DownloadTechnicalSheetButton } from '@/components/landing/DownloadTechn
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.esilab-tn.com/api';
 
-const QUOTE_EMAIL = 'Contact@esilab.tn';
+const QUOTE_EMAIL = 'contact.esilab@esilab.tn';
 const QUOTE_WHATSAPP_NUMBER = '21650601783';
 
 type FieldMeta = {
@@ -71,10 +71,6 @@ const hiddenSpecKeys = new Set([
 
 const productFamilyImages = [
   {
-    test: (data: Record<string, unknown>) => /calibration weight|test weight|weight set|350-82/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
-    url: 'https://www.precisa.com/wp-content/uploads/2021/07/Precisa_Balances_360_EP_6200C-4.jpg',
-  },
-  {
     test: (data: Record<string, unknown>) => /\b520\s+(PB|PT)\b|520 PB\/PT|carat bowl|LP4024|power splitter|anti-theft/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`),
     url: 'https://www.precisa.com/wp-content/uploads/2023/08/DSCF2762-Retouched-300x200.jpg',
   },
@@ -115,6 +111,7 @@ function getProductImage(data: Record<string, unknown>) {
   const imageUrl = getDisplayValue(data, 'image_url', 'image', 'photo', 'picture');
   if (imageUrl) return imageUrl;
   if (/^350-869[45]$/.test(getDisplayValue(data, 'sku')) && /protection IP65/i.test(getDisplayValue(data, 'name'))) return '';
+  if (/\b(calibration weight|test weight|weight set|masse etalon|poids de calibration)\b/i.test(`${data.sku ?? ''} ${data.name ?? ''} ${data.category ?? ''}`)) return '';
   return productFamilyImages.find((family) => family.test(data))?.url ?? '';
 }
 
@@ -219,9 +216,9 @@ export default function ProductDetailPage() {
 
   const quickFacts = [
     brand && { label: 'Marque', value: brand, icon: BadgeCheck },
-    category && { label: 'Univers', value: category, icon: Layers },
+    category && { label: 'Catégorie', value: category, icon: Layers },
     packageSize && { label: 'Conditionnement', value: packageSize, icon: Box },
-    sku && { label: 'Reference', value: sku, icon: Tag },
+    sku && { label: 'Référence', value: sku, icon: Tag },
   ].filter(Boolean) as Array<{ label: string; value: string; icon: typeof BadgeCheck }>;
 
   // Payload for the PDF "Fiche technique"
@@ -258,17 +255,17 @@ export default function ProductDetailPage() {
   };
   const currentUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tn.com'}/products/${product.slug}`;
   const quoteLines = [
-    'Bonjour EsiLab,',
+    'Bonjour ESILAB,',
     '',
     'Je souhaite demander un devis pour ce produit :',
     `Produit : ${name}`,
-    sku ? `Reference / SKU : ${sku}` : '',
+    sku ? `Référence : ${sku}` : '',
     brand ? `Marque : ${brand}` : '',
-    category ? `Univers : ${category}` : '',
+    category ? `Catégorie : ${category}` : '',
     packageSize ? `Conditionnement : ${packageSize}` : '',
     `Lien produit : ${currentUrl}`,
     '',
-    'Merci de me confirmer le prix, la disponibilite et les delais.',
+    'Merci de me confirmer le prix, la disponibilité et les délais.',
   ].filter(Boolean);
   const quoteMessage = quoteLines.join('\n');
   const quoteSubject = `Demande de devis - ${sku || name}`;
@@ -329,7 +326,7 @@ export default function ProductDetailPage() {
         name: `Comment utiliser ${name} ?`,
         acceptedAnswer: {
           '@type': 'Answer',
-          text: description || shortDescription || `EsiLab peut vous accompagner pour l utilisation, la mise en service et le choix des accessoires de ${name}.`,
+          text: description || shortDescription || `ESILAB peut vous accompagner pour l'utilisation, la mise en service et le choix des accessoires de ${name}.`,
         },
       },
       {
@@ -337,7 +334,7 @@ export default function ProductDetailPage() {
         name: `Comment demander un devis pour ${name} ?`,
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `Contactez EsiLab avec la reference ${sku || name} afin de confirmer le prix, la disponibilite, les accessoires et les delais.`,
+          text: `Contactez ESILAB avec la référence ${sku || name} afin de confirmer le prix, la disponibilité, les accessoires et les délais.`,
         },
       },
     ],
@@ -456,7 +453,7 @@ export default function ProductDetailPage() {
                   href="/contact"
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-line px-5 py-3.5 text-sm font-semibold text-ink transition hover:border-blue hover:text-blue"
                 >
-                  Parler a un expert
+                  Parler à un expert
                   <Mail size={16} />
                 </Link>
               </div>
@@ -472,15 +469,15 @@ export default function ProductDetailPage() {
               <div className="mt-8 grid gap-3 border-t border-line pt-6 sm:grid-cols-3">
                 <div className="flex items-start gap-3">
                   <ShieldCheck size={18} className="mt-0.5 text-cyan" />
-                  <p className="text-sm leading-6 text-slate-500"><span className="font-semibold text-ink">Selection pro</span><br />Materiel catalogue qualifie</p>
+                  <p className="text-sm leading-6 text-slate-500"><span className="font-semibold text-ink">Sélection pro</span><br />Matériel catalogue qualifié</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <ClipboardList size={18} className="mt-0.5 text-cyan" />
-                  <p className="text-sm leading-6 text-slate-500"><span className="font-semibold text-ink">Devis clair</span><br />Reference et besoin repris</p>
+                  <p className="text-sm leading-6 text-slate-500"><span className="font-semibold text-ink">Devis clair</span><br />Référence et besoin repris</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <Phone size={18} className="mt-0.5 text-cyan" />
-                  <p className="text-sm leading-6 text-slate-500"><span className="font-semibold text-ink">Support local</span><br />Conseil et suivi EsiLab</p>
+                  <p className="text-sm leading-6 text-slate-500"><span className="font-semibold text-ink">Support local</span><br />Conseil et suivi ESILAB</p>
                 </div>
               </div>
             </div>
@@ -508,7 +505,7 @@ export default function ProductDetailPage() {
               <section className="overflow-hidden rounded-[2rem] border border-line bg-white shadow-soft">
                 <div className="border-b border-line px-6 py-5 sm:px-8">
                   <p className="eyebrow text-slate-400">Fiche technique</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-ink">Caracteristiques principales</h2>
+                  <h2 className="mt-2 text-2xl font-semibold text-ink">Caractéristiques principales</h2>
                 </div>
                 <div className="grid sm:grid-cols-2">
                   {specFields.map((field) => {
@@ -588,12 +585,12 @@ export default function ProductDetailPage() {
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-cyan/10 text-cyan">
                 <Sparkles size={20} />
               </span>
-              <h2 className="mt-4 text-xl font-semibold text-ink">Accompagnement EsiLab</h2>
+              <h2 className="mt-4 text-xl font-semibold text-ink">Accompagnement ESILAB</h2>
               <p className="mt-3 text-sm leading-7 text-slate-500">
-                Notre equipe peut confirmer la reference, proposer une alternative et preparer une offre adaptee a votre application.
+                Notre équipe peut confirmer la référence, proposer une alternative et préparer une offre adaptée à votre application.
               </p>
               <ul className="mt-5 space-y-3 text-sm text-slate-600">
-                {['Verification compatibilite', 'Conseil avant achat', 'Suivi SAV et installation'].map((item) => (
+                {['Vérification compatibilité', 'Conseil avant achat', 'Suivi SAV et installation'].map((item) => (
                   <li key={item} className="flex items-center gap-2">
                     <CheckCircle2 size={16} className="text-lime" />
                     {item}
@@ -621,7 +618,7 @@ export default function ProductDetailPage() {
             <section className="rounded-[2rem] border border-blue/20 bg-blue/5 p-6">
               <p className="eyebrow text-blue">Info catalogue</p>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                Les disponibilites, accessoires et versions peuvent varier selon fournisseur. EsiLab confirme les details avant commande.
+                Les disponibilités, accessoires et versions peuvent varier selon le fournisseur. ESILAB confirme les détails avant commande.
               </p>
             </section>
           </aside>
@@ -646,7 +643,7 @@ function QuoteChoiceCard({
     <div className="mt-4 rounded-2xl border border-blue/20 bg-blue/5 p-4">
       <p className="text-sm font-semibold text-ink">Choisissez comment envoyer votre demande</p>
       <p className="mt-1 text-xs leading-5 text-slate-500">
-        Le message sera prepare automatiquement avec les details de {productName}.
+        Le message sera préparé automatiquement avec les détails de {productName}.
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <a
@@ -843,7 +840,7 @@ function ProductFaqChat({ context }: { context: ProductAssistantContext }) {
             ))}
           </div>
           <p className="mt-5 text-xs leading-5 text-slate-500">
-            Pour les prix, stocks et validations critiques, l'assistant oriente vers une confirmation EsiLab.
+            Pour les prix, les stocks et les validations importantes, l'assistant oriente vers une confirmation ESILAB.
           </p>
         </aside>
       </div>

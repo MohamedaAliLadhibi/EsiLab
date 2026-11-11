@@ -3,28 +3,28 @@ import { Download, Megaphone, Percent, ShoppingCart } from 'lucide-react';
 
 const panels = [
   {
-    title: 'Telechargement',
+    title: 'Téléchargement',
     text: 'Brochures, catalogues et documentations techniques.',
     icon: Download,
     className: 'bg-[#2db7f5]',
-    href: '/contact?subject=documentation',
+    href: '/telechargements',
   },
   {
     title: 'Promotions',
-    text: 'Mises en avant commerciales sur des familles strategiques.',
+    text: 'Renseignez-vous sur nos offres commerciales en cours.',
     icon: Percent,
     className: 'bg-[#45c3b0]',
-    href: '/products?search=promotion',
+    href: '/promotions',
   },
   {
-    title: 'Destockage',
-    text: 'Opportunites produits pour decisions rapides et budgets maitrises.',
+    title: 'Déstockage',
+    text: 'Équipements disponibles selon les stocks et les conditions du moment.',
     icon: ShoppingCart,
     className: 'bg-[#2851b4]',
-    href: '/products?search=destockage',
+    href: '/destockage',
   },
   {
-    title: 'Actualites',
+    title: 'Actualités',
     text: 'Lancements, conseils applicatifs et vie du laboratoire.',
     icon: Megaphone,
     className: 'bg-[#4a4a4a]',

@@ -56,14 +56,14 @@ export function GlobalNav() {
         >
           <div className="site-shell h-full">
             <div className="flex h-full items-center justify-between gap-4">
-              <Link href="/" className="flex shrink-0 items-center" aria-label="EsiLab, accueil">
+              <Link href="/" className="flex shrink-0 items-center" aria-label="ESILAB, accueil">
                 <div className="w-[68px] transition-[width] duration-300 sm:w-[82px] lg:w-[112px]">
                   <Image
                     src="/logo-esilab-transparent.png"
-                    alt="EsiLab"
+                    alt="ESILAB"
                     width={160}
                     height={90}
-                    className="h-auto w-full"
+                    className={`h-auto w-full ${isScrolled ? '' : 'brightness-0 invert'}`}
                     priority
                   />
                 </div>
@@ -129,7 +129,7 @@ export function GlobalNav() {
                     href="https://www.linkedin.com/company/esilab-tunisie/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="LinkedIn EsiLab Tunisie"
+                    aria-label="LinkedIn ESILAB Tunisie"
                     className="transition hover:scale-110"
                   >
                     <Image src="/linkedin-logo.png" width={36} height={36} alt="" className="h-9 w-9 rounded-xl object-contain" />
@@ -138,7 +138,7 @@ export function GlobalNav() {
                     href="https://wa.me/21650601783"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="WhatsApp EsiLab"
+                    aria-label="WhatsApp ESILAB"
                     className="transition hover:scale-110"
                   >
                     <Image src="/whatsapp-logo.png" width={36} height={36} alt="" className="h-9 w-9 rounded-xl object-contain" />
@@ -151,7 +151,7 @@ export function GlobalNav() {
                   href="https://www.linkedin.com/company/esilab-tunisie/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="LinkedIn EsiLab Tunisie"
+                  aria-label="LinkedIn ESILAB Tunisie"
                   className={`grid size-10 place-items-center rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan ${isScrolled ? 'hover:bg-blue/5' : 'hover:bg-white/10'}`}
                 >
                   <Image src="/linkedin-logo.png" width={30} height={30} alt="" className="size-[30px] rounded-lg object-contain" />
@@ -160,7 +160,7 @@ export function GlobalNav() {
                   href="https://wa.me/21650601783"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="WhatsApp EsiLab"
+                  aria-label="WhatsApp ESILAB"
                   className={`grid size-10 place-items-center rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan ${isScrolled ? 'hover:bg-blue/5' : 'hover:bg-white/10'}`}
                 >
                   <Image src="/whatsapp-logo.png" width={30} height={30} alt="" className="size-[30px] rounded-lg object-contain" />

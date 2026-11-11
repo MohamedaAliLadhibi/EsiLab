@@ -27,13 +27,13 @@ const slides = [
   },
   {
     src: '/hero-lab-3.png',
-    alt: 'Equipe scientifique ESILAB',
-    eyebrow: 'Performance et precision',
+    alt: 'Équipe scientifique ESILAB',
+    eyebrow: 'Performance et précision',
   },
   {
     src: '/hero-lab-4.png',
     alt: 'Chercheur ESILAB en laboratoire moderne',
-    eyebrow: 'Qualite et controle',
+    eyebrow: 'Qualité et contrôle',
   },
 ];
 
@@ -87,8 +87,8 @@ export function LandingHero({
 
   const stats = [
     {
-      label: 'References catalogue',
-      value: totalProducts > 0 ? `${totalProducts.toLocaleString('fr-FR')}+` : 'Live',
+      label: 'Références catalogue',
+      value: totalProducts > 0 ? totalProducts.toLocaleString('fr-FR') : '—',
     },
     { label: 'Marques en vitrine', value: `${featuredBrands.length || 1}`.padStart(2, '0') },
     { label: 'Produits mis en avant', value: `${featuredCount}`.padStart(2, '0') },
@@ -122,12 +122,11 @@ export function LandingHero({
 
             {/* Paragraph with frosted-glass background */}
             <p className="mt-5 max-w-2xl rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm leading-6 text-white/90 shadow-soft backdrop-blur-md sm:mt-6 sm:px-5 sm:py-4 sm:text-lg sm:leading-8 md:text-xl">
-              Une presentation plus visuelle, premium et claire du catalogue ESILAB avec mise en
-              avant des equipements, de l&apos;expertise technique et de la demande de devis
-              rapide.
+              Équipements, instruments de mesure et réactifs pour les laboratoires industriels,
+              avec conseil, devis rapide et SAV en Tunisie.
             </p>
 
-            <div className="mt-6 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
+            <div className="mt-6 mr-16 flex flex-col gap-3 sm:mr-0 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
               <Link
                 href="/products"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-cyan px-5 py-3.5 text-sm font-semibold text-ink transition hover:bg-white sm:px-7 sm:py-4"
@@ -165,16 +164,16 @@ export function LandingHero({
                 <div>
                   <p className="eyebrow text-cyan">Produit mis en avant</p>
                   <h2 className="mt-1 line-clamp-2 text-xl font-semibold text-white sm:text-2xl">
-                    {activeProduct?.name ?? 'Selection ESILAB'}
+                    {activeProduct?.name ?? 'Sélection ESILAB'}
                   </h2>
                   <p className="mt-1 text-sm text-white/68">
                     {activeProduct
                       ? `${activeProduct.brand} - ${activeProduct.category}`
-                      : 'Reference issue du catalogue'}
+                      : 'Référence issue du catalogue'}
                   </p>
                 </div>
                 <div className="rounded-full bg-cyan px-4 py-2 text-xs font-mono uppercase tracking-[0.2em] text-ink">
-                  {activeProduct?.sku ?? 'Live'}
+                  {activeProduct?.sku ?? 'Référence catalogue'}
                 </div>
               </div>
 
@@ -195,20 +194,20 @@ export function LandingHero({
                 <div className="flex items-start gap-3">
                   <ShieldCheck size={18} className="mt-1 text-cyan" />
                   <p className="text-sm leading-6 text-white/75">
-                    {activeProduct?.brand ?? 'Marques techniques selectionnees'}
+                    {activeProduct?.brand ?? 'Marques techniques sélectionnées'}
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <Wrench size={18} className="mt-1 text-orange" />
                   <p className="text-sm leading-6 text-white/75">
-                    {activeProduct?.category ?? "Accompagnement a l'installation et au SAV"}
+                    {activeProduct?.category ?? "Accompagnement à l'installation et au SAV"}
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <BriefcaseBusiness size={18} className="mt-1 text-lime" />
                   <p className="line-clamp-3 text-sm leading-6 text-white/75">
                     {activeProduct?.excerpt ??
-                      'Conseil applicatif pour laboratoires, qualite et industrie.'}
+                      'Conseil applicatif pour les laboratoires, la qualité et l’industrie.'}
                   </p>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   ArrowRight,
@@ -14,6 +15,7 @@ import {
   X,
 } from 'lucide-react';
 import { productGroups } from '@/lib/product-groups';
+import { partnerBrands } from '@/lib/brands';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.esilab-tn.com/api';
 type Product = {
@@ -55,10 +57,6 @@ type ApiProductsResponse = {
 
 const productFamilyImages = [
   {
-    test: (text: string) => /calibration weight|test weight|weight set|350-82/i.test(text),
-    url: 'https://www.precisa.com/wp-content/uploads/2021/07/Precisa_Balances_360_EP_6200C-4.jpg',
-  },
-  {
     test: (text: string) => /\b520\s+(PB|PT)\b|520 PB\/PT|carat bowl|LP4024|power splitter|anti-theft/i.test(text),
     url: 'https://www.precisa.com/wp-content/uploads/2023/08/DSCF2762-Retouched-300x200.jpg',
   },
@@ -97,6 +95,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
@@ -110,6 +109,8 @@ export default function ProductsPage() {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setSearch(searchParams.get('search') ?? '');
+    const brand = searchParams.get('brand') ?? '';
+    setSelectedBrand(partnerBrands.includes(brand) ? brand : '');
     const group = searchParams.get('group');
     setSelectedGroup(productGroups.some((item) => item.slug === group) ? group : null);
   }, []);
@@ -124,11 +125,18 @@ export default function ProductsPage() {
         limit: '24',
       });
       if (debouncedSearch) params.set('search', debouncedSearch);
+      if (selectedBrand) params.set('brand', selectedBrand);
 
       const endpoint = selectedGroup
         ? `/categories/${selectedGroup}/products?${params}`
         : `/products?${params}`;
       const res = await fetch(`${API_BASE}${endpoint}`);
+      if (res.status === 404 && selectedGroup) {
+        setProducts([]);
+        setTotalPages(1);
+        setTotal(0);
+        return;
+      }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json: ApiProductsResponse = await res.json();
       const nested = Array.isArray(json.data) ? null : json.data;
@@ -143,7 +151,7 @@ export default function ProductsPage() {
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, page, selectedGroup]);
+  }, [debouncedSearch, page, selectedGroup, selectedBrand]);
 
   useEffect(() => {
     fetchProducts();
@@ -152,7 +160,7 @@ export default function ProductsPage() {
   // Reset to page 1 when search or category changes
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch, selectedGroup]);
+  }, [debouncedSearch, selectedGroup, selectedBrand]);
 
   const clearSearch = () => {
     setSearch('');
@@ -161,7 +169,21 @@ export default function ProductsPage() {
 
   const handleGroupSelect = (slug: string | null) => {
     setSelectedGroup(slug);
+    const params = new URLSearchParams(window.location.search);
+    if (slug) params.set('group', slug);
+    else params.delete('group');
+    const query = params.toString();
+    window.history.replaceState(null, '', query ? `/products?${query}` : '/products');
     setFiltersOpen(false);
+  };
+
+  const handleBrandSelect = (brand: string) => {
+    setSelectedBrand(brand);
+    const params = new URLSearchParams(window.location.search);
+    if (brand) params.set('brand', brand);
+    else params.delete('brand');
+    const query = params.toString();
+    window.history.replaceState(null, '', query ? `/products?${query}` : '/products');
   };
 
   // Extract a display-friendly field from product.data
@@ -189,6 +211,7 @@ export default function ProductsPage() {
     if (image) return image;
 
     const text = getProductText(product);
+    if (/\b(calibration weight|test weight|weight set|masse etalon|poids de calibration)\b/.test(text)) return null;
     return productFamilyImages.find((family) => family.test(text))?.url ?? null;
   };
 
@@ -208,7 +231,7 @@ export default function ProductsPage() {
         <div className="panel-grid absolute inset-0 opacity-20" />
         <div className="site-shell relative">
           <div className="max-w-3xl">
-            <p className="eyebrow text-cyan">Catalogue EsiLab</p>
+            <p className="eyebrow text-cyan">Catalogue ESILAB</p>
             <h1 className="mt-4 text-4xl font-semibold leading-tight lg:text-6xl">
               Produits et solutions pour laboratoires 
             </h1>
@@ -224,7 +247,7 @@ export default function ProductsPage() {
               <p className="mt-1 text-xs uppercase tracking-[0.22em] text-white/55">Références</p>
             </div>
             <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-              <p className="text-2xl font-semibold">4</p>
+              <p className="text-2xl font-semibold">{productGroups.length}</p>
               <p className="mt-1 text-xs uppercase tracking-[0.22em] text-white/55">Univers métier</p>
             </div>
             <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
@@ -236,16 +259,15 @@ export default function ProductsPage() {
       </div>
 
       <div className="site-shell py-12">
-        <section className="grid gap-4 lg:grid-cols-4">
+        <section className="grid gap-4 lg:grid-cols-4 xl:grid-cols-5">
           {productGroups.map((group) => {
             const Icon = group.icon;
             const isActive = selectedGroup === group.slug;
 
             return (
-              <button
+              <Link
                 key={group.slug}
-                type="button"
-                onClick={() => handleGroupSelect(isActive ? null : group.slug)}
+                href={`/products?group=${encodeURIComponent(group.slug)}`}
                 className={`group flex min-h-[17rem] flex-col rounded-2xl border bg-white p-5 text-left shadow-soft transition hover:-translate-y-1 hover:shadow-halo ${
                   isActive ? group.surface : 'border-line/80'
                 }`}
@@ -259,7 +281,7 @@ export default function ProductsPage() {
                   {isActive ? 'Catégorie active' : 'En savoir plus'}
                   <ArrowRight size={13} className="transition group-hover:translate-x-0.5" />
                 </span>
-              </button>
+              </Link>
             );
           })}
         </section>
@@ -290,6 +312,16 @@ export default function ProductsPage() {
             )}
           </div>
 
+          <select
+            aria-label="Filtrer par marque"
+            value={selectedBrand}
+            onChange={(event) => handleBrandSelect(event.target.value)}
+            className="rounded-xl border border-line bg-white px-4 py-3.5 text-sm text-ink focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/20"
+          >
+            <option value="">Toutes les marques</option>
+            {partnerBrands.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
+          </select>
+
           {/* Filter toggle (mobile) */}
           <button
             onClick={() => setFiltersOpen(!filtersOpen)}
@@ -297,8 +329,8 @@ export default function ProductsPage() {
           >
             <SlidersHorizontal size={16} />
             Catégories
-            {selectedGroup !== null && (
-              <span className="ml-1 rounded-full bg-blue px-2 py-0.5 text-xs text-white">1</span>
+            {(selectedGroup !== null || selectedBrand) && (
+              <span className="ml-1 rounded-full bg-blue px-2 py-0.5 text-xs text-white">{Number(selectedGroup !== null) + Number(Boolean(selectedBrand))}</span>
             )}
           </button>
         </div>
@@ -508,8 +540,15 @@ export default function ProductsPage() {
                 </div>
                 <h3 className="mt-6 text-lg font-semibold text-ink">Aucun produit trouvé</h3>
                 <p className="mt-2 text-sm text-slate-500 max-w-xs">
-                  Essayez de modifier votre recherche ou de changer de catégorie.
+                  {activeGroup
+                    ? 'Aucune référence ne correspond actuellement à cette catégorie. Contactez notre équipe pour connaître les disponibilités.'
+                    : 'Essayez de modifier votre recherche ou de changer de catégorie.'}
                 </p>
+                {activeGroup && (
+                  <Link href="/contact?subject=contact" className="mt-5 rounded-full bg-blue px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy">
+                    Contacter ESILAB
+                  </Link>
+                )}
                 <button
                   onClick={() => { setSearch(''); handleGroupSelect(null); }}
                   className="mt-6 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-soft hover:border-blue hover:text-blue transition"

@@ -111,14 +111,14 @@ const faqs = [
   },
   {
     q: 'Intervenez-vous partout en Tunisie ?',
-    a: 'Oui, EsiLab accompagne les laboratoires sur l’ensemble du territoire tunisien, avec un support local et une équipe technique dédiée.',
+    a: 'Oui, ESILAB accompagne les laboratoires sur l’ensemble du territoire tunisien, avec un support local et une équipe technique dédiée.',
   },
 ];
 
 const savSlides = [
   {
     src: '/SAV/SAV-1.jpeg',
-    alt: 'Intervention technique EsiLab sur équipement de laboratoire',
+    alt: 'Intervention technique ESILAB sur un équipement de laboratoire',
     title: 'Sur le terrain',
     caption: 'Installation et mise en service réalisées par nos ingénieurs.',
   },
@@ -136,13 +136,13 @@ const savSlides = [
   },
   {
     src: '/SAV/SAV-4.jpeg',
-    alt: 'Calibration et métrologie EsiLab',
+    alt: 'Étalonnage et métrologie ESILAB',
     title: 'Métrologie & calibration',
     caption: 'Traçabilité et conformité de vos instruments.',
   },
   {
     src: '/SAV/SAV-5.jpeg',
-    alt: 'Formation utilisateurs EsiLab',
+    alt: 'Formation des utilisateurs par ESILAB',
     title: 'Formation utilisateurs',
     caption: 'Vos équipes formées aux bonnes pratiques.',
   },
@@ -174,11 +174,11 @@ export default function SavPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy/90 to-navy/70" />
 
         <div className="site-shell relative grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <div>
+          <div className="min-w-0">
             <p className="text-xs font-mono uppercase tracking-[0.25em] text-cyan">
               Service Après-Vente
             </p>
-            <h1 className="mt-6 text-4xl font-semibold leading-tight md:text-5xl">
+            <h1 className="mt-6 max-w-full break-words text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl">
               Un support technique qui garantit la continuité de vos analyses.
             </h1>
             <p className="mt-6 max-w-xl text-base leading-8 text-white/75">
@@ -315,7 +315,7 @@ export default function SavPage() {
 
             {/* GENERAL CONTACT */}
             <p className="mt-8 text-xs font-mono uppercase tracking-[0.25em] text-white/50">
-              Standard EsiLab
+              Standard ESILAB
             </p>
 
             <div className="mt-4 space-y-2">

@@ -6,9 +6,9 @@ import { GlobalFooter } from '@/components/landing/GlobalFooter';
 import { CatalogueAssistant } from '@/components/landing/CatalogueAssistant';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tn.com';
-const siteName = 'EsiLab';
+const siteName = 'ESILAB';
 const siteDescription =
-  'EsiLab accompagne les laboratoires en Tunisie avec des equipements scientifiques, solutions de mesure, inspection, reactifs et support technique.';
+  'ESILAB accompagne les laboratoires en Tunisie avec des équipements scientifiques, des solutions de mesure, d’inspection, des réactifs et un support technique.';
 
 const sora = localFont({
   src: '../public/fonts/sora-latin.woff2',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   applicationName: siteName,
   title: {
-    default: 'EsiLab | Catalogue laboratoire, equipements et solutions scientifiques',
+    default: 'ESILAB – Équipements et instruments de laboratoire en Tunisie',
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
@@ -47,13 +47,13 @@ export const metadata: Metadata = {
     apple: '/logo-esilab-bleu.png',
   },
   keywords: [
-    'EsiLab',
-    'equipement laboratoire Tunisie',
+    'ESILAB',
+    'équipement de laboratoire Tunisie',
     'catalogue laboratoire',
-    'reactifs laboratoire',
-    'metrologie dimensionnelle',
+    'réactifs de laboratoire',
+    'métrologie dimensionnelle',
     'inspection emballage',
-    'materiel scientifique',
+    'matériel scientifique',
     'maintenance laboratoire',
   ],
   alternates: {
@@ -64,20 +64,20 @@ export const metadata: Metadata = {
     locale: 'fr_TN',
     url: siteUrl,
     siteName,
-    title: 'EsiLab | Catalogue laboratoire et solutions scientifiques',
+    title: 'ESILAB – Équipements et instruments de laboratoire en Tunisie',
     description: siteDescription,
     images: [
       {
         url: '/logo-esilab-bleu.png',
         width: 1200,
         height: 630,
-        alt: 'EsiLab',
+        alt: 'ESILAB',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'EsiLab | Catalogue laboratoire et solutions scientifiques',
+    title: 'ESILAB – Équipements et instruments de laboratoire en Tunisie',
     description: siteDescription,
     images: ['/logo-esilab-bleu.png'],
   },
@@ -102,11 +102,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     name: siteName,
     url: siteUrl,
     logo: `${siteUrl}/logo-esilab-bleu.png`,
-    email: 'contact@esilab.tn',
+    email: 'contact.esilab@esilab.tn',
     telephone: '(+216) 70 036 096',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Bloc C, 4 Boulevard de la qualite de la vie',
+      streetAddress: '4 Boulevard de la Qualité de la Vie',
       addressLocality: 'Ariana',
       postalCode: '2058',
       addressCountry: 'TN',

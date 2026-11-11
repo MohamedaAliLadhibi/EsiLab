@@ -5,10 +5,12 @@ import { FormEvent, useState } from 'react';
 const CONTACT_EMAIL = 'contact.esilab@esilab.tn';
 
 const subjectLabels: Record<string, string> = {
-  commande: 'Demande de commande EsiLab',
-  documentation: 'Demande de documentation EsiLab',
-  actualites: 'Demande d informations actualites EsiLab',
-  sav: 'Demande SAV EsiLab',
+  commande: 'Demande de commande ESILAB',
+  documentation: 'Demande de documentation ESILAB',
+  actualites: "Demande d'informations actualités ESILAB",
+  sav: 'Demande SAV ESILAB',
+  destockage: 'Demande de disponibilités déstockage ESILAB',
+  promotions: 'Demande d’informations sur les promotions ESILAB',
 };
 
 export function ContactForm({ subject = 'contact' }: { subject?: string }) {
@@ -20,27 +22,31 @@ export function ContactForm({ subject = 'contact' }: { subject?: string }) {
 
   const submitContact = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const destinationEmail = subject === 'sav' ? 'achraf.kouki@esilab.tn' : CONTACT_EMAIL;
     const body = [
-      'Bonjour EsiLab,',
+      'Bonjour ESILAB,',
       '',
       'Je souhaite vous contacter pour une demande.',
       '',
       name ? `Nom : ${name}` : '',
-      company ? `Societe : ${company}` : '',
+      company ? `Société : ${company}` : '',
       email ? `Email : ${email}` : '',
-      phone ? `Telephone : ${phone}` : '',
+      phone ? `Téléphone : ${phone}` : '',
       '',
       'Message :',
       message,
     ].filter(Boolean).join('\n');
 
-    const emailSubject = subjectLabels[subject] ?? 'Demande de contact EsiLab';
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(body)}`;
+    const emailSubject = subjectLabels[subject] ?? 'Demande de contact ESILAB';
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(destinationEmail)}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(body)}`;
     window.open(gmailUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
     <form onSubmit={submitContact} className="mt-8 grid gap-4 md:grid-cols-2">
+      <p className="text-sm leading-6 text-slate-600 md:col-span-2">
+        Ce formulaire prépare un e-mail adressé à {subject === 'sav' ? 'achraf.kouki@esilab.tn' : CONTACT_EMAIL}. Vérifiez puis envoyez le brouillon qui s'ouvre.
+      </p>
       <input
         value={name}
         onChange={(event) => setName(event.target.value)}
@@ -51,7 +57,7 @@ export function ContactForm({ subject = 'contact' }: { subject?: string }) {
         value={company}
         onChange={(event) => setCompany(event.target.value)}
         className="rounded-2xl border border-line px-4 py-3 outline-none"
-        placeholder="Societe"
+        placeholder="Société"
       />
       <input
         value={email}
@@ -65,20 +71,20 @@ export function ContactForm({ subject = 'contact' }: { subject?: string }) {
         value={phone}
         onChange={(event) => setPhone(event.target.value)}
         className="rounded-2xl border border-line px-4 py-3 outline-none"
-        placeholder="Telephone"
+        placeholder="Téléphone"
       />
       <textarea
         value={message}
         onChange={(event) => setMessage(event.target.value)}
         required
         className="min-h-40 rounded-2xl border border-line px-4 py-3 outline-none md:col-span-2"
-        placeholder="Decrivez votre besoin, vos produits d interet ou votre contexte laboratoire."
+        placeholder="Décrivez votre besoin, vos produits d'intérêt ou votre contexte laboratoire."
       />
       <button
         type="submit"
         className="rounded-full bg-orange px-6 py-3 text-sm font-semibold text-white transition hover:bg-scarlet md:col-span-2 md:justify-self-start"
       >
-        Envoyer la demande
+        Préparer l'e-mail
       </button>
     </form>
   );

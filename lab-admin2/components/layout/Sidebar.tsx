@@ -70,7 +70,7 @@ export default function Sidebar() {
         <div className="flex flex-col items-start gap-1.5">
           <Image
             src="/logo-esilab-bleu.png"
-            alt="EsiLab logo"
+            alt="Logo ESILAB"
             width={180}
             height={180}
             priority

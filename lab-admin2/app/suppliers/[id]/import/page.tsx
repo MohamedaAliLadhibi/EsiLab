@@ -39,7 +39,7 @@ export default function ImportPage() {
     });
   }, [id]);
 
-  // Parse Excel preview client-side
+  // Parse spreadsheet/CSV preview client-side
   function parsePreview(f: File) {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -57,8 +57,8 @@ export default function ImportPage() {
   }
 
   function handleFile(f: File) {
-    if (!['.xlsx', '.xls'].some(ext => f.name.toLowerCase().endsWith(ext))) {
-      setError(t.ui.clickBrowse); return;
+    if (!['.xlsx', '.xls', '.csv'].some(ext => f.name.toLowerCase().endsWith(ext))) {
+      setError('Choose an .xlsx, .xls, or .csv file.'); return;
     }
     setError(''); setResult(null);
     setFile(f);
@@ -101,7 +101,7 @@ export default function ImportPage() {
 
       <PageHeader
         title={`${t.ui.import} - ${supplier?.name || '...'}`}
-        subtitle={t.ui.uploadExcelSubtitle}
+        subtitle="Import catalogue rows from an Excel workbook or CSV file."
       />
 
       {/* Mapping summary */}
@@ -138,7 +138,7 @@ export default function ImportPage() {
             onClick={() => document.getElementById('fileInput')?.click()}
           >
             <input
-              id="fileInput" type="file" accept=".xlsx,.xls"
+              id="fileInput" type="file" accept=".xlsx,.xls,.csv"
               className="hidden"
               onChange={e => { if (e.target.files?.[0]) handleFile(e.target.files[0]); }}
             />

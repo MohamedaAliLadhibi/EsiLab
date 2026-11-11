@@ -114,7 +114,7 @@ function productSpecs(product: Product) {
 }
 
 const contactLinks: AssistantLink[] = [
-  { label: 'Contacter EsiLab', href: '/contact' },
+  { label: 'Contacter ESILAB', href: '/contact' },
   { label: 'Appeler (+216) 70 036 096', href: 'tel:+21670036096' },
   { label: 'Appeler (+216) 31 586 072', href: 'tel:+21631586072' },
   { label: 'Envoyer un email', href: `mailto:${company.email}` },

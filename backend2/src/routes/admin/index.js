@@ -14,6 +14,9 @@ const upload = multer({
     const allowed = [
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'application/vnd.ms-excel',
+      'text/csv',
+      'application/csv',
+      'application/vnd.ms-excel.sheet.macroEnabled.12',
     ];
     cb(null, allowed.includes(file.mimetype));
   },
@@ -33,6 +36,7 @@ router.put('/suppliers/:id/mappings', supplierCtrl.replaceMappings);
 router.post('/suppliers/:id/import', upload.single('file'), importCtrl.upload);
 router.get('/suppliers/:id/imports', importCtrl.listLogs);
 router.get('/imports/:logId', importCtrl.showLog);
+router.get('/products/export', productCtrl.exportCsv);
 router.get('/products', productCtrl.list);
 router.post('/products/manual', productCtrl.createManual);
 router.get('/products/:id', productCtrl.show);

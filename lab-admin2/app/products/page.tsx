@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getProducts, getSuppliers, toggleProduct, deleteProduct } from '@/lib/api';
 import { PageHeader, Table, Th, Td, Badge, Btn, Spinner, Empty, Select } from '@/components/ui';
-import { Package, Search, Eye, EyeOff, Trash2, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { Package, Search, Eye, EyeOff, Trash2, ChevronLeft, ChevronRight, Plus, Download } from 'lucide-react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
@@ -27,6 +27,7 @@ export default function ProductsPage() {
   const [search,     setSearch]     = useState('');
   const [suppFilter, setSuppFilter] = useState('');
   const [page,       setPage]       = useState(1);
+  const [exporting,  setExporting]  = useState(false);
   const LIMIT = 25;
   const debouncedSearch = useDebouncedValue(search);
 
@@ -52,14 +53,41 @@ export default function ProductsPage() {
     await deleteProduct(id); load();
   }
 
+  async function handleExport() {
+    setExporting(true);
+    try {
+      const response = await fetch('/api/admin/admin/products/export', { credentials: 'include' });
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || 'Catalogue export failed.');
+      }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'esilab-catalogue.csv';
+      anchor.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Catalogue export failed.');
+    } finally {
+      setExporting(false);
+    }
+  }
+
   const supplierName = (sid: string) => suppliers.find(s => String(s.id) === String(sid))?.name || '—';
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
       <PageHeader title={t.ui.products} subtitle={meta ? `${meta.total.toLocaleString()} ${t.ui.productsTotal}` : t.ui.loading}>
-        <Link href="/products/new">
-          <Btn variant="esi"><Plus size={14} /> {t.ui.addProduct}</Btn>
-        </Link>
+        <div className="flex gap-2">
+          <Btn variant="ghost" onClick={handleExport} disabled={exporting}>
+            <Download size={14} /> {exporting ? 'Exporting…' : 'Export CSV'}
+          </Btn>
+          <Link href="/products/new">
+            <Btn variant="esi"><Plus size={14} /> {t.ui.addProduct}</Btn>
+          </Link>
+        </div>
       </PageHeader>
 
       {/* Filters */}

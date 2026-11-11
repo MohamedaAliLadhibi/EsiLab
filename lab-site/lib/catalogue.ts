@@ -80,9 +80,9 @@ function toHomeProduct(product: ProductPayload, image: string, heroImage?: strin
     id: product.id,
     slug: product.slug,
     name,
-    brand: getText(data.brand) || getText(data.supplier) || getText(product.supplier) || 'EsiLab',
+    brand: getText(data.brand) || getText(data.supplier) || getText(product.supplier) || 'ESILAB',
     category: getText(data.category) || 'Catalogue laboratoire',
-    excerpt: shorten(shortDescription || 'Reference catalogue disponible sur demande de devis et accompagnement technique.'),
+    excerpt: shorten(shortDescription || 'Référence catalogue disponible sur demande de devis et accompagnement technique.'),
     description: shorten(getText(data.description) || shortDescription || name, 220),
     sku: getText(data.sku) || undefined,
     image,
@@ -108,10 +108,23 @@ async function fetchProducts(search: string, limit = 6) {
   return (await response.json()) as ProductsResponse;
 }
 
+async function fetchActiveProductCount() {
+  const response = await fetch(`${API_BASE_URL}/products/summary`, {
+    next: { revalidate: 300 },
+  });
+  if (!response.ok) throw new Error(`Failed to fetch catalogue summary (${response.status})`);
+  const result = await response.json() as { totalProducts?: number };
+  return Number(result.totalProducts) || 0;
+}
+
 export async function getHomePageCatalogue() {
   let responses: ProductsResponse[];
+  let totalProducts: number;
   try {
-    responses = await Promise.all(featuredSearches.map((entry) => fetchProducts(entry.search)));
+    [responses, totalProducts] = await Promise.all([
+      Promise.all(featuredSearches.map((entry) => fetchProducts(entry.search))),
+      fetchActiveProductCount(),
+    ]);
   } catch (error) {
     // Keep the marketing site buildable and available if the API/database is
     // temporarily offline. Next.js will retry after the page revalidation window.
@@ -136,7 +149,6 @@ export async function getHomePageCatalogue() {
     })
     .filter((product): product is HomeProduct => product !== null);
 
-  const totalProducts = responses[0]?.pagination?.total ?? responses[0]?.meta?.total ?? 0;
   const featuredBrands = Array.from(new Set(featuredProducts.map((product) => product.brand))).filter(Boolean);
 
   return {

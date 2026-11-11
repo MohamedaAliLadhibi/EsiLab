@@ -53,6 +53,16 @@ export function DownloadTechnicalSheetButton({
     if (busy) return;
     setBusy(true);
     try {
+      const logoResponse = await fetch('/logo-esilab-bleu.png');
+      const logoBlob = logoResponse.ok ? await logoResponse.blob() : null;
+      const logoDataUrl = logoBlob
+        ? await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(logoBlob);
+        })
+        : undefined;
       // Pre-fetch the image so the PDF renderer never hits CORS
       let imageDataUrl: string | undefined;
       if (product.imageUrl && /^https?:\/\//.test(product.imageUrl)) {
@@ -61,7 +71,7 @@ export function DownloadTechnicalSheetButton({
       }
 
       const blob = await pdf(
-        <TechnicalDataSheet product={{ ...product, imageDataUrl }} />
+        <TechnicalDataSheet product={{ ...product, imageDataUrl, logoDataUrl }} />
       ).toBlob();
 
       const url = URL.createObjectURL(blob);
@@ -75,7 +85,7 @@ export function DownloadTechnicalSheetButton({
       document.body.appendChild(a);
       a.click();
       a.remove();
-      URL.revokeObjectURL(url);
+      window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
     } catch (err) {
       console.error('PDF generation failed:', err);
       alert('Erreur lors de la génération du PDF.');
@@ -97,10 +107,10 @@ export function DownloadTechnicalSheetButton({
       >
         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-blue">
           <FileText size={14} />
-          {busy ? 'Génération…' : label}
+          {busy ? 'Téléchargement en cours…' : label}
         </div>
-        <p className="mt-2 text-sm font-semibold text-ink">
-          {busy ? 'Préparation du PDF…' : 'Télécharger en PDF'}
+        <p className="mt-2 text-sm font-semibold text-ink" aria-live="polite">
+          {busy ? 'Téléchargement en cours…' : 'Télécharger en PDF'}
         </p>
       </button>
     );
@@ -117,7 +127,7 @@ export function DownloadTechnicalSheetButton({
       }
     >
       <FileText size={16} />
-      {busy ? 'Génération…' : label}
+      <span aria-live="polite">{busy ? 'Téléchargement en cours…' : label}</span>
     </button>
   );
 }

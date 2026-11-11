@@ -3,6 +3,8 @@ const router = require('express').Router();
 const catalogueCtrl = require('../../controllers/public/catalogueController');
 
 // ── Products ───────────────────────────────────────────────────────────────
+router.get('/products/sitemap',                 catalogueCtrl.sitemapProducts);
+router.get('/products/summary',                 catalogueCtrl.summary);
 router.get('/products',                        catalogueCtrl.list);
 router.get('/products/:slug',                  catalogueCtrl.show);
 

@@ -3,14 +3,14 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Catalogue produits',
   description:
-    'Parcourez le catalogue EsiLab: equipements de laboratoire, instruments de mesure, solutions d inspection, reactifs, accessoires et consommables.',
+    "Parcourez le catalogue ESILAB : équipements de laboratoire, instruments de mesure, solutions d'inspection, réactifs, accessoires et consommables.",
   alternates: {
     canonical: '/products',
   },
   openGraph: {
-    title: 'Catalogue produits EsiLab',
+    title: 'Catalogue produits ESILAB',
     description:
-      'Trouvez les references laboratoire, instruments, reactifs et accessoires adaptes a vos workflows scientifiques et industriels.',
+      'Trouvez les références de laboratoire, instruments, réactifs et accessoires adaptés à vos workflows scientifiques et industriels.',
     url: '/products',
   },
 };

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { brandSlug, partnerBrands } from '@/lib/brands';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.esilab-tn.com';
 const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.esilab-tn.com/api';
@@ -9,15 +10,19 @@ const staticRoutes = [
   { path: '/products', priority: 0.95 },
   { path: '/solutions', priority: 0.85 },
   { path: '/evenements', priority: 0.75 },
-  { path: '/about', priority: 0.7 },
   { path: '/contact', priority: 0.75 },
+  { path: '/sav', priority: 0.75 },
+  { path: '/destockage', priority: 0.7 },
+  { path: '/promotions', priority: 0.7 },
+  { path: '/telechargements', priority: 0.65 },
 ];
+const brandRoutes = partnerBrands.map((brand) => ({ path: `/marques/${brandSlug(brand)}`, priority: 0.65 }));
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // 1. Static entries
-  const staticEntries = staticRoutes.map((route) => ({
+  const staticEntries = [...staticRoutes, ...brandRoutes].map((route) => ({
     url: `${siteUrl}${route.path}`,
     lastModified: now,
     changeFrequency: 'weekly' as const,
@@ -28,8 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let productEntries: MetadataRoute.Sitemap = [];
 
   try {
-    // Fetch up to 5000 products (adjust limit if needed)
-    const response = await fetch(`${apiBase}/products?limit=5000`, {
+    const response = await fetch(`${apiBase}/products/sitemap`, {
       next: { revalidate: 86400 }, // regenerate once per day
     });
 

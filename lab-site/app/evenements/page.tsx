@@ -6,14 +6,14 @@ import { PrecisaAnniversaryGallery } from '@/components/landing/events/PrecisaAn
 
 export const metadata: Metadata = {
   title: 'Événements et actualités',
-  description: 'Suivez les événements, les actualités et les moments de la vie d’équipe chez EsiLab.',
+  description: 'Suivez les événements, les actualités et les moments de la vie d’équipe chez ESILAB.',
   alternates: { canonical: '/evenements' },
 };
 
 const pastEventPhotos = [
   {
     src: '/evenements/team-building-action.jpg',
-    alt: 'L’équipe EsiLab profite d’une partie de paintball en forêt',
+    alt: 'L’équipe ESILAB profite d’une partie de paintball en forêt',
     caption: 'Une activité pleine d’énergie',
     className: 'md:col-span-7 md:row-span-2',
   },
@@ -38,7 +38,7 @@ const precisaAnniversaryPhotos = [
   },
   {
     src: 'https://media.licdn.com/dms/image/v2/D5622AQGdXWs7P10_vA/feedshare-shrink_1280/B56Z6nmT72GgAM-/0/1780928299128?e=1794441600&v=beta&t=pfMmoRiPvuMVnGTob6kdRSwNBYNRJIDTM8JCe3J9UeE',
-    alt: 'Moment de la célébration Precisa partagé par EsiLab',
+    alt: 'Moment de la célébration Precisa partagé par ESILAB',
   },
   {
     src: 'https://media.licdn.com/dms/image/v2/D4D22AQHIwUxR20Itwg/feedshare-image-high-res/B4DZ6N0i6UIQAU-/0/1780495822895?e=1794441600&v=beta&t=9fk6a1Ir1lFi5Ya7GZEzPlmtCwV3sFC8Z_N71lF0DZs',
@@ -57,12 +57,12 @@ export default function EvenementsPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(72,198,223,0.2),transparent_38%),radial-gradient(ellipse_at_0%_100%,rgba(31,87,184,0.45),transparent_45%)]" />
         <div className="site-shell relative grid items-center gap-12 lg:grid-cols-[1fr_0.9fr]">
           <div>
-            <p className="eyebrow text-cyan">La vie chez EsiLab</p>
+            <p className="eyebrow text-cyan">La vie chez ESILAB</p>
             <h1 className="mt-5 max-w-2xl text-balance text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
               Événements & actualités
             </h1>
             <p className="mt-6 max-w-xl text-base leading-8 text-white/70 sm:text-lg">
-              Les nouvelles de l’équipe, nos rencontres et les moments qui nous rassemblent, au travail comme en dehors .
+              Les nouvelles de l’équipe, nos rencontres et les moments qui nous rassemblent, au travail comme en dehors.
             </p>
             <div className="mt-8 flex flex-wrap gap-3 text-sm text-white/80">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2"><CalendarDays size={16} className="text-cyan" /> Samedi 31 octobre 2026 · 08:00</span>
@@ -77,7 +77,7 @@ export default function EvenementsPage() {
             <div className="relative min-h-[340px] overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl sm:min-h-[400px]">
               <Image
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBrquCeQRu4FupyHcixOticvU1RPusRTsZ4r2j267Oyo6DOKWAfOV9SxPr&s=10"
-                alt="Illustration du prochain team building EsiLab"
+                alt="Illustration du prochain team building ESILAB"
                 fill
                 unoptimized
                 priority
@@ -87,7 +87,7 @@ export default function EvenementsPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-7 sm:p-10">
                 <div>
-                  <p className="text-sm text-white/75">Team building EsiLab</p>
+                  <p className="text-sm text-white/75">Team building ESILAB</p>
                   <p className="mt-1 text-xl font-semibold text-white">Samedi 31 octobre · 08:00</p>
                 </div>
                 <Users size={38} strokeWidth={1.2} className="shrink-0 text-cyan" aria-hidden="true" />
@@ -108,7 +108,7 @@ export default function EvenementsPage() {
               <p className="text-base leading-8 text-slate-600">
                 Nous avons partagé une journée de paintball, de rires et de défis en équipe. Une belle occasion de sortir du cadre du travail, de renforcer nos liens et de créer de bons souvenirs ensemble.
               </p>
-              <p className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-slate-500"><Users size={16} className="text-blue" /> Un moment d’équipe EsiLab</p>
+              <p className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-slate-500"><Users size={16} className="text-blue" /> Un moment d’équipe ESILAB</p>
             </div>
           </div>
 
@@ -153,7 +153,7 @@ export default function EvenementsPage() {
           <div className="mx-auto max-w-3xl rounded-[2rem] border border-line bg-panel p-8 text-center sm:p-12">
             <span className="mx-auto inline-flex size-14 items-center justify-center rounded-2xl bg-blue/10 text-blue"><MapPin size={23} /></span>
             <p className="eyebrow mt-6 text-blue">À suivre</p>
-            <h2 className="mt-3 text-3xl font-semibold leading-tight text-ink sm:text-4xl">Les prochains moments avec EsiLab</h2>
+            <h2 className="mt-3 text-3xl font-semibold leading-tight text-ink sm:text-4xl">Les prochains moments avec ESILAB</h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-slate-600">
               Retrouvez ici les prochains événements, rencontres et actualités de notre équipe. Les photos seront ajoutées après chaque événement.
             </p>
@@ -167,10 +167,10 @@ export default function EvenementsPage() {
             <div>
               <p className="eyebrow text-blue">Restez au courant</p>
               <h2 className="mt-3 text-2xl font-semibold text-ink">D’autres nouvelles bientôt</h2>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">Retrouvez ici les prochains événements et les temps forts de la vie EsiLab.</p>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">Retrouvez ici les prochains événements et les temps forts de la vie ESILAB.</p>
             </div>
             <a href="https://www.linkedin.com/company/esilab-tunisie/" target="_blank" rel="noreferrer" className="mt-6 inline-flex shrink-0 rounded-full bg-blue px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy sm:mt-0">
-              Suivre EsiLab sur LinkedIn
+              Suivre ESILAB sur LinkedIn
             </a>
           </div>
         </div>

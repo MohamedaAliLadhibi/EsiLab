@@ -8,7 +8,7 @@ import { ThisIsUs } from '@/components/landing/ThisIsUs';
 export const metadata: Metadata = {
   title: 'Contact',
   description:
-    'Contactez EsiLab pour un devis, une recommandation produit, une installation ou un accompagnement technique pour votre laboratoire.',
+    'Contactez ESILAB pour un devis, une recommandation produit, une installation ou un accompagnement technique pour votre laboratoire.',
   alternates: {
     canonical: '/contact',
   },
@@ -59,14 +59,14 @@ export default function ContactPage({
         <div className="site-shell grid gap-8 sm:gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <SectionTitle
             eyebrow="Contact"
-            title="Un site qui pousse naturellement vers le devis et la prise de contact."
-            text="Pour le lancement, cette page peut servir de formulaire simple, puis evoluer plus tard vers un vrai workflow de demande de devis."
+            title="Une question, un devis ?"
+            text="Remplissez le formulaire, notre équipe vous répond rapidement."
           />
           <div className="rounded-3xl border border-line bg-white p-5 shadow-halo sm:rounded-[2.25rem] sm:p-8">
             <div className="grid gap-6 md:grid-cols-2">
               <div className="rounded-2xl bg-mist p-5">
                 <p className="text-xs font-mono uppercase tracking-[0.22em] text-slate-500">
-                  Telephone
+                  Téléphone
                 </p>
                 <p className="mt-2 text-lg font-semibold text-ink">{company.phone}</p>
               </div>

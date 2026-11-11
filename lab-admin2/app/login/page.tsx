@@ -11,7 +11,7 @@ import { useAuth } from '@/components/auth/AuthProvider';
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
-  const [email, setEmail] = useState('ammamedali@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ export default function LoginPage() {
 
         <section className="glass mx-auto w-full max-w-md rounded-3xl p-8 shadow-2xl shadow-esi/10">
           <div className="mb-8">
-            <Image src="/logo-esilab-bleu.png" alt="EsiLab logo" width={132} height={132} priority />
+            <Image src="/logo-esilab-bleu.png" alt="Logo ESILAB" width={132} height={132} priority />
             <h2 className="mt-6 text-2xl font-bold">Sign in</h2>
             <p className="mt-1 text-sm text-dim">Use your approved admin or employer account.</p>
           </div>

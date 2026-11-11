@@ -1,9 +1,9 @@
-import { BookOpenCheck, CreditCard, Headset, UserRound } from 'lucide-react';
+import { BookOpenCheck, Headset, UserRound } from 'lucide-react';
 
 const items = [
   {
-    title: 'Service SAV Metrologie',
-    text: 'Support local, maintenance et suivi d installation.',
+    title: 'Service SAV métrologie',
+    text: "Support local, maintenance et suivi d'installation.",
     icon: Headset,
     accent: 'text-cyan',
   },
@@ -18,12 +18,6 @@ const items = [
     text: 'Historique, favoris et parcours devis plus fluide.',
     icon: BookOpenCheck,
     accent: 'text-[#45c3b0]',
-  },
-  {
-    title: 'Paiement securise',
-    text: 'Une experience plus rassurante pour la partie commerciale.',
-    icon: CreditCard,
-    accent: 'text-slate-500',
   },
 ];
 

@@ -1,4 +1,4 @@
-import { FlaskConical, Microscope, Ruler, ScanSearch } from 'lucide-react';
+import { FlaskConical, Microscope, Ruler, Scale, ScanSearch } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export type ProductGroup = {
@@ -15,9 +15,9 @@ export type ProductGroup = {
 export const productGroups: ProductGroup[] = [
   {
     slug: 'equipements-laboratoires',
-    name: 'Equipements Laboratoires',
+    name: 'Équipements de laboratoire',
     summary:
-      'Instrumentation, centrifugation, hotte, microbiologie et solutions completes pour laboratoires scientifiques.',
+      'Instrumentation, centrifugation, hottes, microbiologie et solutions complètes pour les laboratoires scientifiques.',
     icon: Microscope,
     accent: 'from-blue to-cyan',
     chip: 'border-blue/25 bg-blue/5 text-blue',
@@ -25,19 +25,28 @@ export const productGroups: ProductGroup[] = [
   },
   {
     slug: 'metrologie-dimensionnelle',
-    name: 'Metrologie Dimensionnelle',
+    name: 'Métrologie dimensionnelle',
     summary:
-      'Mesure, controle dimensionnel et verification de precision pour les environnements exigeants.',
+      'Mesure, contrôle dimensionnel et vérification de précision pour les environnements exigeants.',
     icon: Ruler,
     accent: 'from-cyan to-lime',
     chip: 'border-cyan/25 bg-cyan/5 text-cyan',
     surface: 'border-cyan/20 bg-cyan/5',
   },
   {
+    slug: 'metrologie-masses-pesage',
+    name: 'Métrologie des masses & pesage',
+    summary: 'Balances, masses étalons et équipements de pesage pour le contrôle métrologique.',
+    icon: Scale,
+    accent: 'from-blue to-cyan',
+    chip: 'border-blue/25 bg-blue/5 text-blue',
+    surface: 'border-blue/20 bg-blue/5',
+  },
+  {
     slug: 'inspection-emballage',
-    name: 'Inspection & Emballage',
+    name: 'Inspection & emballage',
     summary:
-      'Controle qualite, inspection visuelle et solutions industrielles de conditionnement et tracabilite.',
+      'Contrôle qualité, inspection visuelle et solutions industrielles de conditionnement et traçabilité.',
     icon: ScanSearch,
     accent: 'from-lime to-orange',
     chip: 'border-lime/30 bg-lime/10 text-lime',
@@ -45,9 +54,9 @@ export const productGroups: ProductGroup[] = [
   },
   {
     slug: 'produits-chimiques-reactifs',
-    name: 'Produits Chimiques & Reactifs',
+    name: 'Produits chimiques & réactifs',
     summary:
-      'Reactifs, consommables et produits de laboratoire adaptes aux usages de routine et de recherche.',
+      'Réactifs, consommables et produits de laboratoire adaptés aux usages de routine et de recherche.',
     icon: FlaskConical,
     accent: 'from-orange to-scarlet',
     chip: 'border-orange/25 bg-orange/5 text-orange',

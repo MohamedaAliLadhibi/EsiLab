@@ -3,7 +3,7 @@ import { ArrowRight, ClipboardList, MessageSquareText, PackageSearch } from 'luc
 import { SectionTitle } from '@/components/landing/SectionTitle';
 
 const steps = [
-  { number: '01', title: 'Partagez votre besoin', text: 'Application, contraintes, reference connue ou objectif de votre equipe.', icon: MessageSquareText },
+  { number: '01', title: 'Partagez votre besoin', text: 'Application, contraintes, référence connue ou objectif de votre équipe.', icon: MessageSquareText },
   { number: '02', title: 'Recevez une recommandation', text: 'ESILAB vous oriente vers une solution et les documents techniques utiles.', icon: PackageSearch },
   { number: '03', title: 'Avancez sereinement', text: 'Devis, livraison, installation et suivi selon votre contexte.', icon: ClipboardList },
 ];
@@ -13,8 +13,8 @@ export function HowItWorks() {
     <section className="bg-white py-14 sm:py-20 lg:py-24">
       <div className="site-shell">
         <div className="grid gap-6 sm:gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-          <SectionTitle eyebrow="Une approche simple" title="De la question terrain a la bonne solution." text="Notre role ne s arrete pas au catalogue : nous vous aidons a choisir une solution pertinente et a la mettre en place." />
-          <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-semibold text-blue transition hover:text-navy lg:justify-self-end">Parler a un expert <ArrowRight size={17} /></Link>
+          <SectionTitle eyebrow="Une approche simple" title="De la question terrain à la bonne solution." text="Notre rôle ne s'arrête pas au catalogue : nous vous aidons à choisir une solution pertinente et à la mettre en place." />
+          <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-semibold text-blue transition hover:text-navy lg:justify-self-end">Parler à un expert <ArrowRight size={17} /></Link>
         </div>
         <div className="mt-8 grid gap-4 sm:mt-12 sm:gap-5 lg:grid-cols-3">
           {steps.map((step, index) => {

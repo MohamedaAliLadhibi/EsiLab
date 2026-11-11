@@ -2,14 +2,41 @@
 const Product = require('../../models/Product');
 const db = require('../../db/knex');
 
+// GET /api/products/sitemap — compact list for the public XML sitemap.
+exports.sitemapProducts = async (req, res, next) => {
+  try {
+    const products = await db('products')
+      .where({ is_active: true })
+      .select('slug', 'updated_at')
+      .orderBy('id');
+    res.json({ data: products });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// GET /api/products/summary — raw active catalogue count for public stats.
+exports.summary = async (req, res, next) => {
+  try {
+    const result = await db('products')
+      .where({ is_active: true })
+      .count({ total: '*' })
+      .first();
+    res.json({ totalProducts: Number(result.total) || 0 });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // GET /api/products
 exports.list = async (req, res, next) => {
   try {
-    const { page = 1, limit = 24, search, category_id } = req.query;
+    const { page = 1, limit = 24, search, brand, category_id } = req.query;
     const result = await Product.findAll({
       page:       parseInt(page),
       limit:      Math.min(parseInt(limit), 48),
       search:     search || null,
+      brand:      brand || null,
       categoryId: category_id ? parseInt(category_id) : null,
     });
     res.json(result);
@@ -79,12 +106,13 @@ exports.categoryProducts = async (req, res, next) => {
     const category = await db('categories').where({ slug: req.params.slug }).first();
     if (!category) return res.status(404).json({ error: 'Category not found' });
 
-    const { page = 1, limit = 24, search } = req.query;
+    const { page = 1, limit = 24, search, brand } = req.query;
     const result = await Product.findAll({
       page:       parseInt(page),
       limit:      Math.min(parseInt(limit), 48),
       categoryId: category.id,
       search:     search || null,
+      brand:      brand || null,
     });
     res.json({ ...result, category });
   } catch (err) { next(err); }

@@ -1,10 +1,10 @@
 import { Award, BadgeCheck, MapPin, Wrench } from 'lucide-react';
 
 const trustPoints = [
-  { label: 'Selection technique', detail: 'Marques et solutions verifiees', icon: BadgeCheck },
+  { label: 'Sélection technique', detail: 'Marques et solutions vérifiées', icon: BadgeCheck },
   { label: 'Support local', detail: 'Accompagnement en Tunisie', icon: MapPin },
   { label: 'Mise en service', detail: 'Installation et prise en main', icon: Wrench },
-  { label: 'Qualite suivie', detail: 'Conseil, SAV et maintenance', icon: Award },
+  { label: 'Qualité suivie', detail: 'Conseil, SAV et maintenance', icon: Award },
 ];
 
 export function TrustBar() {

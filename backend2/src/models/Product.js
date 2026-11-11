@@ -8,14 +8,43 @@ const TABLE = 'products';
 const Product = {
   // ── Public queries ────────────────────────────────────────────────────────
 
-  async findAll({ page = 1, limit = 24, search = null, categoryId = null, supplierId = null } = {}) {
+  async findAll({ page = 1, limit = 24, search = null, brand = null, categoryId = null, supplierId = null } = {}) {
     const offset = (page - 1) * limit;
-    const term = search ? `%${String(search).trim()}%` : null;
+    const term = search ? String(search).trim() : null;
+    // Match a complete word or phrase. Substring matching produced false
+    // positives such as "Esco" in "telescoping" and "pH" in "height".
+    const searchPattern = term
+      ? `(^|[^[:alnum:]])${term.split(/\s+/).map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('\\s+')}([^[:alnum:]]|$)`
+      : null;
+    const brandTerm = brand ? String(brand).trim() : null;
+    const brandPattern = brandTerm
+      ? `(^|[^[:alnum:]])${brandTerm.split(/\s+/).map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('\\s+')}([^[:alnum:]]|$)`
+      : null;
+    const isExactCatalogueSku = term && /^\d{3}(?:[-_][a-z0-9]+)+$/i.test(term);
+    const groupFamilies = !isExactCatalogueSku;
 
     const applyFilters = (qb) => {
       qb.where(`${TABLE}.is_active`, true);
+      // Collapse only Memmert configuration rows for public listings. Other
+      // families (such as distinct Precisa balance models) remain searchable.
+      if (groupFamilies) {
+        qb.whereRaw(`(
+          NULLIF(${TABLE}.data->>'product_family_key', '') IS NULL
+          OR ${TABLE}.data->>'product_family_key' NOT LIKE 'memmert-%'
+          OR ${TABLE}.id = (
+            SELECT MIN(family_product.id)
+            FROM ${TABLE} AS family_product
+            WHERE family_product.is_active = true
+              AND family_product.data->>'product_family_key' = ${TABLE}.data->>'product_family_key'
+          )
+        )`);
+      }
 
       if (supplierId) qb.where(`${TABLE}.supplier_id`, supplierId);
+
+      if (term || brandTerm) {
+        qb.leftJoin('suppliers as s_search', 's_search.id', `${TABLE}.supplier_id`);
+      }
 
       if (categoryId) {
         qb.join('product_categories as pc', 'pc.product_id', `${TABLE}.id`)
@@ -25,13 +54,24 @@ const Product = {
       if (term) {
         qb.where((inner) => {
           inner
-            .whereRaw(`${TABLE}.data->>'sku' ILIKE ?`, [term])
-            .orWhereRaw(`${TABLE}.data->>'name' ILIKE ?`, [term])
-            .orWhereRaw(`${TABLE}.data->>'short_description' ILIKE ?`, [term])
-            .orWhereRaw(`${TABLE}.data->>'description' ILIKE ?`, [term])
-            .orWhereRaw(`${TABLE}.data->>'brand' ILIKE ?`, [term])
-            .orWhereRaw(`${TABLE}.data->>'category' ILIKE ?`, [term])
-            .orWhereRaw(`${TABLE}.data->>'product_family_key' ILIKE ?`, [term]);
+            .whereRaw(`${TABLE}.data->>'sku' ~* ?`, [searchPattern])
+            .orWhereRaw(`${TABLE}.data->>'name' ~* ?`, [searchPattern])
+            .orWhereRaw(`${TABLE}.data->>'short_description' ~* ?`, [searchPattern])
+            .orWhereRaw(`${TABLE}.data->>'description' ~* ?`, [searchPattern])
+            .orWhereRaw(`${TABLE}.data->>'brand' ~* ?`, [searchPattern])
+            .orWhereRaw(`s_search.name ~* ?`, [searchPattern])
+            .orWhereRaw(`${TABLE}.data->>'category' ~* ?`, [searchPattern])
+            .orWhereRaw(`${TABLE}.data->>'product_family_key' ~* ?`, [searchPattern]);
+        });
+      }
+
+      if (brandTerm) {
+        qb.where((inner) => {
+          inner
+            .whereRaw(`${TABLE}.data->>'brand' ~* ?`, [brandPattern])
+            .orWhereRaw(`${TABLE}.data->>'supplier' ~* ?`, [brandPattern])
+            .orWhereRaw(`${TABLE}.data->>'manufacturer' ~* ?`, [brandPattern])
+            .orWhereRaw(`s_search.name ~* ?`, [brandPattern]);
         });
       }
     };
@@ -44,7 +84,8 @@ const Product = {
       .orderBy(`${TABLE}.created_at`, 'desc')
       .leftJoin('product_categories as pc_display', 'pc_display.product_id', `${TABLE}.id`)
       .leftJoin('categories as c_display', 'c_display.id', 'pc_display.category_id')
-      .select(`${TABLE}.*`, 'c_display.slug as category_slug', 'c_display.name as assigned_category')
+      .leftJoin('suppliers as s_data', 's_data.id', `${TABLE}.supplier_id`)
+      .select(`${TABLE}.*`, 'c_display.slug as category_slug', 'c_display.name as assigned_category', 's_data.name as supplier_name')
       .limit(limit)
       .offset(offset);
 
@@ -63,8 +104,9 @@ const Product = {
     const row = await db(TABLE)
       .leftJoin('product_categories as pc_display', 'pc_display.product_id', `${TABLE}.id`)
       .leftJoin('categories as c_display', 'c_display.id', 'pc_display.category_id')
+      .leftJoin('suppliers as s_data', 's_data.id', `${TABLE}.supplier_id`)
       .where({ [`${TABLE}.slug`]: slug, [`${TABLE}.is_active`]: true })
-      .select(`${TABLE}.*`, 'c_display.slug as category_slug', 'c_display.name as assigned_category')
+      .select(`${TABLE}.*`, 'c_display.slug as category_slug', 'c_display.name as assigned_category', 's_data.name as supplier_name')
       .first();
     return row ? Product._deserialize(row) : null;
   },
@@ -180,9 +222,13 @@ const Product = {
   // ── Helpers ───────────────────────────────────────────────────────────────
 
   _deserialize(row) {
+    const data = typeof row.data === 'string' ? JSON.parse(row.data) : row.data;
+    if (row.supplier_name && !data.brand && !data.supplier && !data.manufacturer) {
+      data.brand = row.supplier_name;
+    }
     return {
       ...row,
-      data: typeof row.data === 'string' ? JSON.parse(row.data) : row.data,
+      data,
     };
   },
 
@@ -194,7 +240,8 @@ const Product = {
   },
 
   async _uniqueSlug(base, trx = db) {
-    let slug = slugify(String(base), { lower: true, strict: true });
+    // Preserve decimal points in model specifications (e.g. 3.0 mg vs 30 mg).
+    let slug = slugify(String(base).replace(/(\d)\.(\d)/g, '$1-$2'), { lower: true, strict: true });
     let candidate = slug;
     let count = 1;
 

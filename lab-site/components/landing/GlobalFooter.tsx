@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Mail, MapPin, Phone, ExternalLink } from 'lucide-react';
 import { company, solutions } from '@/lib/site-data';
 
-const mapAddress = 'Boulevard de la qualite de la vie, Ariana 2058.';
+const mapAddress = '4 Boulevard de la Qualité de la Vie, Ariana 2058, Tunisie';
 
 export function GlobalFooter() {
   return (
@@ -17,7 +17,7 @@ export function GlobalFooter() {
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-[0_18px_30px_-18px_rgba(37,99,235,0.75)]">
                 <Image
                   src="/logo-esilab-transparent.png"
-                  alt="EsiLab"
+                  alt="ESILAB"
                   width={34}
                   height={34}
                   className="h-auto w-8"
@@ -33,11 +33,15 @@ export function GlobalFooter() {
             <div>
               <h2 className="text-4xl font-semibold">ESILAB</h2>
               <p className="mt-3 max-w-xl text-base leading-8 text-slate-300">
-                Depuis plus de 10 ans dans l’esprit des grandes maisons du laboratoire,
-                EsiLab accompagne les équipes avec des équipements, des réactifs,
-                des services et un support technique centré sur la qualité,
+                Depuis plus de 10 ans, ESILAB accompagne les laboratoires avec des équipements,
+                des réactifs, des services et un support technique centré sur la qualité,
                 la précision et la performance.
               </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <a href="https://www.linkedin.com/company/esilab-tunisie/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-white transition hover:bg-white/10">LinkedIn ESILAB</a>
+              <a href="https://wa.me/21650601783" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-white transition hover:bg-white/10">WhatsApp</a>
             </div>
 
             {/* Contact cards */}

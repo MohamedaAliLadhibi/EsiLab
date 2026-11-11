@@ -70,11 +70,11 @@ export function CatalogueAssistant() {
   return (
     <div className="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-3 sm:bottom-7 sm:right-7">
       {open && (
-        <section aria-label="Assistant catalogue EsiLab" className="flex h-[min(76vh,650px)] w-[min(92vw,390px)] flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_24px_80px_rgba(15,27,52,0.24)]">
+        <section aria-label="Assistant catalogue ESILAB" className="flex h-[min(76vh,650px)] w-[min(92vw,390px)] flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_24px_80px_rgba(15,27,52,0.24)]">
           <header className="flex items-center gap-3 bg-navy px-5 py-4 text-white">
             <span className="grid size-10 place-items-center rounded-2xl bg-white/10 text-cyan"><Bot size={21} /></span>
             <div className="min-w-0 flex-1">
-              <h2 className="font-display text-sm font-semibold">Assistant EsiLab</h2>
+              <h2 className="font-display text-sm font-semibold">Assistant ESILAB</h2>
               <p className="mt-0.5 flex items-center gap-1.5 text-xs text-white/70"><span className="size-1.5 rounded-full bg-emerald-400" />Conseil produits & catalogue</p>
             </div>
             <button type="button" onClick={() => setOpen(false)} aria-label="Fermer le chat" className="grid size-9 place-items-center rounded-xl text-white/75 transition hover:bg-white/10 hover:text-white"><X size={19} /></button>
@@ -132,12 +132,12 @@ export function CatalogueAssistant() {
               <textarea id="catalogue-assistant-input" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); void sendMessage(input); } }} placeholder="Posez votre question…" maxLength={1200} rows={1} className="max-h-24 min-h-9 flex-1 resize-none bg-transparent px-2 py-2 text-sm text-ink outline-none placeholder:text-slate-400" />
               <button type="submit" disabled={!input.trim() || busy} aria-label="Envoyer le message" className="grid size-9 shrink-0 place-items-center rounded-xl bg-blue text-white transition hover:bg-navy disabled:cursor-not-allowed disabled:opacity-40"><Send size={16} /></button>
             </div>
-            <p className="mt-2 flex items-center justify-center gap-1 text-[10px] text-slate-400"><Sparkles size={11} />Réponses fondées sur le catalogue EsiLab</p>
+            <p className="mt-2 flex items-center justify-center gap-1 text-[10px] text-slate-400"><Sparkles size={11} />Réponses fondées sur le catalogue ESILAB</p>
           </form>
         </section>
       )}
 
-      <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={open ? 'Fermer l’assistant EsiLab' : 'Ouvrir l’assistant EsiLab'} className="group relative grid size-14 place-items-center rounded-full bg-blue text-white shadow-[0_12px_34px_rgba(31,87,184,0.35)] transition duration-200 hover:-translate-y-0.5 hover:bg-navy focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue/25">
+      <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={open ? 'Fermer l’assistant ESILAB' : 'Ouvrir l’assistant ESILAB'} className="group relative grid size-14 place-items-center rounded-full bg-blue text-white shadow-[0_12px_34px_rgba(31,87,184,0.35)] transition duration-200 hover:-translate-y-0.5 hover:bg-navy focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue/25">
         {open ? <X size={23} /> : <><MessageCircle size={24} /><span className="absolute -right-0.5 -top-0.5 grid size-5 place-items-center rounded-full border-2 border-white bg-cyan text-[10px] font-bold text-navy"> <Sparkles size={10} /></span></>}
       </button>
     </div>

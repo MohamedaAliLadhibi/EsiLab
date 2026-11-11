@@ -5,11 +5,11 @@ const importQueue = require('../../../queue/importQueue');
 const logger = require('../../utils/logger');
 
 // POST /admin/suppliers/:id/import
-// Accepts a multipart Excel upload and enqueues it for async processing.
+// Accepts a multipart Excel/CSV upload and enqueues it for async processing.
 exports.upload = async (req, res, next) => {
   if (!req.file) {
     return res.status(400).json({
-      error: 'No file uploaded. Send an Excel file as multipart field "file".',
+      error: 'No file uploaded. Send an Excel or CSV file as multipart field "file".',
     });
   }
 
@@ -18,8 +18,8 @@ exports.upload = async (req, res, next) => {
 
   // Validate extension
   const ext = path.extname(originalFilename).toLowerCase();
-  if (!['.xlsx', '.xls'].includes(ext)) {
-    return res.status(422).json({ error: 'Only .xlsx and .xls files are accepted.' });
+  if (!['.xlsx', '.xls', '.csv'].includes(ext)) {
+    return res.status(422).json({ error: 'Only .xlsx, .xls, and .csv files are accepted.' });
   }
 
   // Create an import log record before enqueuing so failures remain traceable.

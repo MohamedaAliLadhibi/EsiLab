@@ -15,7 +15,7 @@ export default function TopBar() {
             <LayoutDashboard size={18} />
           </div>
           <div>
-            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-dim">EsiLab</p>
+            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-dim">ESILAB</p>
             <p className="text-sm font-semibold text-ink">Catalogue management</p>
           </div>
         </div>

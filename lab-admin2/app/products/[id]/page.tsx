@@ -23,7 +23,10 @@ export default function ProductDetailPage() {
     const [p, f] = await Promise.all([getProduct(id), getProductFields()]);
     setProduct(p.data);
     setFields(f.data || []);
-    setRows(Object.entries(p.data.data || {}).map(([key, value]) => ({ key, value: String(value) })));
+    setRows(Object.entries(p.data.data || {}).map(([key, value]) => ({
+      key,
+      value: value !== null && typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value ?? ''),
+    })));
   }
 
   useEffect(() => { load(); }, [id]);
@@ -36,9 +39,19 @@ export default function ProductDetailPage() {
 
   async function handleSave() {
     setSaving(true); setError(''); setSuccess(false);
-    const data: Record<string, string> = {};
+    const data: Record<string, unknown> = {};
     for (const row of rows) {
-      if (row.key.trim() && row.value.trim()) data[row.key.trim()] = row.value.trim();
+      if (!row.key.trim() || !row.value.trim()) continue;
+      const value = row.value.trim();
+      try {
+        if (!value.startsWith('{') && !value.startsWith('[')) {
+          data[row.key.trim()] = value;
+          continue;
+        }
+        data[row.key.trim()] = JSON.parse(value);
+      } catch {
+        data[row.key.trim()] = value;
+      }
     }
     try {
       const res = await fetch(`/api/admin/admin/products/${id}`, {

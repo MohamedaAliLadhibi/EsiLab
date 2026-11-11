@@ -126,7 +126,7 @@ export function SupplierCarousel() {
                 : 'grid size-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-blue/[0.08] to-slate-50 ring-1 ring-blue/[0.08] transition-colors group-hover:from-blue/[0.12] group-hover:to-blue/[0.04]'}>
                 <img
                   src={supplier.logo ?? `https://www.google.com/s2/favicons?domain=${supplier.domain}&sz=96`}
-                  alt=""
+                  alt={`Logo ${supplier.name}`}
                   loading="lazy"
                   className={supplier.logo ? 'max-h-14 w-full object-contain' : 'size-11 object-contain'}
                   onError={(event) => { event.currentTarget.style.display = 'none'; }}

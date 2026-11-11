@@ -29,21 +29,21 @@ const placeholderProductImage = '/product-hero-cryoscope.svg';
 export const solutions: Solution[] = [
   {
     slug: 'equipements-laboratoires',
-    name: 'Equipements Laboratoires',
+    name: 'Équipements de laboratoire',
     accent: 'bg-orange',
     border: 'border-orange/30',
     text: 'text-orange',
     summary:
-      'Instrumentation, centrifugation, hotte, microbiologie et solutions completes pour laboratoires scientifiques.',
+      'Instrumentation, centrifugation, hottes, microbiologie et solutions complètes pour les laboratoires scientifiques.',
   },
   {
     slug: 'metrologie-dimensionnelle',
-    name: 'Metrologie Dimensionnelle',
+    name: 'Métrologie dimensionnelle',
     accent: 'bg-cyan',
     border: 'border-cyan/30',
     text: 'text-cyan',
     summary:
-      'Mesure, controle dimensionnel et verification de precision pour les environnements exigeants.',
+      'Mesure, contrôle dimensionnel et vérification de précision pour les environnements exigeants.',
   },
   {
     slug: 'inspection-emballage',
@@ -52,40 +52,33 @@ export const solutions: Solution[] = [
     border: 'border-lime/30',
     text: 'text-lime',
     summary:
-      'Controle qualite, inspection visuelle et solutions industrielles de conditionnement et tracabilite.',
+      'Contrôle qualité, inspection visuelle et solutions industrielles de conditionnement et traçabilité.',
   },
   {
     slug: 'produits-chimiques-reactifs',
-    name: 'Produits Chimiques & Reactifs',
+    name: 'Produits chimiques & réactifs',
     accent: 'bg-navy',
     border: 'border-navy/30',
     text: 'text-navy',
     summary:
-      'Reactifs, consommables et produits de laboratoire adaptes aux usages de routine et de recherche.',
+      'Réactifs, consommables et produits de laboratoire adaptés aux usages de routine et de recherche.',
   },
 ];
 
-export const brands = [
-  'Advanced Instruments',
-  'Brookfield Ametek',
-  'Eppendorf',
-  'Esco Scientific',
-  'Osmotech',
-  'Airstream',
-];
+export const brands = partnerBrands;
 
 export const values = [
   {
-    title: 'Assistance & Accompagnement',
-    text: 'Du conseil avant achat jusqu a la mise en service, nous accompagnons vos equipes avec une approche terrain.',
+    title: 'Assistance & accompagnement',
+    text: "Du conseil avant achat jusqu'à la mise en service, nous accompagnons vos équipes avec une approche terrain.",
   },
   {
-    title: 'Service Apres-Vente',
-    text: 'Nos ingenieurs et techniciens assurent installation, maintenance, formation et suivi durable.',
+    title: 'Service après-vente',
+    text: 'Nos ingénieurs et techniciens assurent installation, maintenance, formation et suivi durable.',
   },
   {
-    title: 'Precision & Fiabilite',
-    text: 'Chaque gamme est selectionnee pour sa performance, sa tracabilite et sa regularite en environnement professionnel.',
+    title: 'Précision & fiabilité',
+    text: 'Chaque gamme est sélectionnée pour sa performance, sa traçabilité et sa régularité en environnement professionnel.',
   },
 ];
 
@@ -93,17 +86,17 @@ export const productCategories = [
   {
     name: 'Analytique & Mesure',
     count: '14+ familles',
-    summary: 'Mesure, caracterisation et controle de qualite pour les workflows critiques.',
+    summary: 'Mesure, caractérisation et contrôle qualité pour les workflows critiques.',
   },
   {
-    name: 'Preparation & Echantillons',
+    name: 'Préparation & échantillons',
     count: '20+ families',
     summary: 'Centrifugation, agitation, temperature et manipulations fluides au quotidien.',
   },
   {
     name: 'Bioproduction & Microbiologie',
     count: '08+ familles',
-    summary: 'Solutions robustes pour culture, environnement controle et sterilite.',
+    summary: 'Solutions robustes pour la culture, les environnements contrôlés et la stérilité.',
   },
 ];
 
@@ -115,24 +108,24 @@ export const featuredProducts: Product[] = [
     category: 'Analytique & Mesure',
     image: placeholderProductImage,
     excerpt:
-      'Cryoscope a echantillon unique pour le controle precis de l osmolalite avec ergonomie laboratoire et impression integree.',
+      "Cryoscope à échantillon unique pour le contrôle précis de l'osmolalité, avec ergonomie de laboratoire et impression intégrée.",
     description:
-      'Une solution premium pour les laboratoires qui veulent standardiser le controle de l osmolalite sans alourdir les operations de paillasse. Le systeme combine vitesse, lisibilite des mesures et integration fluide dans les routines qualite.',
-    audience: 'Laiteries, biopharma, laboratoires qualite et R&D',
-    leadTime: 'Installation planifiable sous 2 a 4 semaines',
-    support: 'Qualification, mise en route et formation operateur',
+      "Une solution pour les laboratoires qui souhaitent standardiser le contrôle de l'osmolalité. Le système combine rapidité, lisibilité des mesures et intégration fluide aux routines qualité.",
+    audience: 'Laiteries, biopharma, laboratoires qualité et R&D',
+    leadTime: 'Installation planifiable sous 2 à 4 semaines',
+    support: 'Qualification, mise en route et formation des opérateurs',
     highlights: [
-      'Mesure fiable de l osmolalite',
+      'Mesure fiable de l’osmolalité',
       'Format compact pour paillasse',
-      'Interface claire et maintenance simplifiee',
+      'Interface claire et maintenance simplifiée',
     ],
-    applications: ['Controle qualite laitier', 'Biopharma', 'Verification de conformite'],
-    deliverables: ['Installation sur site', 'Formation equipe', 'Support SAV'],
+    applications: ['Contrôle qualité laitier', 'Biopharma', 'Vérification de conformité'],
+    deliverables: ['Installation sur site', 'Formation de l’équipe', 'Support SAV'],
     specs: [
-      ['Volume echantillon', '2.0 ou 2.5 mL'],
-      ['Resolution', '1 mC ou mOsm/kg'],
-      ['Alimentation', '100 a 240V AC'],
-      ['Utilisation', 'Controle qualite, agroalimentaire, biopharma'],
+      ['Volume d’échantillon', '2,0 ou 2,5 mL'],
+      ['Résolution', '1 m°C ou mOsm/kg'],
+      ['Alimentation', '100 à 240 V CA'],
+      ['Utilisation', 'Contrôle qualité, agroalimentaire, biopharma'],
     ],
   },
   {
@@ -142,47 +135,47 @@ export const featuredProducts: Product[] = [
     category: 'Analytique & Mesure',
     image: placeholderProductImage,
     excerpt:
-      'Viscosimetre moderne pour mesures reproductibles avec interface tactile et exploitation fluide des donnees.',
+      'Viscosimètre moderne pour des mesures reproductibles, avec interface tactile et exploitation fluide des données.',
     description:
-      'Concu pour les laboratoires qui veulent une lecture rapide, une meilleure repetabilite et une experience operateur plus moderne. Le DVPlus aide a accelerer les controles de routine tout en gardant une vraie finesse d analyse.',
-    audience: 'Cosmetique, peinture, agroalimentaire et formulation',
-    leadTime: 'Demonstration et configuration selon votre viscosite cible',
-    support: 'Aide au choix des spindle, protocole de mesure et qualification',
+      "Conçu pour les laboratoires qui souhaitent une lecture rapide, une meilleure répétabilité et une expérience opérateur moderne. Le DVPlus accélère les contrôles de routine tout en préservant la finesse d'analyse.",
+    audience: 'Cosmétique, peinture, agroalimentaire et formulation',
+    leadTime: 'Démonstration et configuration selon la viscosité cible',
+    support: 'Aide au choix des mobiles, protocole de mesure et qualification',
     highlights: [
-      'Haute precision de mesure',
+      'Haute précision de mesure',
       'Interface tactile intuitive',
-      'Convient au controle routine et R&D',
+      'Convient au contrôle de routine et à la R&D',
     ],
-    applications: ['Formulation', 'Controle process', 'Comparaison de lots'],
-    deliverables: ['Conseil applicatif', 'Mise en service', 'Appui methodologique'],
+    applications: ['Formulation', 'Contrôle de processus', 'Comparaison de lots'],
+    deliverables: ['Conseil applicatif', 'Mise en service', 'Appui méthodologique'],
     specs: [
-      ['Affichage', 'Ecran tactile couleur 5 pouces'],
-      ['Plage vitesse', 'Jusqu a 740 increments'],
-      ['Usages', 'Viscosite, rheologie, texture'],
-      ['Atout', 'Connexion et lecture rapide des donnees'],
+      ['Affichage', 'Écran tactile couleur 5 pouces'],
+      ['Plage de vitesse', 'Jusqu’à 740 incréments'],
+      ['Usages', 'Viscosité, rhéologie, texture'],
+      ['Atout', 'Connexion et lecture rapide des données'],
     ],
   },
   {
     slug: 'eppendorf-5430',
     brand: 'Eppendorf',
     name: 'Microcentrifugeuse 5430 / 5430 R',
-    category: 'Preparation & Echantillons',
+    category: 'Préparation & échantillons',
     image: placeholderProductImage,
     excerpt:
       'Microcentrifugeuse compacte et polyvalente pour biologie, recherche et analyses de routine.',
     description:
-      'Une plateforme tres appreciee pour les equipes qui cherchent un compromis solide entre compacite, performance et simplicite d usage. Elle s integre bien dans les laboratoires qui tournent en flux continu.',
-    audience: 'Biologie moleculaire, controle routine, laboratoires academiques',
-    leadTime: 'Disponibilite selon rotor et version refrigeration',
-    support: 'Formation operateur, maintenance et suivi preventif',
+      "Une plateforme appréciée par les équipes qui recherchent un équilibre entre compacité, performance et simplicité d'utilisation. Elle s'intègre bien aux laboratoires en flux continu.",
+    audience: 'Biologie moléculaire, contrôle de routine, laboratoires académiques',
+    leadTime: 'Disponibilité selon le rotor et la version réfrigérée',
+    support: 'Formation des opérateurs, maintenance et suivi préventif',
     highlights: ['Format compact', 'Large choix de rotors', 'Usage silencieux et fiable'],
-    applications: ['Preparation ADN/ARN', 'Spin down rapide', 'Workflow de laboratoire'],
+    applications: ['Préparation ADN/ARN', 'Centrifugation rapide', 'Flux de travail en laboratoire'],
     deliverables: ['Installation', 'Qualification de base', 'SAV local'],
     specs: [
-      ['Vitesse max', 'Jusqu a 30 130 x g'],
-      ['Capacites', 'Tubes coniques et MTP'],
-      ['Interface', 'Menu multilingue retroeclaire'],
-      ['Usage', 'Cellules, echantillons, biologie'],
+      ['Vitesse maximale', 'Jusqu’à 30 130 × g'],
+      ['Capacités', 'Tubes coniques et plaques MTP'],
+      ['Interface', 'Menu multilingue rétroéclairé'],
+      ['Usage', 'Cellules, échantillons, biologie'],
     ],
   },
   {
@@ -192,23 +185,23 @@ export const featuredProducts: Product[] = [
     category: 'Bioproduction & Microbiologie',
     image: placeholderProductImage,
     excerpt:
-      'Poste de securite microbiologique pour proteger operateur, produit et environnement dans les manipulations sensibles.',
+      'Poste de sécurité microbiologique conçu pour protéger l’opérateur, le produit et l’environnement lors des manipulations sensibles.',
     description:
-      'Pensé pour les laboratoires qui ont besoin d une protection fiable, d une circulation d air maitrisee et d une integration propre dans les espaces controlés. Le cabinet valorise autant la securite que le confort quotidien.',
-    audience: 'Microbiologie, pharma, controle sterile et laboratoires hospitaliers',
+      "Pensé pour les laboratoires qui ont besoin d'une protection fiable, d'une circulation d'air maîtrisée et d'une intégration adaptée aux espaces contrôlés. Ce poste de sécurité allie protection et confort d'utilisation.",
+    audience: 'Microbiologie, pharma, contrôle stérile et laboratoires hospitaliers',
     leadTime: 'Configuration selon largeur et classe de filtration',
-    support: 'Validation, installation et maintenance preventive',
+    support: 'Validation, installation et maintenance préventive',
     highlights: [
-      'Protection tripartite operateur-produit-environnement',
+      'Protection tripartite opérateur-produit-environnement',
       'Faible niveau sonore',
-      'Design propre pour salle controlee',
+      'Conception adaptée aux salles contrôlées',
     ],
-    applications: ['Manipulations steriles', 'Culture cellulaire', 'Preparation echantillons critiques'],
-    deliverables: ['Mise en place', 'Verification fonctionnement', 'Programme maintenance'],
+    applications: ['Manipulations stériles', 'Culture cellulaire', 'Préparation d’échantillons critiques'],
+    deliverables: ['Mise en place', 'Vérification du fonctionnement', 'Programme de maintenance'],
     specs: [
       ['Classe', 'Class II Type A2'],
-      ['Flux', 'Airflow controle avec filtration HEPA'],
-      ['Usage', 'Travaux microbiologiques et steriles'],
+      ['Flux', 'Flux d’air contrôlé avec filtration HEPA'],
+      ['Usage', 'Travaux microbiologiques et stériles'],
       ['Options', 'UV, support, configuration sur mesure'],
     ],
   },
@@ -216,27 +209,27 @@ export const featuredProducts: Product[] = [
     slug: 'memmert-universal-oven',
     brand: 'Memmert',
     name: 'Universal Oven UN Series',
-    category: 'Preparation & Echantillons',
+    category: 'Préparation & échantillons',
     image: placeholderProductImage,
     excerpt:
-      'Etuve universelle de laboratoire pour sechage, chauffage et stabilite thermique dans les workflows exigeants.',
+      'Étuve universelle de laboratoire pour le séchage, le chauffage et la stabilité thermique dans les applications exigeantes.',
     description:
-      'Une solution reconnue pour les laboratoires qui veulent une temperature stable, une interface lisible et une qualite de fabrication rassurante. Parfaite pour structurer des procedures repetables.',
-    audience: 'Controle qualite, materiaux, pharma et recherche',
+      'Une solution reconnue pour sa stabilité thermique, son interface lisible et sa qualité de fabrication. Elle convient aux procédures répétables.',
+    audience: 'Contrôle qualité, matériaux, pharma et recherche',
     leadTime: 'Dimensionnement selon volume et plage thermique',
     support: 'Aide au choix, mise en service et entretien',
     highlights: [
-      'Homogeneite thermique',
+      'Homogénéité thermique',
       'Construction durable',
       'Interface lisible et pilotage intuitif',
     ],
-    applications: ['Sechage', 'Conditionnement thermique', 'Essais stabilite'],
-    deliverables: ['Selection de gamme', 'Installation', 'Support technique'],
+    applications: ['Séchage', 'Conditionnement thermique', 'Essais de stabilité'],
+    deliverables: ['Sélection de gamme', 'Installation', 'Support technique'],
     specs: [
-      ['Volumes', '32 a 749 litres'],
-      ['Plage', 'Au-dessus de l ambiant a 300 C'],
-      ['Pilotage', 'Controleur numerique intuitif'],
-      ['Atout', 'Reproductibilite des conditions'],
+      ['Volumes', '32 à 749 litres'],
+      ['Plage', 'De la température ambiante à 300 °C'],
+      ['Pilotage', 'Contrôleur numérique intuitif'],
+      ['Atout', 'Reproductibilité des conditions'],
     ],
   },
   {
@@ -246,19 +239,19 @@ export const featuredProducts: Product[] = [
     category: 'Analytique & Mesure',
     image: placeholderProductImage,
     excerpt:
-      'Analyseur laitier pour etablir rapidement les indicateurs de composition et renforcer la cadence du laboratoire.',
+      'Analyseur laitier pour établir rapidement les indicateurs de composition et renforcer la cadence du laboratoire.',
     description:
-      'Concu pour les acteurs de la filiere laitiere qui ont besoin de decisions rapides, d une interface exploitable par les techniciens et d un bon compromis entre cadence et confiance metrologique.',
-    audience: 'Laiteries, collecte, controle reception et qualite',
-    leadTime: 'Parametrage selon methode et flux analytiques',
-    support: 'Configuration, verification et accompagnement terrain',
-    highlights: ['Cadence adaptee aux flux qualite', 'Lecture claire', 'Support applicatif local'],
-    applications: ['Reception matiere', 'Suivi production', 'Controle de conformite'],
+      'Conçu pour les acteurs de la filière laitière qui ont besoin de décisions rapides, d’une interface exploitable par les techniciens et d’un bon compromis entre cadence et confiance métrologique.',
+    audience: 'Laiteries, collecte, contrôle à la réception et qualité',
+    leadTime: 'Paramétrage selon la méthode et les flux analytiques',
+    support: 'Configuration, vérification et accompagnement terrain',
+    highlights: ['Cadence adaptée aux flux qualité', 'Lecture claire', 'Support applicatif local'],
+    applications: ['Réception des matières', 'Suivi de production', 'Contrôle de conformité'],
     deliverables: ['Conseil process', 'Installation', 'Assistance exploitation'],
     specs: [
-      ['Analyses', 'Composition laitiere selon configuration'],
-      ['Usage', 'Controle reception et suivi production'],
-      ['Interface', 'Lecture numerique simple'],
+      ['Analyses', 'Composition laitière selon la configuration'],
+      ['Usage', 'Contrôle à la réception et suivi de production'],
+      ['Interface', 'Lecture numérique simple'],
       ['Services', 'Accompagnement mise en route'],
     ],
   },
@@ -269,7 +262,7 @@ export const clientReferences = ['Delice', 'Azur', 'Unimed', 'Saiph', 'Coficab',
 export const company = {
   phone: '(+216) 70 036 096 / (+216) 31 586 072',
   email: 'contact.esilab@esilab.tn',
-  address: 'Bloc C, 4 Boulevard de la qualite de la vie, Ariana 2058.',
+  address: '4 Boulevard de la Qualité de la Vie, Ariana 2058, Tunisie',
 };
 
 export function getProduct(slug: string) {
@@ -281,6 +274,7 @@ export const savContact = {
   role: 'Responsable SAV',
   email: 'achraf.kouki@esilab.tn',
   phone: '50783775',
-  phoneDisplay: '50 783 775',
+  phoneDisplay: '+216 50 783 775',
   whatsapp: '21650783775',
 };
+import { partnerBrands } from './brands';
