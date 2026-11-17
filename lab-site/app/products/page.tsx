@@ -8,6 +8,7 @@ import {
   Boxes,
   ChevronLeft,
   ChevronRight,
+  LoaderCircle,
   Package,
   Search,
   SlidersHorizontal,
@@ -96,6 +97,7 @@ export default function ProductsPage() {
   const [search, setSearch] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [selectedBrand, setSelectedBrand] = useState('');
+  const [supplierOptions, setSupplierOptions] = useState<string[]>(partnerBrands);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
@@ -104,6 +106,7 @@ export default function ProductsPage() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
   const searchRef = useRef<HTMLInputElement>(null);
+  const requestId = useRef(0);
 
   const debouncedSearch = useDebounce(search, 350);
 
@@ -111,13 +114,28 @@ export default function ProductsPage() {
     const searchParams = new URLSearchParams(window.location.search);
     setSearch(searchParams.get('search') ?? '');
     const brand = searchParams.get('brand') ?? '';
-    setSelectedBrand(partnerBrands.includes(brand) ? brand : '');
+    setSelectedBrand(brand);
     const group = searchParams.get('group');
     setSelectedGroup(productGroups.some((item) => item.slug === group) ? group : null);
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${API_BASE}/suppliers`)
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((json) => {
+        const names = (Array.isArray(json.data) ? json.data : [])
+          .map((supplier: { name?: unknown } | string) => typeof supplier === 'string' ? supplier : supplier.name)
+          .filter((name: unknown): name is string => typeof name === 'string' && Boolean(name.trim()));
+        if (!cancelled && names.length) setSupplierOptions([...new Set(names)].sort((a, b) => a.localeCompare(b, 'fr')));
+      })
+      .catch(() => undefined);
+    return () => { cancelled = true; };
+  }, []);
+
   // Fetch products when filters change
   const fetchProducts = useCallback(async () => {
+    const currentRequest = ++requestId.current;
     setLoading(true);
     setError(null);
     try {
@@ -133,6 +151,7 @@ export default function ProductsPage() {
         : `/products?${params}`;
       const res = await fetch(`${API_BASE}${endpoint}`);
       if (res.status === 404 && selectedGroup) {
+        if (currentRequest !== requestId.current) return;
         setProducts([]);
         setTotalPages(1);
         setTotal(0);
@@ -140,6 +159,7 @@ export default function ProductsPage() {
       }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json: ApiProductsResponse = await res.json();
+      if (currentRequest !== requestId.current) return;
       const nested = Array.isArray(json.data) ? null : json.data;
       const resultProducts = Array.isArray(json.data) ? json.data : nested?.data ?? [];
       const pagination = json.pagination ?? json.meta ?? nested?.meta;
@@ -147,10 +167,11 @@ export default function ProductsPage() {
       setTotalPages(pagination?.totalPages ?? 1);
       setTotal(pagination?.total ?? 0);
     } catch (e) {
+      if (currentRequest !== requestId.current) return;
       setError('Impossible de charger les produits. Vérifiez que le serveur API est démarré.');
       setProducts([]);
     } finally {
-      setLoading(false);
+      if (currentRequest === requestId.current) setLoading(false);
     }
   }, [debouncedSearch, page, selectedGroup, selectedBrand]);
 
@@ -185,6 +206,7 @@ export default function ProductsPage() {
     else params.delete('brand');
     const query = params.toString();
     window.history.replaceState(null, '', query ? `/products?${query}` : '/products');
+    setFiltersOpen(false);
   };
 
   // Extract a display-friendly field from product.data
@@ -337,7 +359,7 @@ export default function ProductsPage() {
             className="hidden rounded-xl border border-line bg-white px-4 py-3.5 text-sm text-ink focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/20 sm:block"
           >
             <option value="">Toutes les marques</option>
-            {partnerBrands.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
+            {supplierOptions.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
           </select>
 
           <select aria-label="Trier les produits" value={sortBy} onChange={(event) => setSortBy(event.target.value)} className="hidden rounded-xl border border-line bg-white px-4 py-3.5 text-sm text-ink sm:block">
@@ -360,7 +382,7 @@ export default function ProductsPage() {
           </button>
         </div>
 
-        <div className="mt-4 flex gap-10 sm:mt-8">
+        <div className="mt-4 flex flex-col gap-5 sm:mt-8 sm:flex-row sm:gap-10">
           {/* Sidebar — categories */}
           <aside
             className={`${
@@ -372,7 +394,7 @@ export default function ProductsPage() {
                 <label className="text-xs font-semibold text-slate-500">Marque
                   <select aria-label="Filtrer par marque" value={selectedBrand} onChange={(event) => handleBrandSelect(event.target.value)} className="mt-1.5 w-full rounded-xl border border-line bg-white px-3 py-3 text-sm text-ink">
                     <option value="">Toutes les marques</option>
-                    {partnerBrands.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
+                  {supplierOptions.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
                   </select>
                 </label>
                 <label className="text-xs font-semibold text-slate-500">Trier par
@@ -432,21 +454,27 @@ export default function ProductsPage() {
           <div className="min-w-0 flex-1">
             {/* Results count + active filters */}
             <div className="mb-4 flex flex-wrap items-center gap-3 sm:mb-6">
-              {!loading && (
-                <p className="text-sm text-slate-500">
+              <p className="flex items-center gap-2 text-sm text-slate-500" aria-live="polite">
+                  {loading && <LoaderCircle size={15} className="animate-spin text-blue" aria-hidden="true" />}
                   {visibleProducts.length > 0 ? (
                     <>
-                      <span className="font-semibold text-ink">{total}</span> produit{total > 1 ? 's' : ''} affiché{total > 1 ? 's' : ''}
+                      <span className="font-semibold text-ink">{loading && total === 0 ? '…' : total}</span> produit{total > 1 ? 's' : ''} affiché{total > 1 ? 's' : ''}
                     </>
+                  ) : loading ? (
+                    'Chargement des produits…'
                   ) : (
                     'Aucun produit trouvé'
                   )}
-                </p>
-              )}
+              </p>
               {debouncedSearch && (
                 <span className="flex items-center gap-1 rounded-full border border-blue/30 bg-blue/5 px-3 py-1 text-xs text-blue">
                   "{debouncedSearch}"
                   <button onClick={clearSearch} aria-label="Effacer la recherche"><X size={12} /></button>
+                </span>
+              )}
+              {selectedBrand && (
+                <span className="flex items-center gap-1 rounded-full border border-blue/30 bg-blue/5 px-3 py-1 text-xs text-blue">
+                  {selectedBrand}<button onClick={() => handleBrandSelect('')} aria-label="Retirer la marque"><X size={12} /></button>
                 </span>
               )}
               {activeGroup && (
@@ -588,7 +616,7 @@ export default function ProductsPage() {
                   </Link>
                 )}
                 <button
-                  onClick={() => { setSearch(''); handleGroupSelect(null); }}
+                  onClick={() => { setSearch(''); handleGroupSelect(null); handleBrandSelect(''); }}
                   className="mt-6 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-soft hover:border-blue hover:text-blue transition"
                 >
                   Réinitialiser les filtres

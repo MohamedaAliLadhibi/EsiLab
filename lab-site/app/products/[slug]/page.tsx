@@ -444,7 +444,7 @@ export default function ProductDetailPage() {
                 <button
                   type="button"
                   onClick={() => setIsQuoteChoiceOpen((isOpen) => !isOpen)}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-navy"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue bg-white px-5 py-3.5 text-sm font-semibold text-blue transition hover:bg-blue hover:text-white"
                 >
                   Demander un devis
                   <ArrowRight size={16} />
@@ -630,7 +630,7 @@ export default function ProductDetailPage() {
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-8px_28px_rgba(15,27,52,0.12)] backdrop-blur sm:hidden">
         <div className="mx-auto flex max-w-lg gap-3">
           <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-[#25D366]/40 bg-white px-3 text-sm font-semibold text-[#168b45]"><MessageCircle size={17} /> WhatsApp</a>
-          <a href={emailHref} className="inline-flex min-h-12 flex-[1.3] items-center justify-center gap-2 rounded-xl bg-blue px-3 text-sm font-semibold text-white"><Mail size={17} /> Demander un devis</a>
+          <a href={emailHref} className="inline-flex min-h-12 flex-[1.3] items-center justify-center gap-2 rounded-xl border border-blue bg-white px-3 text-sm font-semibold text-blue hover:bg-blue hover:text-white"><Mail size={17} /> Demander un devis</a>
         </div>
       </div>
     </main>
