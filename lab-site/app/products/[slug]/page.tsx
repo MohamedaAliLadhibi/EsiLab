@@ -341,7 +341,7 @@ export default function ProductDetailPage() {
   };
 
   return (
-    <main className="min-h-screen bg-panel">
+    <main className="min-h-screen bg-panel pb-24 sm:pb-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
@@ -355,7 +355,7 @@ export default function ProductDetailPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <div className="bg-white border-b border-line">
-        <div className="site-shell py-4 flex items-center gap-2 text-sm text-slate-500">
+        <div className="site-shell flex items-center gap-2 overflow-hidden py-3 text-xs text-slate-500 sm:py-4 sm:text-sm">
           <Link href="/" className="hover:text-blue transition">Accueil</Link>
           <span>/</span>
           <Link href="/products" className="hover:text-blue transition">Produits</Link>
@@ -364,7 +364,7 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      <div className="site-shell py-10">
+      <div className="site-shell py-5 sm:py-10">
         <Link
           href="/products"
           className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-blue transition"
@@ -373,9 +373,9 @@ export default function ProductDetailPage() {
           Retour au catalogue
         </Link>
 
-        <section className="mt-8 overflow-hidden rounded-[2rem] border border-line bg-white shadow-soft">
+        <section className="mt-4 overflow-hidden rounded-2xl border border-line bg-white shadow-soft sm:mt-8 sm:rounded-[2rem]">
           <div className="grid lg:grid-cols-[0.92fr_1.08fr]">
-            <div className="relative min-h-[28rem] overflow-hidden bg-gradient-to-br from-cloud via-white to-mist p-6 sm:p-8">
+            <div className="relative min-h-[18rem] overflow-hidden bg-gradient-to-br from-cloud via-white to-mist p-4 sm:min-h-[28rem] sm:p-8">
               <div className="panel-grid absolute inset-0 opacity-70" />
               <div className="absolute left-6 top-6 z-10 flex flex-wrap gap-2">
                 {brand && (
@@ -390,12 +390,12 @@ export default function ProductDetailPage() {
                 )}
               </div>
 
-              <div className="relative z-0 flex h-full min-h-[24rem] items-center justify-center pt-12">
+              <div className="relative z-0 flex h-full min-h-[16rem] items-center justify-center pt-10 sm:min-h-[24rem] sm:pt-12">
                 {imageUrl ? (
                   <img
                     src={imageUrl}
                     alt={name}
-                    className="max-h-[24rem] max-w-full object-contain drop-shadow-xl"
+                    className="max-h-[17rem] max-w-full object-contain drop-shadow-xl sm:max-h-[24rem]"
                     onError={(event) => {
                       (event.currentTarget as HTMLImageElement).style.display = 'none';
                     }}
@@ -408,14 +408,14 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            <div className="flex flex-col p-6 sm:p-8 lg:p-10">
+            <div className="flex flex-col p-5 sm:p-8 lg:p-10">
               {sku && (
                 <p className="eyebrow flex items-center gap-2 text-slate-400">
                   <Tag size={13} /> Ref. {sku}
                 </p>
               )}
 
-              <h1 className="mt-4 text-3xl font-semibold leading-tight text-ink lg:text-5xl">
+              <h1 className="mt-3 text-2xl font-semibold leading-tight text-ink sm:mt-4 sm:text-3xl lg:text-5xl">
                 {name}
               </h1>
 
@@ -484,10 +484,13 @@ export default function ProductDetailPage() {
           </div>
         </section>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem]">
+        <nav className="sticky top-[72px] z-20 -mx-4 mt-4 flex gap-5 overflow-x-auto border-y border-line bg-white px-4 py-3 text-sm font-semibold text-slate-500 sm:static sm:mx-0 sm:mt-8 sm:justify-start sm:rounded-xl sm:border sm:px-5" aria-label="Sections du produit">
+          {[["overview", "Aperçu"], ["description", "Description"], ["specifications", "Spécifications"], ["variants", "Variantes"], ["assistant", "Conseil"]].map(([id, label]) => <a key={id} href={`#${id}`} className="shrink-0 hover:text-blue">{label}</a>)}
+        </nav>
+        <div id="overview" className="mt-5 grid scroll-mt-36 gap-5 sm:mt-8 sm:gap-8 lg:grid-cols-[1fr_22rem]">
           <div className="space-y-8">
             {description && description !== shortDescription && description !== name && (
-              <section className="rounded-[2rem] border border-line bg-white p-6 shadow-soft sm:p-8">
+              <section id="description" className="scroll-mt-36 rounded-2xl border border-line bg-white p-5 shadow-soft sm:rounded-[2rem] sm:p-8">
                 <div className="flex items-center gap-3">
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-blue/10 text-blue">
                     <FileText size={20} />
@@ -502,7 +505,7 @@ export default function ProductDetailPage() {
             )}
 
             {specFields.length > 0 && (
-              <section className="overflow-hidden rounded-[2rem] border border-line bg-white shadow-soft">
+              <section id="specifications" className="scroll-mt-36 overflow-hidden rounded-2xl border border-line bg-white shadow-soft sm:rounded-[2rem]">
                 <div className="border-b border-line px-6 py-5 sm:px-8">
                   <p className="eyebrow text-slate-400">Fiche technique</p>
                   <h2 className="mt-2 text-2xl font-semibold text-ink">Caractéristiques principales</h2>
@@ -529,7 +532,7 @@ export default function ProductDetailPage() {
             )}
 
             {product.related_variants && product.related_variants.length > 0 && (
-              <section className="overflow-hidden rounded-[2rem] border border-line bg-white shadow-soft">
+              <section id="variants" className="scroll-mt-36 overflow-hidden rounded-2xl border border-line bg-white shadow-soft sm:rounded-[2rem]">
                 <div className="border-b border-line px-6 py-5 sm:px-8">
                   <p className="eyebrow text-slate-400">Même famille produit</p>
                   <h2 className="mt-2 text-2xl font-semibold text-ink">Autres références et variantes</h2>
@@ -577,7 +580,7 @@ export default function ProductDetailPage() {
               </section>
             )}
 
-            <ProductFaqChat context={assistantContext} />
+            <div id="assistant" className="scroll-mt-36"><ProductFaqChat context={assistantContext} /></div>
           </div>
 
           <aside className="space-y-5">
@@ -622,6 +625,12 @@ export default function ProductDetailPage() {
               </p>
             </section>
           </aside>
+        </div>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-8px_28px_rgba(15,27,52,0.12)] backdrop-blur sm:hidden">
+        <div className="mx-auto flex max-w-lg gap-3">
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-[#25D366]/40 bg-white px-3 text-sm font-semibold text-[#168b45]"><MessageCircle size={17} /> WhatsApp</a>
+          <a href={emailHref} className="inline-flex min-h-12 flex-[1.3] items-center justify-center gap-2 rounded-xl bg-blue px-3 text-sm font-semibold text-white"><Mail size={17} /> Demander un devis</a>
         </div>
       </div>
     </main>

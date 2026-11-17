@@ -102,6 +102,7 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [sortBy, setSortBy] = useState('relevance');
   const searchRef = useRef<HTMLInputElement>(null);
 
   const debouncedSearch = useDebounce(search, 350);
@@ -220,28 +221,39 @@ export default function ProductsPage() {
       group.slug === product.category_slug || group.slug === product.data?.category_slug,
     );
 
-  const visibleProducts = products;
+  const visibleProducts = [...products].sort((a, b) => {
+    const nameA = getField(a, 'name', 'nom', 'product_name', 'title') ?? a.name ?? '';
+    const nameB = getField(b, 'name', 'nom', 'product_name', 'title') ?? b.name ?? '';
+    const brandA = getField(a, 'brand', 'marque', 'supplier', 'fabricant') ?? a.supplier ?? '';
+    const brandB = getField(b, 'brand', 'marque', 'supplier', 'fabricant') ?? b.supplier ?? '';
+    const skuA = getField(a, 'sku', 'reference', 'ref', 'code') ?? a.sku ?? '';
+    const skuB = getField(b, 'sku', 'reference', 'ref', 'code') ?? b.sku ?? '';
+    if (sortBy === 'name') return nameA.localeCompare(nameB, 'fr');
+    if (sortBy === 'brand') return brandA.localeCompare(brandB, 'fr') || nameA.localeCompare(nameB, 'fr');
+    if (sortBy === 'reference') return skuA.localeCompare(skuB, 'fr');
+    return 0;
+  });
 
   const activeGroup = productGroups.find((group) => group.slug === selectedGroup) ?? null;
 
   return (
     <main className="min-h-screen bg-panel">
       {/* Page Header */}
-      <div className="relative overflow-hidden bg-hero-mesh py-16 text-white lg:py-20">
+      <div className="relative overflow-hidden bg-hero-mesh py-8 text-white sm:py-16 lg:py-20">
         <div className="panel-grid absolute inset-0 opacity-20" />
         <div className="site-shell relative">
           <div className="max-w-3xl">
-            <p className="eyebrow text-cyan">Catalogue ESILAB</p>
-            <h1 className="mt-4 text-4xl font-semibold leading-tight lg:text-6xl">
+            <p className="eyebrow hidden text-cyan sm:block">Catalogue ESILAB</p>
+            <h1 className="mt-1 text-2xl font-semibold leading-tight sm:mt-4 sm:text-4xl lg:text-6xl">
               Produits et solutions pour laboratoires 
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-white/70">
+            <p className="mt-2 hidden max-w-2xl text-base leading-8 text-white/70 sm:mt-5 sm:block">
               Trouvez rapidement les équipements, instruments de mesure, solutions
               d'inspection et réactifs adaptés à vos workflows scientifiques et industriels.
             </p>
           </div>
 
-          <div className="mt-10 grid gap-3 sm:grid-cols-3">
+          <div className="mt-4 hidden gap-3 sm:mt-10 sm:grid sm:grid-cols-3">
             <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
               <p className="text-2xl font-semibold">{total || '...'}</p>
               <p className="mt-1 text-xs uppercase tracking-[0.22em] text-white/55">Références</p>
@@ -258,8 +270,14 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      <div className="site-shell py-12">
-        <section className="grid gap-4 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="site-shell py-5 sm:py-12">
+        <section className="mb-4 flex snap-x gap-2 overflow-x-auto pb-2 lg:hidden" aria-label="Catégories de produits">
+          <button onClick={() => handleGroupSelect(null)} className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold ${!selectedGroup ? 'border-blue bg-blue text-white' : 'border-line bg-white text-ink'}`}>Tout voir</button>
+          {productGroups.map((group) => (
+            <button key={group.slug} onClick={() => handleGroupSelect(group.slug)} className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold ${selectedGroup === group.slug ? 'border-blue bg-blue text-white' : 'border-line bg-white text-ink'}`}>{group.name}</button>
+          ))}
+        </section>
+        <section className="hidden gap-4 lg:grid lg:grid-cols-4 xl:grid-cols-5">
           {productGroups.map((group) => {
             const Icon = group.icon;
             const isActive = selectedGroup === group.slug;
@@ -287,7 +305,7 @@ export default function ProductsPage() {
         </section>
 
         {/* Search + Filter Bar */}
-        <div className="mt-10 flex flex-col gap-4 rounded-2xl border border-line bg-white p-4 shadow-soft sm:flex-row sm:items-center">
+        <div className="sticky top-[72px] z-30 mt-0 flex flex-col gap-3 border-b border-line bg-panel/95 p-3 shadow-soft backdrop-blur sm:static sm:mt-10 sm:flex-row sm:items-center sm:rounded-2xl sm:border sm:bg-white sm:p-4">
           {/* Search */}
           <div className="relative flex-1">
             <Search
@@ -299,7 +317,7 @@ export default function ProductsPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher un produit, une marque, une référence…"
+              placeholder="Produit, marque ou référence…"
               className="w-full rounded-xl border border-line bg-cloud py-3.5 pl-11 pr-10 text-sm text-ink placeholder:text-slate-400 transition focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/20"
             />
             {search && (
@@ -316,10 +334,17 @@ export default function ProductsPage() {
             aria-label="Filtrer par marque"
             value={selectedBrand}
             onChange={(event) => handleBrandSelect(event.target.value)}
-            className="rounded-xl border border-line bg-white px-4 py-3.5 text-sm text-ink focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/20"
+            className="hidden rounded-xl border border-line bg-white px-4 py-3.5 text-sm text-ink focus:border-blue focus:outline-none focus:ring-2 focus:ring-blue/20 sm:block"
           >
             <option value="">Toutes les marques</option>
             {partnerBrands.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
+          </select>
+
+          <select aria-label="Trier les produits" value={sortBy} onChange={(event) => setSortBy(event.target.value)} className="hidden rounded-xl border border-line bg-white px-4 py-3.5 text-sm text-ink sm:block">
+            <option value="relevance">Trier : pertinence</option>
+            <option value="name">Nom : A à Z</option>
+            <option value="brand">Marque</option>
+            <option value="reference">Référence</option>
           </select>
 
           {/* Filter toggle (mobile) */}
@@ -328,21 +353,34 @@ export default function ProductsPage() {
             className="flex items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 py-3.5 text-sm font-semibold text-ink transition hover:border-blue sm:hidden"
           >
             <SlidersHorizontal size={16} />
-            Catégories
+            Filtres
             {(selectedGroup !== null || selectedBrand) && (
               <span className="ml-1 rounded-full bg-blue px-2 py-0.5 text-xs text-white">{Number(selectedGroup !== null) + Number(Boolean(selectedBrand))}</span>
             )}
           </button>
         </div>
 
-        <div className="mt-8 flex gap-10">
+        <div className="mt-4 flex gap-10 sm:mt-8">
           {/* Sidebar — categories */}
           <aside
             className={`${
               filtersOpen ? 'block' : 'hidden'
             } w-full shrink-0 sm:block sm:w-72`}
           >
-            <div className="sticky top-6 rounded-2xl border border-line bg-white p-5 shadow-soft">
+            <div className="rounded-2xl border border-line bg-white p-5 shadow-soft sm:sticky sm:top-28">
+              <div className="mb-4 grid gap-3 border-b border-line pb-4 sm:hidden">
+                <label className="text-xs font-semibold text-slate-500">Marque
+                  <select aria-label="Filtrer par marque" value={selectedBrand} onChange={(event) => handleBrandSelect(event.target.value)} className="mt-1.5 w-full rounded-xl border border-line bg-white px-3 py-3 text-sm text-ink">
+                    <option value="">Toutes les marques</option>
+                    {partnerBrands.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
+                  </select>
+                </label>
+                <label className="text-xs font-semibold text-slate-500">Trier par
+                  <select aria-label="Trier les produits" value={sortBy} onChange={(event) => setSortBy(event.target.value)} className="mt-1.5 w-full rounded-xl border border-line bg-white px-3 py-3 text-sm text-ink">
+                    <option value="relevance">Pertinence</option><option value="name">Nom : A à Z</option><option value="brand">Marque</option><option value="reference">Référence</option>
+                  </select>
+                </label>
+              </div>
               <p className="eyebrow mb-4 text-slate-400">Univers produits</p>
               <ul className="space-y-2">
                 <li>
@@ -393,7 +431,7 @@ export default function ProductsPage() {
           {/* Products grid */}
           <div className="min-w-0 flex-1">
             {/* Results count + active filters */}
-            <div className="mb-6 flex flex-wrap items-center gap-3">
+            <div className="mb-4 flex flex-wrap items-center gap-3 sm:mb-6">
               {!loading && (
                 <p className="text-sm text-slate-500">
                   {visibleProducts.length > 0 ? (
@@ -436,7 +474,7 @@ export default function ProductsPage() {
 
             {/* Loading skeleton */}
             {loading && (
-              <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
                 {Array.from({ length: 9 }).map((_, i) => (
                   <div key={i} className="animate-pulse rounded-2xl border border-line bg-white p-5">
                     <div className="h-32 rounded-xl bg-slate-100" />
@@ -451,7 +489,7 @@ export default function ProductsPage() {
 
             {/* Products */}
             {!loading && visibleProducts.length > 0 && (
-              <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
                 {visibleProducts.map((product) => {
                   const name = getField(product, 'name', 'nom', 'product_name', 'title') ?? product.name ?? 'Produit';
                   const sku = getField(product, 'sku', 'reference', 'ref', 'code') ?? product.sku;
@@ -466,10 +504,10 @@ export default function ProductsPage() {
                     <a
                       key={product.id}
                       href={`/products/${product.slug}`}
-                      className="group flex overflow-hidden rounded-2xl border border-line/80 bg-white shadow-soft transition hover:-translate-y-1 hover:border-blue/35 hover:shadow-halo"
+                      className="group flex overflow-hidden rounded-2xl border border-line/80 bg-white shadow-soft transition hover:-translate-y-1 hover:border-blue/35 hover:shadow-halo sm:block"
                     >
-                      <article className="flex w-full flex-col">
-                        <div className={`relative flex h-40 items-center justify-center border-b border-line/70 ${group?.surface ?? 'border-slate-200 bg-slate-50'}`}>
+                      <article className="flex w-full flex-row sm:flex-col">
+                        <div className={`relative flex h-36 w-[36%] shrink-0 items-center justify-center border-r border-line/70 sm:h-40 sm:w-auto sm:border-b sm:border-r-0 ${group?.surface ?? 'border-slate-200 bg-slate-50'}`}>
                           <div className="panel-grid absolute inset-0 opacity-50" />
                           {image ? (
                             <img
@@ -484,9 +522,9 @@ export default function ProductsPage() {
                           )}
                         </div>
 
-                        <div className="flex flex-1 flex-col p-5">
+                        <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-5">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${group?.chip ?? 'border-slate-200 bg-slate-50 text-slate-500'}`}>
+                            <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[9px] font-semibold sm:gap-1.5 sm:px-2.5 sm:text-xs ${group?.chip ?? 'border-slate-200 bg-slate-50 text-slate-500'}`}>
                               <Icon size={12} />
                               {group?.name ?? 'À classer'}
                             </span>
