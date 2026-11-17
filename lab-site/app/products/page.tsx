@@ -124,10 +124,14 @@ export default function ProductsPage() {
     fetch(`${API_BASE}/suppliers`)
       .then((response) => response.ok ? response.json() : Promise.reject())
       .then((json) => {
-        const names = (Array.isArray(json.data) ? json.data : [])
-          .map((supplier: { name?: unknown } | string) => typeof supplier === 'string' ? supplier : supplier.name)
-          .filter((name: unknown): name is string => typeof name === 'string' && Boolean(name.trim()));
-        if (!cancelled && names.length) setSupplierOptions([...new Set(names)].sort((a, b) => a.localeCompare(b, 'fr')));
+        const names: string[] = (Array.isArray(json.data) ? json.data : [])
+          .flatMap((supplier: { name?: unknown } | string) => {
+            const name = typeof supplier === 'string' ? supplier : supplier.name;
+            return typeof name === 'string' && name.trim() ? [name.trim()] : [];
+          });
+        if (!cancelled && names.length) {
+          setSupplierOptions(Array.from(new Set<string>(names)).sort((a, b) => a.localeCompare(b, 'fr')));
+        }
       })
       .catch(() => undefined);
     return () => { cancelled = true; };

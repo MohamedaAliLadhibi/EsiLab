@@ -10,6 +10,7 @@ router.get('/products/:slug',                  catalogueCtrl.show);
 
 // ── Categories ─────────────────────────────────────────────────────────────
 router.get('/categories',                      catalogueCtrl.categories);
+router.get('/suppliers',                       catalogueCtrl.suppliers);
 router.get('/categories/:slug/products',       catalogueCtrl.categoryProducts);
 
 module.exports = router;

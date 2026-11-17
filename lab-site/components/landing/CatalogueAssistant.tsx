@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Bot, LoaderCircle, MessageCircle, Send, Sparkles, X } from 'lucide-react';
 
@@ -20,6 +21,7 @@ const greeting: ChatMessage = {
 };
 
 export function CatalogueAssistant() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([greeting]);
@@ -68,7 +70,7 @@ export function CatalogueAssistant() {
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-3 sm:bottom-7 sm:right-7">
+    <div className={`fixed right-5 z-[70] flex flex-col items-end gap-3 sm:bottom-7 sm:right-7 ${pathname.startsWith('/products/') ? 'bottom-28' : 'bottom-5'}`}>
       {open && (
         <section aria-label="Assistant catalogue ESILAB" className="flex h-[min(76vh,650px)] w-[min(92vw,390px)] flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_24px_80px_rgba(15,27,52,0.24)]">
           <header className="flex items-center gap-3 bg-navy px-5 py-4 text-white">

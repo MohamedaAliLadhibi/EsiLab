@@ -100,6 +100,20 @@ exports.categories = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+// GET /api/suppliers — names used by active catalogue products.
+exports.suppliers = async (req, res, next) => {
+  try {
+    const suppliers = await db('suppliers as s')
+      .join('products as p', 'p.supplier_id', 's.id')
+      .where('p.is_active', true)
+      .distinct('s.id', 's.name')
+      .orderBy('s.name');
+    res.json({ data: suppliers });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // GET /api/categories/:slug/products
 exports.categoryProducts = async (req, res, next) => {
   try {
